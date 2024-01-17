@@ -5,7 +5,7 @@ package newznab
 import (
 	"crypto/tls"
 	"encoding/xml"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -392,7 +392,7 @@ func (c Client) getURL(url string, err error) ([]byte, error) {
 	}
 
 	var data []byte
-	data, err = ioutil.ReadAll(res.Body)
+	data, err = io.ReadAll(res.Body)
 	res.Body.Close()
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to read response body")
