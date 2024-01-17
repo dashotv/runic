@@ -16,41 +16,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// Various constants for categories
 const (
-	// TV Categories
-	// CategoryTVAll is for all shows
-	CategoryTVAll = 5000
-	// CategoryTVForeign is for foreign shows
-	CategoryTVForeign = 5020
-	// CategoryTVSD is for standard-definition shows
-	CategoryTVSD = 5030
-	// CategoryTVHD is for high-definition shows
-	CategoryTVHD = 5040
-	// CategoryTVUHD is for UHD shows
-	CategoryTVUHD = 5045
-	// CategoryTVOther is for other shows
-	CategoryTVOther = 5050
-	// CategoryTVSport is for sports shows
-	CategoryTVSport = 5060
-
-	// Movie categories
-	// CategoryMovieAll is for all movies
-	CategoryMovieAll = 2000
-	// CategoryMovieForeign is for foreign movies
-	CategoryMovieForeign = 2010
-	// CategoryMovieOther is for other movies
-	CategoryMovieOther = 2020
-	// CategoryMovieSD is for standard-definition movies
-	CategoryMovieSD = 2030
-	// CategoryMovieHD is for high-definition movies
-	CategoryMovieHD = 2040
-	// CategoryMovieUHD is for UHD movies
-	CategoryMovieUHD = 2045
-	// CategoryMovieBluRay is for blu-ray movies
-	CategoryMovieBluRay = 2050
-	// CategoryMovie3D is for 3-D movies
-	CategoryMovie3D = 2060
+	apiPath = "/api"
+	rssPath = "/rss"
 )
 
 // Client is a type for interacting with a newznab or torznab api
@@ -421,11 +389,6 @@ func parseDate(date string) (time.Time, error) {
 	}
 	return parsedTime, errors.Errorf("failed to parse date %s as one of %s", date, strings.Join(formats, ", "))
 }
-
-const (
-	apiPath = "/api"
-	rssPath = "/rss"
-)
 
 type commentResponse struct {
 	Channel struct {

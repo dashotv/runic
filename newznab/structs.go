@@ -1,5 +1,7 @@
 package newznab
 
+// fork of https://github.com/mrobinsn/go-newznab/tree/master/newznab
+
 import (
 	"encoding/json"
 	"encoding/xml"
