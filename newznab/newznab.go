@@ -221,23 +221,48 @@ func (c Client) process(vals url.Values, path string) ([]NZB, error) {
 		}
 		for _, attr := range gotNZB.Attributes {
 			switch attr.Name {
+			case "size":
+				parsedInt, _ := strconv.ParseInt(attr.Value, 0, 64)
+				nzb.Size = parsedInt
+			case "category":
+				nzb.Category = append(nzb.Category, attr.Value)
+			case "guid":
+				nzb.ID = attr.Value
+			case "poster":
+				nzb.Poster = attr.Value
+			case "group":
+				nzb.Group = attr.Value
+			case "team":
+				nzb.Team = attr.Value
+			case "grabs":
+				parsedInt, _ := strconv.ParseInt(attr.Value, 0, 32)
+				nzb.NumGrabs = int(parsedInt)
+			case "password":
+				nzb.Password = attr.Value
+			case "comments":
+				parsedInt, _ := strconv.ParseInt(attr.Value, 0, 32)
+				nzb.NumComments = int(parsedInt)
+			case "usenetdate":
+				if parsedUsetnetDate, err := parseDate(attr.Value); err != nil {
+					log.WithError(err).WithField("usenetdate", attr.Value).Debug("failed to parse usenetdate")
+				} else {
+					nzb.UsenetDate = parsedUsetnetDate
+				}
+			case "info":
+				nzb.Info = attr.Value
+			case "year":
+				parsedInt, _ := strconv.ParseInt(attr.Value, 0, 32)
+				nzb.Year = int(parsedInt)
+			case "season":
+				nzb.Season = attr.Value
+			case "episode":
+				nzb.Episode = attr.Value
 			case "tvairdate":
 				if parsedAirDate, err := parseDate(attr.Value); err != nil {
 					log.WithError(err).WithField("tvairdate", attr.Value).Debug("newznab:Client:Search: failed to parse tvairdate")
 				} else {
 					nzb.AirDate = parsedAirDate
 				}
-			case "guid":
-				nzb.ID = attr.Value
-			case "size":
-				parsedInt, _ := strconv.ParseInt(attr.Value, 0, 64)
-				nzb.Size = parsedInt
-			case "grabs":
-				parsedInt, _ := strconv.ParseInt(attr.Value, 0, 32)
-				nzb.NumGrabs = int(parsedInt)
-			case "comments":
-				parsedInt, _ := strconv.ParseInt(attr.Value, 0, 32)
-				nzb.NumComments = int(parsedInt)
 			case "seeders":
 				parsedInt, _ := strconv.ParseInt(attr.Value, 0, 32)
 				nzb.Seeders = int(parsedInt)
@@ -249,8 +274,6 @@ func (c Client) process(vals url.Values, path string) ([]NZB, error) {
 			case "infohash":
 				nzb.InfoHash = attr.Value
 				nzb.IsTorrent = true
-			case "category":
-				nzb.Category = append(nzb.Category, attr.Value)
 			case "genre":
 				nzb.Genre = attr.Value
 			case "tvdbid":
@@ -259,17 +282,25 @@ func (c Client) process(vals url.Values, path string) ([]NZB, error) {
 				nzb.TVRageID = attr.Value
 			case "tvmazeid":
 				nzb.TVMazeID = attr.Value
-			case "info":
-				nzb.Info = attr.Value
-			case "season":
-				nzb.Season = attr.Value
-			case "episode":
-				nzb.Episode = attr.Value
 			case "tvtitle":
 				nzb.TVTitle = attr.Value
 			case "rating":
 				parsedInt, _ := strconv.ParseInt(attr.Value, 0, 32)
 				nzb.Rating = int(parsedInt)
+			case "coverurl":
+				nzb.CoverURL = attr.Value
+			case "resolution":
+				nzb.Resolution = attr.Value
+			case "video":
+				nzb.Video = attr.Value
+			case "audio":
+				nzb.Audio = attr.Value
+			case "framerate":
+				nzb.Framerate = attr.Value
+			case "language":
+				nzb.Language = attr.Value
+			case "subs":
+				nzb.Subs = strings.Split(attr.Value, ",")
 			case "imdb":
 				nzb.IMDBID = attr.Value
 			case "imdbtitle":
@@ -280,16 +311,39 @@ func (c Client) process(vals url.Values, path string) ([]NZB, error) {
 			case "imdbscore":
 				parsedFloat, _ := strconv.ParseFloat(attr.Value, 32)
 				nzb.IMDBScore = float32(parsedFloat)
-			case "coverurl":
-				nzb.CoverURL = attr.Value
-			case "usenetdate":
-				if parsedUsetnetDate, err := parseDate(attr.Value); err != nil {
-					log.WithError(err).WithField("usenetdate", attr.Value).Debug("failed to parse usenetdate")
+			case "imdbtagline":
+				nzb.IMDBTagline = attr.Value
+			case "imdbplot":
+				nzb.IMDBPlot = attr.Value
+			case "imdbdirector":
+				nzb.IMDBDirector = attr.Value
+			case "imdbactors":
+				nzb.IMDBActors = strings.Split(attr.Value, ",")
+			case "artist":
+				nzb.Artist = attr.Value
+			case "album":
+				nzb.Album = attr.Value
+			case "publisher":
+				nzb.Publisher = attr.Value
+			case "tracks":
+				nzb.Tracks = attr.Value
+			case "backdropcoverurl":
+				nzb.BackdropCoverURL = attr.Value
+			case "review":
+				nzb.Review = attr.Value
+			case "booktitle":
+				nzb.BookTitle = attr.Value
+			case "publishdate":
+				if parsedAirDate, err := parseDate(attr.Value); err != nil {
+					log.WithError(err).WithField("tvairdate", attr.Value).Debug("newznab:Client:Search: failed to parse tvairdate")
 				} else {
-					nzb.UsenetDate = parsedUsetnetDate
+					nzb.PublishDate = parsedAirDate
 				}
-			case "resolution":
-				nzb.Resolution = attr.Value
+			case "author":
+				nzb.Author = attr.Value
+			case "pages":
+				parsedInt, _ := strconv.ParseInt(attr.Value, 0, 32)
+				nzb.Pages = int(parsedInt)
 			default:
 				log.WithFields(log.Fields{
 					"name":  attr.Name,

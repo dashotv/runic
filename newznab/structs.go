@@ -22,6 +22,8 @@ type NZB struct {
 	NumGrabs    int       `json:"num_grabs,omitempty"`
 	NumComments int       `json:"num_comments,omitempty"`
 	Comments    []Comment `json:"comments,omitempty"`
+	Poster      string    `json:"poster,omitempty"`
+	Password    string    `json:"password,omitempty"`
 
 	SourceEndpoint string `json:"source_endpoint"`
 	SourceAPIKey   string `json:"source_apikey"`
@@ -29,8 +31,21 @@ type NZB struct {
 	Category []string `json:"category,omitempty"`
 	Info     string   `json:"info,omitempty"`
 	Genre    string   `json:"genre,omitempty"`
+	Group    string   `json:"group,omitempty"`
+	Team     string   `json:"team,omitempty"`
+	Year     int      `json:"year,omitempty"`
 
-	Resolution string `json:"resolution,omitempty"`
+	Resolution string   `json:"resolution,omitempty"`
+	Video      string   `json:"video,omitempty"`
+	Audio      string   `json:"audio,omitempty"`
+	Framerate  string   `json:"framerate,omitempty"`
+	Language   string   `json:"language,omitempty"`
+	Subs       []string `json:"subs,omitempty"`
+
+	CoverURL         string `json:"coverurl,omitempty"`
+	Publisher        string `json:"publisher,omitempty"`
+	BackdropCoverURL string `json:"backdropcoverurl,omitempty"`
+	Review           string `json:"review,omitempty"`
 
 	// TV Specific stuff
 	TVDBID   string `json:"tvdbid,omitempty"`
@@ -42,11 +57,25 @@ type NZB struct {
 	Rating   int    `json:"rating,omitempty"`
 
 	// Movie Specific stuff
-	IMDBID    string  `json:"imdb,omitempty"`
-	IMDBTitle string  `json:"imdbtitle,omitempty"`
-	IMDBYear  int     `json:"imdbyear,omitempty"`
-	IMDBScore float32 `json:"imdbscore,omitempty"`
-	CoverURL  string  `json:"coverurl,omitempty"`
+	IMDBID       string   `json:"imdb,omitempty"`
+	IMDBTitle    string   `json:"imdbtitle,omitempty"`
+	IMDBYear     int      `json:"imdbyear,omitempty"`
+	IMDBScore    float32  `json:"imdbscore,omitempty"`
+	IMDBActors   []string `json:"imdbactors,omitempty"`
+	IMDBDirector string   `json:"imdbdirector,omitempty"`
+	IMDBTagline  string   `json:"imdbtagline,omitempty"`
+	IMDBPlot     string   `json:"imdbplot,omitempty"`
+
+	// Audio Specific stuff
+	Artist string `json:"artist,omitempty"`
+	Album  string `json:"album,omitempty"`
+	Tracks string `json:"tracks,omitempty"`
+
+	// Book Specific stuff
+	Author      string    `json:"author,omitempty"`
+	Pages       int       `json:"pages,omitempty"`
+	PublishDate time.Time `json:"publish_date,omitempty"`
+	BookTitle   string    `json:"booktitle,omitempty"`
 
 	// Torznab specific stuff
 	Seeders     int    `json:"seeders,omitempty"`
