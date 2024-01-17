@@ -4,9 +4,9 @@ package newznab
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"regexp"
 	"testing"
 
@@ -29,11 +29,11 @@ func TestUsenetCrawlerClient(t *testing.T) {
 			// Fetch nzb
 			nzbID := r.URL.Query()["id"][0]
 			filePath := fmt.Sprintf("../tests/fixtures/nzbs/%v.nzb", nzbID)
-			f, err = ioutil.ReadFile(filePath)
+			f, err = os.ReadFile(filePath)
 		} else {
 			// Get xml
 			filePath := fmt.Sprintf("../tests/fixtures%v/%v.xml", r.URL.Path, fixedPath)
-			f, err = ioutil.ReadFile(filePath)
+			f, err = os.ReadFile(filePath)
 		}
 
 		if err != nil {
@@ -93,7 +93,7 @@ func TestUsenetCrawlerClient(t *testing.T) {
 				nzb := results[1]
 				require.Empty(t, nzb.Comments)
 				require.NotZero(t, nzb.NumComments)
-				err := client.PopulateComments(&nzb)
+				err := client.PopulateComments(nzb)
 				require.NoError(t, err)
 				require.NotEmpty(t, nzb.Comments, "expected at least one comment")
 				for _, comment := range nzb.Comments {

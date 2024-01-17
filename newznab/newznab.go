@@ -30,8 +30,8 @@ type Client struct {
 }
 
 // New returns a new instance of Client
-func New(baseURL string, apikey string, userID int, insecure bool) Client {
-	ret := Client{
+func New(baseURL string, apikey string, userID int, insecure bool) *Client {
+	ret := &Client{
 		apikey:     apikey,
 		apiBaseURL: baseURL,
 		apiUserID:  userID,
@@ -48,7 +48,7 @@ func New(baseURL string, apikey string, userID int, insecure bool) Client {
 }
 
 // SearchWithTVRage returns NZBs for the given parameters
-func (c Client) SearchWithTVRage(categories []int, tvRageID int, season int, episode int) ([]NZB, error) {
+func (c *Client) SearchWithTVRage(categories []int, tvRageID int, season int, episode int) ([]*NZB, error) {
 	return c.search(url.Values{
 		"rid":     []string{strconv.Itoa(tvRageID)},
 		"cat":     c.splitCats(categories),
@@ -59,7 +59,7 @@ func (c Client) SearchWithTVRage(categories []int, tvRageID int, season int, epi
 }
 
 // SearchWithTVDB returns NZBs for the given parameters
-func (c Client) SearchWithTVDB(categories []int, tvDBID int, season int, episode int) ([]NZB, error) {
+func (c *Client) SearchWithTVDB(categories []int, tvDBID int, season int, episode int) ([]*NZB, error) {
 	return c.search(url.Values{
 		"tvdbid":  []string{strconv.Itoa(tvDBID)},
 		"cat":     c.splitCats(categories),
@@ -70,7 +70,7 @@ func (c Client) SearchWithTVDB(categories []int, tvDBID int, season int, episode
 }
 
 // SearchWithTVMaze returns NZBs for the given parameters
-func (c Client) SearchWithTVMaze(categories []int, tvMazeID int, season int, episode int) ([]NZB, error) {
+func (c *Client) SearchWithTVMaze(categories []int, tvMazeID int, season int, episode int) ([]*NZB, error) {
 	return c.search(url.Values{
 		"tvmazeid": []string{strconv.Itoa(tvMazeID)},
 		"cat":      c.splitCats(categories),
@@ -81,7 +81,7 @@ func (c Client) SearchWithTVMaze(categories []int, tvMazeID int, season int, epi
 }
 
 // SearchWithIMDB returns NZBs for the given parameters
-func (c Client) SearchWithIMDB(categories []int, imdbID string) ([]NZB, error) {
+func (c *Client) SearchWithIMDB(categories []int, imdbID string) ([]*NZB, error) {
 	return c.search(url.Values{
 		"imdbid": []string{imdbID},
 		"cat":    c.splitCats(categories),
@@ -90,7 +90,7 @@ func (c Client) SearchWithIMDB(categories []int, imdbID string) ([]NZB, error) {
 }
 
 // SearchWithQuery returns NZBs for the given parameters
-func (c Client) SearchWithQuery(categories []int, query string, searchType string) ([]NZB, error) {
+func (c *Client) SearchWithQuery(categories []int, query string, searchType string) ([]*NZB, error) {
 	return c.search(url.Values{
 		"q":   []string{query},
 		"cat": c.splitCats(categories),
@@ -99,7 +99,7 @@ func (c Client) SearchWithQuery(categories []int, query string, searchType strin
 }
 
 // LoadRSSFeed returns up to <num> of the most recent NZBs of the given categories.
-func (c Client) LoadRSSFeed(categories []int, num int) ([]NZB, error) {
+func (c *Client) LoadRSSFeed(categories []int, num int) ([]*NZB, error) {
 	return c.rss(url.Values{
 		"num": []string{strconv.Itoa(num)},
 		"t":   c.splitCats(categories),
@@ -108,16 +108,16 @@ func (c Client) LoadRSSFeed(categories []int, num int) ([]NZB, error) {
 }
 
 // Capabilities returns the capabilities of this tracker
-func (c Client) Capabilities() (Capabilities, error) {
+func (c *Client) Capabilities() (Capabilities, error) {
 	return c.caps(url.Values{
 		"t": []string{"caps"},
 	})
 }
 
 // LoadRSSFeedUntilNZBID fetches NZBs until a given NZB id is reached.
-func (c Client) LoadRSSFeedUntilNZBID(categories []int, num int, id string, maxRequests int) ([]NZB, error) {
+func (c *Client) LoadRSSFeedUntilNZBID(categories []int, num int, id string, maxRequests int) ([]*NZB, error) {
 	count := 0
-	var nzbs []NZB
+	var nzbs []*NZB
 	for {
 		partition, err := c.rss(url.Values{
 			"num":    []string{strconv.Itoa(num)},
@@ -143,14 +143,14 @@ func (c Client) LoadRSSFeedUntilNZBID(categories []int, num int, id string, maxR
 }
 
 // Details get the details of a particular nzb
-func (c Client) Details(guid string) (Details, error) {
+func (c *Client) Details(guid string) (Details, error) {
 	return c.details(url.Values{
 		"t":    []string{"details"},
 		"guid": []string{guid},
 	})
 }
 
-func (c Client) splitCats(cats []int) []string {
+func (c *Client) splitCats(cats []int) []string {
 	var categories, catsOut []string
 	for _, v := range cats {
 		categories = append(categories, strconv.Itoa(v))
@@ -159,18 +159,18 @@ func (c Client) splitCats(cats []int) []string {
 	return catsOut
 }
 
-func (c Client) rss(vals url.Values) ([]NZB, error) {
+func (c *Client) rss(vals url.Values) ([]*NZB, error) {
 	vals.Set("r", c.apikey)
 	vals.Set("i", strconv.Itoa(c.apiUserID))
 	return c.process(vals, rssPath)
 }
 
-func (c Client) search(vals url.Values) ([]NZB, error) {
+func (c *Client) search(vals url.Values) ([]*NZB, error) {
 	vals.Set("apikey", c.apikey)
 	return c.process(vals, apiPath)
 }
 
-func (c Client) caps(vals url.Values) (Capabilities, error) {
+func (c *Client) caps(vals url.Values) (Capabilities, error) {
 	vals.Set("apikey", c.apikey)
 	resp, err := c.getURL(c.buildURL(vals, apiPath))
 	if err != nil {
@@ -183,7 +183,7 @@ func (c Client) caps(vals url.Values) (Capabilities, error) {
 	return cResp, nil
 }
 
-func (c Client) details(vals url.Values) (Details, error) {
+func (c *Client) details(vals url.Values) (Details, error) {
 	vals.Set("apikey", c.apikey)
 	resp, err := c.getURL(c.buildURL(vals, apiPath))
 	if err != nil {
@@ -196,8 +196,8 @@ func (c Client) details(vals url.Values) (Details, error) {
 	return dResp, nil
 }
 
-func (c Client) process(vals url.Values, path string) ([]NZB, error) {
-	var nzbs []NZB
+func (c *Client) process(vals url.Values, path string) ([]*NZB, error) {
+	var nzbs []*NZB
 	resp, err := c.getURL(c.buildURL(vals, path))
 	if err != nil {
 		return nzbs, err
@@ -211,7 +211,7 @@ func (c Client) process(vals url.Values, path string) ([]NZB, error) {
 		return nil, errors.Errorf("newznab api error %d: %s", feed.ErrorCode, feed.ErrorDesc)
 	}
 	for _, gotNZB := range feed.Channel.NZBs {
-		nzb := NZB{
+		nzb := &NZB{
 			Title:          gotNZB.Title,
 			Description:    gotNZB.Description,
 			PubDate:        gotNZB.Date.Add(0),
@@ -219,6 +219,7 @@ func (c Client) process(vals url.Values, path string) ([]NZB, error) {
 			SourceEndpoint: c.apiBaseURL,
 			SourceAPIKey:   c.apikey,
 		}
+		// see: https://inhies.github.io/Newznab-API/attributes/
 		for _, attr := range gotNZB.Attributes {
 			switch attr.Name {
 			case "size":
@@ -360,7 +361,7 @@ func (c Client) process(vals url.Values, path string) ([]NZB, error) {
 }
 
 // PopulateComments fills in the Comments for the given NZB
-func (c Client) PopulateComments(nzb *NZB) error {
+func (c *Client) PopulateComments(nzb *NZB) error {
 	data, err := c.getURL(c.buildURL(url.Values{
 		"t":      []string{"comments"},
 		"id":     []string{nzb.ID},
@@ -391,7 +392,7 @@ func (c Client) PopulateComments(nzb *NZB) error {
 }
 
 // NZBDownloadURL returns a URL to download the NZB from
-func (c Client) NZBDownloadURL(nzb NZB) (string, error) {
+func (c *Client) NZBDownloadURL(nzb *NZB) (string, error) {
 	return c.buildURL(url.Values{
 		"t":      []string{"get"},
 		"id":     []string{nzb.ID},
@@ -400,11 +401,11 @@ func (c Client) NZBDownloadURL(nzb NZB) (string, error) {
 }
 
 // DownloadNZB returns the bytes of the actual NZB file for the given NZB
-func (c Client) DownloadNZB(nzb NZB) ([]byte, error) {
+func (c *Client) DownloadNZB(nzb *NZB) ([]byte, error) {
 	return c.getURL(c.NZBDownloadURL(nzb))
 }
 
-func (c Client) getURL(url string, err error) ([]byte, error) {
+func (c *Client) getURL(url string, err error) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
@@ -422,7 +423,7 @@ func (c Client) getURL(url string, err error) ([]byte, error) {
 	return data, nil
 }
 
-func (c Client) buildURL(vals url.Values, path string) (string, error) {
+func (c *Client) buildURL(vals url.Values, path string) (string, error) {
 	parsedURL, err := url.Parse(c.apiBaseURL + path)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to parse base API url")
