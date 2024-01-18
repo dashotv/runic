@@ -5,7 +5,7 @@ package jackett
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-
 	"golang.org/x/net/context"
 )
 
@@ -35,8 +34,8 @@ type FetchRequest struct {
 }
 
 type FetchResponse struct {
-	Results  []Result
-	Indexers []Indexer
+	Results  []FetchResult
+	Indexers []FetchIndexer
 }
 
 type jackettTime struct {
@@ -54,7 +53,7 @@ func (jt *jackettTime) UnmarshalJSON(b []byte) (err error) {
 	return
 }
 
-type Result struct {
+type FetchResult struct {
 	BannerUrl            string
 	BlackholeLink        string
 	Category             []uint
@@ -86,7 +85,7 @@ type Result struct {
 	UploadVolumeFactor   float32
 }
 
-type Indexer struct {
+type FetchIndexer struct {
 	Error   string
 	ID      string
 	Name    string
@@ -146,7 +145,7 @@ func (j *Jackett) Fetch(ctx context.Context, fr *FetchRequest) (*FetchResponse, 
 		return nil, errors.Wrap(err, "failed to invoke fetch request")
 	}
 	defer res.Body.Close()
-	data, err := ioutil.ReadAll(res.Body)
+	data, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to read fetch data")
 	}

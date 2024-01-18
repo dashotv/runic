@@ -5,9 +5,11 @@ package newznab
 import (
 	"crypto/tls"
 	"encoding/xml"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -20,6 +22,8 @@ const (
 	apiPath = "/api"
 	rssPath = "/rss"
 )
+
+var sizeRegex = regexp.MustCompile(`(\d+\.?\d*)\s([KMG]iB)`)
 
 // Client is a type for interacting with a newznab or torznab api
 type Client struct {
@@ -202,6 +206,8 @@ func (c *Client) process(vals url.Values, path string) ([]*NZB, error) {
 	if err != nil {
 		return nzbs, err
 	}
+	u, _ := c.buildURL(vals, path)
+	fmt.Printf("URL: %s\n", u)
 	var feed SearchResponse
 	err = xml.Unmarshal(resp, &feed)
 	if err != nil {
@@ -223,8 +229,8 @@ func (c *Client) process(vals url.Values, path string) ([]*NZB, error) {
 		for _, attr := range gotNZB.Attributes {
 			switch attr.Name {
 			case "size":
-				parsedInt, _ := strconv.ParseInt(attr.Value, 0, 64)
-				nzb.Size = parsedInt
+				v, _ := parseSize(attr.Value)
+				nzb.Size = v
 			case "category":
 				nzb.Category = append(nzb.Category, attr.Value)
 			case "guid":
@@ -353,7 +359,8 @@ func (c *Client) process(vals url.Values, path string) ([]*NZB, error) {
 			}
 		}
 		if nzb.Size == 0 {
-			nzb.Size = gotNZB.Size
+			parsedInt, _ := parseSize(gotNZB.Size)
+			nzb.Size = parsedInt
 		}
 		nzbs = append(nzbs, nzb)
 	}
@@ -443,6 +450,23 @@ func parseDate(date string) (time.Time, error) {
 		}
 	}
 	return parsedTime, errors.Errorf("failed to parse date %s as one of %s", date, strings.Join(formats, ", "))
+}
+
+func parseSize(size string) (int64, error) {
+	if matches := sizeRegex.FindStringSubmatch(size); len(matches) > 0 {
+		size, _ := strconv.ParseFloat(matches[1], 64)
+		switch matches[2] {
+		case "KiB":
+			size *= 1024
+		case "MiB":
+			size *= 1024 * 1024
+		case "GiB":
+			size *= 1024 * 1024 * 1024
+		}
+		return int64(size), nil
+	}
+
+	return strconv.ParseInt(size, 0, 64)
 }
 
 type commentResponse struct {
