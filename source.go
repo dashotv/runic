@@ -95,15 +95,16 @@ func (r *Runic) Jackett(URL, key string) error {
 	r.jackett.indexers = resp.Indexers
 
 	for _, indexer := range resp.Indexers {
+		u := fmt.Sprintf("%s/api/v2.0/indexers/%s/results/torznab", URL, indexer.ID)
 		s := &Source{
 			Name:     indexer.ID,
-			URL:      fmt.Sprintf("%s/api/v2.0/indexers/%s/results/torznab", URL, indexer.ID),
+			URL:      u,
 			Key:      key,
 			UserID:   0,
 			Insecure: true,
 			Type:     SourceJackett,
 			Caps:     &indexer.Caps,
-			client:   newznab.New(URL, key, 0, true),
+			client:   newznab.New(u, key, 0, true),
 		}
 		if err := r.addSource(indexer.ID, s); err != nil {
 			return err
