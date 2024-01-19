@@ -16,64 +16,52 @@ type IndexersResponse struct {
 }
 
 type Indexer struct {
-	ID          string `xml:"id,attr"`
-	Configured  string `xml:"configured,attr"`
-	Title       string `xml:"title"`
-	Description string `xml:"description"`
-	Link        string `xml:"link"`
-	Language    string `xml:"language"`
-	Type        string `xml:"type"`
-	Caps        struct {
-		Server struct {
-			Title string `xml:"title,attr"`
-		} `xml:"server"`
-		Limits struct {
-			Default string `xml:"default,attr"`
-			Max     string `xml:"max,attr"`
-		} `xml:"limits"`
-		Searching struct {
-			Search struct {
-				Available       string `xml:"available,attr"`
-				SupportedParams string `xml:"supportedParams,attr"`
-				SearchEngine    string `xml:"searchEngine,attr"`
-			} `xml:"search"`
-			TvSearch struct {
-				Available       string `xml:"available,attr"`
-				SupportedParams string `xml:"supportedParams,attr"`
-				SearchEngine    string `xml:"searchEngine,attr"`
-			} `xml:"tv-search"`
-			MovieSearch struct {
-				Available       string `xml:"available,attr"`
-				SupportedParams string `xml:"supportedParams,attr"`
-				SearchEngine    string `xml:"searchEngine,attr"`
-			} `xml:"movie-search"`
-			MusicSearch struct {
-				Available       string `xml:"available,attr"`
-				SupportedParams string `xml:"supportedParams,attr"`
-				SearchEngine    string `xml:"searchEngine,attr"`
-			} `xml:"music-search"`
-			AudioSearch struct {
-				Available       string `xml:"available,attr"`
-				SupportedParams string `xml:"supportedParams,attr"`
-				SearchEngine    string `xml:"searchEngine,attr"`
-			} `xml:"audio-search"`
-			BookSearch struct {
-				Available       string `xml:"available,attr"`
-				SupportedParams string `xml:"supportedParams,attr"`
-				SearchEngine    string `xml:"searchEngine,attr"`
-			} `xml:"book-search"`
-		} `xml:"searching"`
-		Categories struct {
-			Category []struct {
-				ID     string `xml:"id,attr"`
-				Name   string `xml:"name,attr"`
-				Subcat []struct {
-					ID   string `xml:"id,attr"`
-					Name string `xml:"name,attr"`
-				} `xml:"subcat"`
-			} `xml:"category"`
-		} `xml:"categories"`
-	} `xml:"caps"`
+	ID          string       `xml:"id,attr"`
+	Configured  string       `xml:"configured,attr"`
+	Title       string       `xml:"title"`
+	Description string       `xml:"description"`
+	Link        string       `xml:"link"`
+	Language    string       `xml:"language"`
+	Type        string       `xml:"type"`
+	Caps        Capabilities `xml:"caps"`
+}
+
+type Capabilities struct {
+	Server struct {
+		Title string `xml:"title,attr"`
+	} `xml:"server"`
+	Limits struct {
+		Default string `xml:"default,attr"`
+		Max     string `xml:"max,attr"`
+	} `xml:"limits"`
+	Searching struct {
+		Search      SearchSettings `xml:"search"`
+		TvSearch    SearchSettings `xml:"tv-search"`
+		MovieSearch SearchSettings `xml:"movie-search"`
+		MusicSearch SearchSettings `xml:"music-search"`
+		AudioSearch SearchSettings `xml:"audio-search"`
+		BookSearch  SearchSettings `xml:"book-search"`
+	} `xml:"searching"`
+	Categories Categories `xml:"categories"`
+}
+
+type SearchSettings struct {
+	Available       string `xml:"available,attr"`
+	SupportedParams string `xml:"supportedParams,attr"`
+	SearchEngine    string `xml:"searchEngine,attr"`
+}
+
+type Categories struct {
+	Category []Category `xml:"category"`
+}
+type Category struct {
+	ID     string   `xml:"id,attr"`
+	Name   string   `xml:"name,attr"`
+	Subcat []Subcat `xml:"subcat"`
+}
+type Subcat struct {
+	ID   string `xml:"id,attr"`
+	Name string `xml:"name,attr"`
 }
 
 func (j *Jackett) Indexers(ctx context.Context, configuredOnly bool) (*IndexersResponse, error) {

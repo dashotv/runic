@@ -232,15 +232,18 @@ type Capabilities struct {
 		} `xml:"movie-search" json:"movie_search,omitempty"`
 	} `xml:"searching" json:"searching,omitempty"`
 	Categories struct {
-		Category []struct {
-			ID     string `xml:"id,attr" json:"id,omitempty"`
-			Name   string `xml:"name,attr" json:"name,omitempty"`
-			Subcat []struct {
-				ID   string `xml:"id,attr" json:"id,omitempty"`
-				Name string `xml:"name,attr" json:"name,omitempty"`
-			} `xml:"subcat" json:"subcat,omitempty"`
-		} `xml:"category" json:"category,omitempty"`
+		Category []Category `xml:"category" json:"category,omitempty"`
 	} `xml:"categories" json:"categories,omitempty"`
+}
+
+type Category struct {
+	ID     string   `xml:"id,attr" json:"id,omitempty"`
+	Name   string   `xml:"name,attr" json:"name,omitempty"`
+	Subcat []Subcat `xml:"subcat" json:"subcat,omitempty"`
+}
+type Subcat struct {
+	ID   string `xml:"id,attr" json:"id,omitempty"`
+	Name string `xml:"name,attr" json:"name,omitempty"`
 }
 
 type Details struct {

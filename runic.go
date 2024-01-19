@@ -1,9 +1,7 @@
 package runic
 
 import (
-	"context"
 	"errors"
-	"fmt"
 
 	"github.com/dashotv/runic/jackett"
 	"github.com/dashotv/runic/newznab"
@@ -18,89 +16,8 @@ type Runic struct {
 	}
 }
 
-const (
-	SourceUnknown = iota
-	SourceNewznab
-	SourceJackett
-)
-
-type Source struct {
-	Name     string
-	URL      string
-	Key      string
-	UserID   int
-	Insecure bool
-	Type     int
-	client   *newznab.Client
-}
-
-func (r *Runic) addSource(name, URL, key string, userID int, srcType int, insecure bool) error {
-	if _, ok := r.sources[name]; ok {
-		return errors.New("indexer already exists")
-	}
-
-	s := &Source{
-		Name:     name,
-		URL:      URL,
-		Key:      key,
-		UserID:   userID,
-		Insecure: insecure,
-		Type:     srcType,
-		client:   newznab.New(URL, key, userID, insecure),
-	}
-
-	if r.sources == nil {
-		r.sources = make(map[string]*Source)
-	}
-	r.sources[name] = s
-
-	return nil
-}
-
-func (r *Runic) Add(name, URL, key string, userID int, insecure bool) error {
-	return r.addSource(name, URL, key, userID, SourceNewznab, insecure)
-}
-
-func (r *Runic) AddTorznab(name, URL, key string, userID int, insecure bool) error {
-	return r.addSource(name, URL, key, userID, SourceJackett, insecure)
-}
-
-func (r *Runic) Sources() []string {
-	var sources []string
-	for name := range r.sources {
-		sources = append(sources, name)
-	}
-	return sources
-}
-
-func (r *Runic) Source(name string) (*Source, bool) {
-	s, ok := r.sources[name]
-	return s, ok
-}
-
-func (r *Runic) Jackett(URL, key string) error {
-	j := jackett.NewJackett(&jackett.Settings{ApiURL: URL, ApiKey: key, Client: nil})
-
-	resp, err := j.Indexers(context.Background(), true)
-	if err != nil {
-		return err
-	}
-
-	r.jackett.client = j
-	r.jackett.indexers = resp.Indexers
-
-	for _, indexer := range resp.Indexers {
-		u := fmt.Sprintf("%s/api/v2.0/indexers/%s/results/torznab", URL, indexer.ID)
-		if err := r.addSource(indexer.ID, u, key, 0, SourceJackett, false); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (r *Runic) Read(name string, categories []int) ([]*newznab.NZB, error) {
-	s, ok := r.sources[name]
+func (r *Runic) Read(source string, categories []int) ([]*newznab.NZB, error) {
+	s, ok := r.sources[source]
 	if !ok {
 		return nil, errors.New("indexer does not exist")
 	}
@@ -112,8 +29,8 @@ func (r *Runic) Read(name string, categories []int) ([]*newznab.NZB, error) {
 	return s.client.LoadRSSFeed(categories, 100)
 }
 
-func (r *Runic) Search(name string, categories []int, query string) ([]*newznab.NZB, error) {
-	s, ok := r.sources[name]
+func (r *Runic) Search(source string, categories []int, query string) ([]*newznab.NZB, error) {
+	s, ok := r.sources[source]
 	if !ok {
 		return nil, errors.New("indexer does not exist")
 	}
