@@ -65,6 +65,19 @@ func (r *Runic) AddTorznab(name, URL, key string, userID int, insecure bool) err
 	return r.addSource(name, URL, key, userID, SourceJackett, insecure)
 }
 
+func (r *Runic) Sources() []string {
+	var sources []string
+	for name := range r.sources {
+		sources = append(sources, name)
+	}
+	return sources
+}
+
+func (r *Runic) Source(name string) (*Source, bool) {
+	s, ok := r.sources[name]
+	return s, ok
+}
+
 func (r *Runic) Jackett(URL, key string) error {
 	j := jackett.NewJackett(&jackett.Settings{ApiURL: URL, ApiKey: key, Client: nil})
 
@@ -92,10 +105,18 @@ func (r *Runic) Read(name string, categories []int) ([]*newznab.NZB, error) {
 		return nil, errors.New("indexer does not exist")
 	}
 
-	fmt.Printf("READ:%+v\n", s)
 	if s.Type == SourceJackett {
 		return s.client.SearchWithQuery(categories, "", "search")
 	}
 
 	return s.client.LoadRSSFeed(categories, 100)
+}
+
+func (r *Runic) Search(name string, categories []int, query string) ([]*newznab.NZB, error) {
+	s, ok := r.sources[name]
+	if !ok {
+		return nil, errors.New("indexer does not exist")
+	}
+
+	return s.client.SearchWithQuery(categories, query, "search")
 }
