@@ -22,7 +22,7 @@ func (r *Runic) Read(source string, categories []int) ([]*newznab.NZB, error) {
 		return nil, errors.New("indexer does not exist")
 	}
 
-	if s.Type == SourceJackett {
+	if s.Type == SourceJackett || s.Type == SourceTorznab {
 		return s.client.SearchWithQuery(categories, "", "search")
 	}
 

@@ -12,6 +12,7 @@ import (
 const (
 	SourceUnknown = "unknown"
 	SourceNewznab = "newznab"
+	SourceTorznab = "torznab"
 	SourceJackett = "jackett"
 )
 
@@ -61,7 +62,7 @@ func (r *Runic) AddTorznab(name, URL, key string, userID int, insecure bool) err
 		Key:      key,
 		UserID:   userID,
 		Insecure: insecure,
-		Type:     SourceNewznab,
+		Type:     SourceTorznab,
 		Caps:     newznabToJackett(caps),
 		client:   n,
 	}
@@ -100,7 +101,7 @@ func (r *Runic) Jackett(URL, key string) error {
 			Key:      key,
 			UserID:   0,
 			Insecure: true,
-			Type:     SourceNewznab,
+			Type:     SourceJackett,
 			Caps:     &indexer.Caps,
 			client:   newznab.New(URL, key, 0, true),
 		}
