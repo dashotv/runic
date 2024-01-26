@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -341,10 +342,10 @@ func (c *Client) process(vals url.Values, path string) ([]*NZB, error) {
 			case "booktitle":
 				nzb.BookTitle = attr.Value
 			case "publishdate":
-				if parsedAirDate, err := parseDate(attr.Value); err != nil {
+				if d, err := parseDate(attr.Value); err != nil {
 					log.WithError(err).WithField("tvairdate", attr.Value).Debug("newznab:Client:Search: failed to parse tvairdate")
 				} else {
-					nzb.PublishDate = parsedAirDate
+					nzb.PublishDate = d
 				}
 			case "author":
 				nzb.Author = attr.Value
@@ -361,6 +362,9 @@ func (c *Client) process(vals url.Values, path string) ([]*NZB, error) {
 		if nzb.Size == 0 {
 			parsedInt, _ := parseSize(gotNZB.Size)
 			nzb.Size = parsedInt
+		}
+		if len(nzb.Category) > 0 {
+			nzb.Category = lo.Uniq(nzb.Category)
 		}
 		nzbs = append(nzbs, nzb)
 	}

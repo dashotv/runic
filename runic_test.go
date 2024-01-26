@@ -54,7 +54,7 @@ func TestRunic_JackettRead(t *testing.T) {
 	assert.NotNil(t, results, "runic.Read() should return a non-nil value")
 
 	for _, result := range results {
-		fmt.Printf("%s: %d: %s\n", result.Title, result.Size, strings.Join(result.Category, ","))
+		fmt.Printf("%25.25s: %d %s %s\n", result.Title, result.Size, result.PubDate, strings.Join(result.Category, ","))
 	}
 }
 
