@@ -43,6 +43,46 @@ func TestRunic_GeekRead(t *testing.T) {
 		}
 	}
 }
+func TestRunic_GeekCats(t *testing.T) {
+	r := &Runic{}
+	err := r.Add("geek", os.Getenv("NZBGEEK_URL"), os.Getenv("NZBGEEK_KEY"), 0, false)
+	assert.NoError(t, err, "runic.Add() should not return an error")
+
+	source, ok := r.Source("geek")
+	assert.True(t, ok, "runic.Source() should return true")
+	assert.NotNil(t, source, "runic.Source() should return a non-nil value")
+
+	count := 0
+	for _, cat := range source.Caps.Categories.Category {
+		fmt.Printf("%s: %s\n", cat.ID, cat.Name)
+		count++
+		for _, subcat := range cat.Subcat {
+			fmt.Printf("%s: %s\n", subcat.ID, subcat.Name)
+			count++
+		}
+	}
+	fmt.Printf("count: %d\n", count)
+}
+func TestRunic_NyaaCats(t *testing.T) {
+	r := &Runic{}
+	err := r.AddTorznab("nyaasi", "http://10.0.4.62:9117/api/v2.0/indexers/nyaasi/results/torznab", os.Getenv("JACKETT_KEY"), 0, false)
+	assert.NoError(t, err)
+
+	source, ok := r.Source("nyaasi")
+	assert.True(t, ok, "runic.Source() should return true")
+	assert.NotNil(t, source, "runic.Source() should return a non-nil value")
+
+	count := 0
+	for _, cat := range source.Caps.Categories.Category {
+		fmt.Printf("%s: %s\n", cat.ID, cat.Name)
+		count++
+		for _, subcat := range cat.Subcat {
+			fmt.Printf("%s: %s\n", subcat.ID, subcat.Name)
+			count++
+		}
+	}
+	fmt.Printf("count: %d\n", count)
+}
 
 func TestRunic_JackettRead(t *testing.T) {
 	r := &Runic{}

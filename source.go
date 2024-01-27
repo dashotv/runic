@@ -114,6 +114,34 @@ func (r *Runic) Jackett(URL, key string) error {
 	return nil
 }
 
+func dedupCategories(cats []jackett.Category) []jackett.Category {
+	var out []jackett.Category
+	seen := map[string]bool{}
+	for _, cat := range cats {
+		if _, ok := seen[cat.ID]; ok {
+			continue
+		}
+
+		out = append(out, cat)
+		seen[cat.ID] = true
+		cat.Subcat = dedupSubcats(cat.Subcat)
+	}
+	return out
+}
+func dedupSubcats(cats []jackett.Subcat) []jackett.Subcat {
+	var out []jackett.Subcat
+	seen := map[string]bool{}
+	for _, cat := range cats {
+		if _, ok := seen[cat.ID]; ok {
+			continue
+		}
+
+		out = append(out, cat)
+		seen[cat.ID] = true
+	}
+	return out
+}
+
 func newznabToJackett(i newznab.Capabilities) *jackett.Capabilities {
 	caps := &jackett.Capabilities{}
 	caps.Searching.Search.Available = i.Searching.Search.Available
@@ -155,10 +183,12 @@ func (r *Runic) addSource(name string, s *Source) error {
 	if r.sources == nil {
 		r.sources = make(map[string]*Source)
 	}
+
 	if _, ok := r.sources[name]; ok {
 		return errors.New("indexer already exists")
 	}
 
+	s.Caps.Categories.Category = dedupCategories(s.Caps.Categories.Category)
 	r.sources[name] = s
 
 	return nil
