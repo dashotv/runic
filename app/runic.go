@@ -1,4 +1,4 @@
-package runic
+package app
 
 import (
 	"errors"
@@ -9,6 +9,7 @@ import (
 
 type Runic struct {
 	sources map[string]*Source
+	parser  *Parser
 
 	jackett struct {
 		client   *jackett.Jackett

@@ -1,6 +1,9 @@
 package app
 
 import (
+	"fmt"
+
+	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 )
@@ -19,9 +22,13 @@ type Application struct {
 
 	//golem:template:app/app_partial_definitions
 	// DO NOT EDIT. This section is managed by github.com/dashotv/golem.
+	// Routes
+	Engine  *gin.Engine
+	Default *gin.RouterGroup
+	Router  *gin.RouterGroup
 
 	//golem:template:app/app_partial_definitions
-
+	Runic *Runic
 }
 
 func Start() error {
@@ -41,6 +48,11 @@ func Start() error {
 
 	//golem:template:app/app_partial_start
 	// DO NOT EDIT. This section is managed by github.com/dashotv/golem.
+	app.Routes()
+	app.Log.Info("starting routes...")
+	if err := app.Engine.Run(fmt.Sprintf(":%d", app.Config.Port)); err != nil {
+		return errors.Wrap(err, "starting router")
+	}
 
 	//golem:template:app/app_partial_start
 

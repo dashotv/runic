@@ -4,14 +4,14 @@ repo: github.com/dashotv/runic
 package: app
 output: app
 plugins:
-    models: false
-    routes: false
-    workers: false
-    cache: false
-    events: false
+  models: false
+  routes: true
+  workers: false
+  cache: false
+  events: false
 definitions:
-    models: .golem/models
-    routes: .golem/routes
-    events: .golem/events
-    workers: .golem/workers
-    queues: .golem/queues
+  models: .golem/models
+  routes: .golem/routes
+  events: .golem/events
+  workers: .golem/workers
+  queues: .golem/queues

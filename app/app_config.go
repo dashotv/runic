@@ -24,6 +24,9 @@ type Config struct {
 	Port   int    `env:"PORT" envDefault:"10080"`
 	//golem:template:app/config_partial_struct
 	// DO NOT EDIT. This section is managed by github.com/dashotv/golem.
+	// Router Auth
+	Auth           bool   `env:"AUTH" envDefault:"false"`
+	ClerkSecretKey string `env:"CLERK_SECRET_KEY"`
 
 	//golem:template:app/config_partial_struct
 

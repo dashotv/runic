@@ -1,4 +1,4 @@
-package runic
+package app
 
 import (
 	"context"
