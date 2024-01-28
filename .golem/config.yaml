@@ -1,0 +1,17 @@
+version: "2.0"
+name: runic
+repo: github.com/dashotv/runic
+package: app
+output: app
+plugins:
+    models: false
+    routes: false
+    workers: false
+    cache: false
+    events: false
+definitions:
+    models: .golem/models
+    routes: .golem/routes
+    events: .golem/events
+    workers: .golem/workers
+    queues: .golem/queues

@@ -1,0 +1,18 @@
+[Unit]
+Description=runic Container
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop dashotv/runic
+ExecStartPre=-/usr/bin/docker rm dashotv/runic
+ExecStartPre=/usr/bin/docker pull dashotv/runic
+ExecStart=/usr/bin/docker run --rm --name %n \
+    --add-host=host.docker.internal:host-gateway \
+    -p 3000:3000 \
+    dashotv/runic
+
+[Install]
+WantedBy=multi-user.target
