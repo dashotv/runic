@@ -16,6 +16,24 @@ type Runic struct {
 	}
 }
 
+func New() *Runic {
+	r := &Runic{
+		sources: make(map[string]*Source),
+		parser:  &Parser{},
+	}
+
+	return r
+}
+
+func (r *Runic) Parse(source string, categories []int) error {
+	list, err := r.Read(source, categories)
+	if err != nil {
+		return err
+	}
+
+	return r.parser.Parse(list)
+}
+
 func (r *Runic) Read(source string, categories []int) ([]*newznab.NZB, error) {
 	s, ok := r.sources[source]
 	if !ok {
