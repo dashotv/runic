@@ -25,6 +25,10 @@ func init() {
 }
 
 func setupParser(a *Application) error {
+	replacements = []*Replacement{
+		{Regex: regexp.MustCompile(`\'(\w{1,2})\b`), Sub: "$1"},
+		{Regex: regexp.MustCompile(`[\W]+`), Sub: " "},
+	}
 	// for k, v := range a.Config.Replacements {
 	// 	replacements = append(replacements, &Replacement{
 	// 		Regex: regexp.MustCompile(k),
@@ -37,6 +41,12 @@ func setupParser(a *Application) error {
 			Sub:   "",
 		})
 	}
+
+	replacements = append(replacements, []*Replacement{
+		{Regex: regexp.MustCompile(`\s+`), Sub: " "},
+		{Regex: regexp.MustCompile(`^\s+`), Sub: ""},
+		{Regex: regexp.MustCompile(`\s+$`), Sub: ""},
+	}...)
 	return nil
 }
 

@@ -43,8 +43,7 @@ type Config struct {
 
 	//golem:template:app/config_partial_struct
 
-	Words        []string          `env:"WORDS"`
-	Replacements map[string]string `env:"REPLACEMENTS" envSeparator:";"`
+	Words []string `env:"WORDS"`
 }
 
 func (c *Config) Validate() error {
