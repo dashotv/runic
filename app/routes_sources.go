@@ -50,6 +50,18 @@ func (a *Application) SourcesShow(c *gin.Context, id string) {
 	c.JSON(http.StatusOK, gin.H{"error": false, "source": s})
 }
 
+func (a *Application) SourcesUpdate(c *gin.Context, id string) {
+	c.JSON(http.StatusNotImplemented, gin.H{"error": "not implemented"})
+}
+
+func (a *Application) SourcesSettings(c *gin.Context, id string) {
+	c.JSON(http.StatusNotImplemented, gin.H{"error": "not implemented"})
+}
+
+func (a *Application) SourcesDelete(c *gin.Context, id string) {
+	c.JSON(http.StatusNotImplemented, gin.H{"error": "not implemented"})
+}
+
 func (a *Application) SourcesRead(c *gin.Context, id string) {
 	cats := strings.Split(QueryString(c, "categories"), ",")
 	catsInt := make([]int, 0)
@@ -91,29 +103,5 @@ func (a *Application) SourcesSearch(c *gin.Context, id string, query string, sea
 		"error":   false,
 		"source":  id,
 		"results": results,
-	})
-}
-
-func (a *Application) SourcesUpdate(c *gin.Context, id string) {
-	// asssuming this is a CRUD route, get the subject from the database
-	// subject, err := a.DB.Runic.Get(id)
-	c.JSON(http.StatusOK, gin.H{
-		"error": false,
-	})
-}
-
-func (a *Application) SourcesSettings(c *gin.Context, id string) {
-	// asssuming this is a CRUD route, get the subject from the database
-	// subject, err := a.DB.Runic.Get(id)
-	c.JSON(http.StatusOK, gin.H{
-		"error": false,
-	})
-}
-
-func (a *Application) SourcesDelete(c *gin.Context, id string) {
-	// asssuming this is a CRUD route, get the subject from the database
-	// subject, err := a.DB.Runic.Get(id)
-	c.JSON(http.StatusOK, gin.H{
-		"error": false,
 	})
 }
