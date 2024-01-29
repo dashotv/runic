@@ -6,15 +6,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dotenv-org/godotenvvault"
 	"github.com/stretchr/testify/assert"
 )
 
-func init() {
-	if err := godotenvvault.Load(); err != nil {
-		panic(err)
-	}
-}
+// func init() {
+// 	if err := godotenvvault.Load("../.env"); err != nil {
+// 		panic(err)
+// 	}
+// }
 
 func TestRunic_Jackett(t *testing.T) {
 	r := &Runic{}

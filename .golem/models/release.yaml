@@ -7,21 +7,19 @@ fields:
     type: string
   - name: source
     type: string
-  - name: raw
-    type: string
   - name: title
     type: string
+  - name: year
+    type: int
   - name: description
     type: string
   - name: size
-    type: string
+    type: int64
   - name: view
     type: string
   - name: download
     type: string
   - name: infohash
-    type: string
-  - name: name
     type: string
   - name: season
     type: int
@@ -29,11 +27,7 @@ fields:
     type: int
   - name: volume
     type: int
-  - name: checksum
-    type: string
   - name: group
-    type: string
-  - name: author
     type: string
   - name: verified
     type: bool
@@ -51,11 +45,7 @@ fields:
     type: string
   - name: quality
     type: string
+  - name: raw
+    type: "*newznab.NZB"
   - name: published_at
     type: time.Time
-#  - name: created
-#    type: time.Time
-#    bson: created_at
-#  - name: updated
-#    type: time.Time
-#    bson: updated_at

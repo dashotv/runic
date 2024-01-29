@@ -46,10 +46,10 @@ func New() *Runic {
 	return r
 }
 
-func (r *Runic) Parse(source string, categories []int) error {
+func (r *Runic) Parse(source string, categories []int) ([]*Release, error) {
 	list, err := r.Read(source, categories)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	return r.parser.Parse(list)
