@@ -54,10 +54,35 @@ func (a *Application) IndexersUpdate(c *gin.Context, id string) {
 	c.JSON(http.StatusOK, gin.H{"error": false, "result": subject})
 }
 
+type Setting struct {
+	Key   string `json:"setting"`
+	Value bool   `json:"value"`
+}
+
 func (a *Application) IndexersSettings(c *gin.Context, id string) {
-	// asssuming this is a CRUD route, get the subject from the database
-	// subject, err := a.DB.Indexers.Get(id)
-	c.JSON(http.StatusNotImplemented, gin.H{"error": "not implemented"})
+	subject, err := a.DB.IndexerGet(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	setting := &Setting{}
+	if err := c.BindJSON(setting); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	switch setting.Key {
+	case "active":
+		subject.Active = setting.Value
+	}
+
+	if err := a.DB.Indexer.Save(subject); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"error": false})
 }
 
 func (a *Application) IndexersDelete(c *gin.Context, id string) {
