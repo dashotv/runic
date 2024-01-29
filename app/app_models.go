@@ -31,6 +31,7 @@ func checkDb(app *Application) (err error) {
 
 type Connector struct {
 	Log     *zap.SugaredLogger
+	Indexer *grimoire.Store[*Indexer]
 	Minion  *grimoire.Store[*Minion]
 	Release *grimoire.Store[*Release]
 }
@@ -38,6 +39,15 @@ type Connector struct {
 func NewConnector(app *Application) (*Connector, error) {
 	var s *Connection
 	var err error
+
+	s, err = app.Config.ConnectionFor("indexer")
+	if err != nil {
+		return nil, err
+	}
+	indexer, err := grimoire.New[*Indexer](s.URI, s.Database, s.Collection)
+	if err != nil {
+		return nil, err
+	}
 
 	s, err = app.Config.ConnectionFor("minion")
 	if err != nil {
@@ -59,11 +69,24 @@ func NewConnector(app *Application) (*Connector, error) {
 
 	c := &Connector{
 		Log:     app.Log.Named("db"),
+		Indexer: indexer,
 		Minion:  minion,
 		Release: release,
 	}
 
 	return c, nil
+}
+
+type Indexer struct { // model
+	grimoire.Document `bson:",inline"` // includes default model settings
+	//ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	//CreatedAt time.Time          `bson:"created_at" json:"created_at"`
+	//UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
+	Name        string           `bson:"name" json:"name"`
+	Url         string           `bson:"url" json:"url"`
+	Active      bool             `bson:"active" json:"active"`
+	Categories  map[string][]int `bson:"categories" json:"categories"`
+	ProcessedAt time.Time        `bson:"processed_at" json:"processed_at"`
 }
 
 type Minion struct { // model

@@ -78,6 +78,14 @@ func (a *Application) Routes() {
 	a.Default.GET("/", a.indexHandler)
 	a.Default.GET("/health", a.healthHandler)
 
+	indexers := a.Router.Group("/indexers")
+	indexers.GET("/", a.IndexersIndexHandler)
+	indexers.POST("/", a.IndexersCreateHandler)
+	indexers.GET("/:id", a.IndexersShowHandler)
+	indexers.PUT("/:id", a.IndexersUpdateHandler)
+	indexers.PATCH("/:id", a.IndexersSettingsHandler)
+	indexers.DELETE("/:id", a.IndexersDeleteHandler)
+
 	sources := a.Router.Group("/sources")
 	sources.GET("/", a.SourcesIndexHandler)
 	sources.POST("/", a.SourcesCreateHandler)
@@ -94,7 +102,8 @@ func (a *Application) indexHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"name": "runic",
 		"routes": gin.H{
-			"sources": "/sources",
+			"indexers": "/indexers",
+			"sources":  "/sources",
 		},
 	})
 }
@@ -108,6 +117,32 @@ func (a *Application) healthHandler(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"name": "runic", "health": health})
+}
+
+// Indexers (/indexers)
+func (a *Application) IndexersIndexHandler(c *gin.Context) {
+	page := QueryInt(c, "page")
+	limit := QueryInt(c, "limit")
+	a.IndexersIndex(c, page, limit)
+}
+func (a *Application) IndexersCreateHandler(c *gin.Context) {
+	a.IndexersCreate(c)
+}
+func (a *Application) IndexersShowHandler(c *gin.Context) {
+	id := c.Param("id")
+	a.IndexersShow(c, id)
+}
+func (a *Application) IndexersUpdateHandler(c *gin.Context) {
+	id := c.Param("id")
+	a.IndexersUpdate(c, id)
+}
+func (a *Application) IndexersSettingsHandler(c *gin.Context) {
+	id := c.Param("id")
+	a.IndexersSettings(c, id)
+}
+func (a *Application) IndexersDeleteHandler(c *gin.Context) {
+	id := c.Param("id")
+	a.IndexersDelete(c, id)
 }
 
 // Sources (/sources)
