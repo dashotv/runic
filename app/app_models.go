@@ -8,6 +8,7 @@ import (
 
 	"github.com/dashotv/grimoire"
 	"github.com/dashotv/runic/newznab"
+	"github.com/dashotv/runic/parser"
 )
 
 func init() {
@@ -115,27 +116,28 @@ type Release struct { // model
 	//ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
 	//CreatedAt time.Time          `bson:"created_at" json:"created_at"`
 	//UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
-	Type        string       `bson:"type" json:"type"`
-	Source      string       `bson:"source" json:"source"`
-	Title       string       `bson:"title" json:"title"`
-	Year        int          `bson:"year" json:"year"`
-	Description string       `bson:"description" json:"description"`
-	Size        int64        `bson:"size" json:"size"`
-	View        string       `bson:"view" json:"view"`
-	Download    string       `bson:"download" json:"download"`
-	Infohash    string       `bson:"infohash" json:"infohash"`
-	Season      int          `bson:"season" json:"season"`
-	Episode     int          `bson:"episode" json:"episode"`
-	Volume      int          `bson:"volume" json:"volume"`
-	Group       string       `bson:"group" json:"group"`
-	Verified    bool         `bson:"verified" json:"verified"`
-	Widescreen  bool         `bson:"widescreen" json:"widescreen"`
-	Uncensored  bool         `bson:"uncensored" json:"uncensored"`
-	Bluray      bool         `bson:"bluray" json:"bluray"`
-	Nzb         bool         `bson:"nzb" json:"nzb"`
-	Resolution  string       `bson:"resolution" json:"resolution"`
-	Encoding    string       `bson:"encoding" json:"encoding"`
-	Quality     string       `bson:"quality" json:"quality"`
-	Raw         *newznab.NZB `bson:"raw" json:"raw"`
-	PublishedAt time.Time    `bson:"published_at" json:"published_at"`
+	Type        string              `bson:"type" json:"type"`
+	Source      string              `bson:"source" json:"source"`
+	Title       string              `bson:"title" json:"title"`
+	Year        int                 `bson:"year" json:"year"`
+	Description string              `bson:"description" json:"description"`
+	Size        int64               `bson:"size" json:"size"`
+	View        string              `bson:"view" json:"view"`
+	Download    string              `bson:"download" json:"download"`
+	Infohash    string              `bson:"infohash" json:"infohash"`
+	Season      int                 `bson:"season" json:"season"`
+	Episode     int                 `bson:"episode" json:"episode"`
+	Volume      int                 `bson:"volume" json:"volume"`
+	Group       string              `bson:"group" json:"group"`
+	Verified    bool                `bson:"verified" json:"verified"`
+	Widescreen  bool                `bson:"widescreen" json:"widescreen"`
+	Uncensored  bool                `bson:"uncensored" json:"uncensored"`
+	Bluray      bool                `bson:"bluray" json:"bluray"`
+	Nzb         bool                `bson:"nzb" json:"nzb"`
+	Resolution  string              `bson:"resolution" json:"resolution"`
+	Encoding    string              `bson:"encoding" json:"encoding"`
+	Quality     string              `bson:"quality" json:"quality"`
+	Raw         *newznab.NZB        `bson:"raw" json:"raw"`
+	Info        *parser.TorrentInfo `bson:"info" json:"info"`
+	PublishedAt time.Time           `bson:"published_at" json:"published_at"`
 }

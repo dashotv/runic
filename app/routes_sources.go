@@ -62,8 +62,8 @@ func (a *Application) SourcesDelete(c *gin.Context, id string) {
 	c.JSON(http.StatusNotImplemented, gin.H{"error": "not implemented"})
 }
 
-func (a *Application) SourcesRead(c *gin.Context, id string) {
-	cats := strings.Split(QueryString(c, "categories"), ",")
+func parseCategories(categories string) ([]int, error) {
+	cats := strings.Split(categories, ",")
 	catsInt := make([]int, 0)
 	for _, cat := range cats {
 		if cat == "" {
@@ -72,14 +72,42 @@ func (a *Application) SourcesRead(c *gin.Context, id string) {
 
 		i, err := strconv.Atoi(cat)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
+			return nil, err
 		}
 
 		catsInt = append(catsInt, i)
 	}
+	return catsInt, nil
+}
 
-	results, err := a.Runic.Read(id, catsInt)
+func (a *Application) SourcesRead(c *gin.Context, id string) {
+	cats, err := parseCategories(QueryString(c, "categories"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	results, err := a.Runic.Read(id, cats)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"source":  id,
+		"results": results,
+	})
+}
+
+func (a *Application) SourcesParse(c *gin.Context, id string) {
+	cats, err := parseCategories(QueryString(c, "categories"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	results, err := a.Runic.Parse(id, cats)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

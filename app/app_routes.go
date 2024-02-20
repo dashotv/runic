@@ -95,6 +95,7 @@ func (a *Application) Routes() {
 	sources.DELETE("/:id", a.SourcesDeleteHandler)
 	sources.GET("/:id/read", a.SourcesReadHandler)
 	sources.GET("/:id/search", a.SourcesSearchHandler)
+	sources.GET("/:id/parse", a.SourcesParseHandler)
 
 }
 
@@ -179,4 +180,8 @@ func (a *Application) SourcesSearchHandler(c *gin.Context) {
 	q := QueryString(c, "q")
 	t := QueryString(c, "t")
 	a.SourcesSearch(c, id, q, t)
+}
+func (a *Application) SourcesParseHandler(c *gin.Context) {
+	id := c.Param("id")
+	a.SourcesParse(c, id)
 }
