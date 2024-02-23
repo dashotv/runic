@@ -90,7 +90,7 @@ func (p *Parser) Parse(list []*newznab.NZB) ([]*Release, error) {
 		// r.Proper = info.Proper
 		// r.Repack = info.Repack
 		// r.Container = info.Container
-		r.Widescreen = info.Widescreen
+		// r.Widescreen = info.Widescreen
 		// r.Website = info.Website
 		// r.Language = info.Language
 		// r.Sbs = info.Sbs

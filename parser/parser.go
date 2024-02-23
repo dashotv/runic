@@ -68,6 +68,7 @@ var _qualities = []string{
 	"web",
 	"webrip",
 }
+var bluray *regexp.Regexp
 var _bluray = []string{
 	"bd",
 	"bdrip",
@@ -80,6 +81,7 @@ func init() {
 	encodings = regexp.MustCompile(`(?i)\b(` + strings.Join(_encodings, "|") + `)\b`)
 	resolutions = regexp.MustCompile(`(?i)\b(` + strings.Join(_resolutions, "|") + `)[p]*\b`)
 	qualities = regexp.MustCompile(`(?i)\b(` + strings.Join(_qualities, "|") + `)\b`)
+	bluray = regexp.MustCompile(`(?i)\b(` + strings.Join(_bluray, "|") + `)\b`)
 	uncensored = regexp.MustCompile(`(?i)\b(unc(en)*(sored)*)\b`)
 }
 
@@ -87,7 +89,7 @@ func isUncensored(title string) bool {
 	return uncensored.MatchString(title)
 }
 func isBluray(title string) bool {
-	return qualities.MatchString(title)
+	return bluray.MatchString(title)
 }
 func getResolution(title string) string {
 	results := resolutions.FindStringSubmatch(title)
@@ -108,4 +110,16 @@ func getQuality(title string) string {
 		return ""
 	}
 	return strings.ToLower(results[0])
+}
+
+func Parse(title string) (*TorrentInfo, error) {
+	info := &TorrentInfo{
+		Title:      title,
+		Resolution: getResolution(title),
+		Quality:    getQuality(title),
+		Encodings:  getEncodings(title),
+		Bluray:     isBluray(title),
+		Uncensored: isUncensored(title),
+	}
+	return info, nil
 }
