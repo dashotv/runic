@@ -129,15 +129,18 @@ type Release struct { // model
 	Episode     int                 `bson:"episode" json:"episode"`
 	Volume      int                 `bson:"volume" json:"volume"`
 	Group       string              `bson:"group" json:"group"`
+	Website     string              `bson:"website" json:"website"`
 	Verified    bool                `bson:"verified" json:"verified"`
 	Widescreen  bool                `bson:"widescreen" json:"widescreen"`
+	Unrated     bool                `bson:"unrated" json:"unrated"`
 	Uncensored  bool                `bson:"uncensored" json:"uncensored"`
 	Bluray      bool                `bson:"bluray" json:"bluray"`
-	Nzb         bool                `bson:"nzb" json:"nzb"`
+	ThreeD      bool                `bson:"threeD" json:"threeD"`
 	Resolution  string              `bson:"resolution" json:"resolution"`
-	Encoding    string              `bson:"encoding" json:"encoding"`
+	Encodings   []string            `bson:"encodings" json:"encodings"`
 	Quality     string              `bson:"quality" json:"quality"`
 	Raw         *newznab.NZB        `bson:"raw" json:"raw"`
 	Info        *parser.TorrentInfo `bson:"info" json:"info"`
+	Downloader  string              `bson:"downloader" json:"downloader"`
 	PublishedAt time.Time           `bson:"published_at" json:"published_at"`
 }

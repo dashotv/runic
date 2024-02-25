@@ -39,7 +39,7 @@ func TestNewResolutions(t *testing.T) {
 		want    string
 	}{
 		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", "1080"},
-		{"Hercules (2014) 1080p BrRip H264 - YIFY", "1080"},
+		{"Hercules (2014) [1080p] BrRip H264 - YIFY", "1080"},
 		{"Dawn.of.the.Planet.of.the.Apes.2014.HDRip.XViD-EVO", ""},
 		{"The Big Bang Theory S08E06 HDTV XviD-LOL [eztv]", ""},
 		{"22 Jump Street (2014) 720p BrRip x264 - YIFY", "720"},
@@ -52,6 +52,7 @@ func TestNewResolutions(t *testing.T) {
 		{"X-Men.Days.of.Future.Past.2014.1080p.WEB-DL.DD5.1.H264-RARBG", "1080"},
 		{"Guardians Of The Galaxy 2014 R6 720p HDCAM x264-JYK", "720"},
 		{"Marvel's.Agents.of.S.H.I.E.L.D.S02E01.Shadows.1080p.WEB-DL.DD5.1", "1080"},
+		{"[Erai-raws] Shangri-La Frontier - Kusogee Hunter, Kamige ni Idoman to Su - 20 [720p][Multiple Subtitle] [ENG][POR-BR][SPA-LA][SPA][ARA][FRE][GER][ITA][RUS]", "720"},
 	}
 	for _, tt := range testdata {
 		t.Run(tt.subject, func(t *testing.T) {

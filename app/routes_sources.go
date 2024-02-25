@@ -113,6 +113,11 @@ func (a *Application) SourcesParse(c *gin.Context, id string) {
 		return
 	}
 
+	// TODO: remove this
+	if len(results) > 10 {
+		results = results[:10]
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"error":   false,
 		"source":  id,

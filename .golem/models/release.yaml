@@ -29,25 +29,31 @@ fields:
     type: int
   - name: group
     type: string
+  - name: website
+    type: string
   - name: verified
     type: bool
   - name: widescreen
+    type: bool
+  - name: unrated
     type: bool
   - name: uncensored
     type: bool
   - name: bluray
     type: bool
-  - name: nzb
+  - name: threeD
     type: bool
   - name: resolution
     type: string
-  - name: encoding
-    type: string
+  - name: encodings
+    type: "[]string"
   - name: quality
     type: string
   - name: raw
     type: "*newznab.NZB"
   - name: info
     type: "*parser.TorrentInfo"
+  - name: downloader
+    type: string # torrent | nzb | metube
   - name: published_at
     type: time.Time

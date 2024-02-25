@@ -61,14 +61,16 @@ func (p *Parser) Parse(list []*newznab.NZB) ([]*Release, error) {
 		if nzb.IMDBTitle != "" {
 			r.Title = nzb.IMDBTitle
 			r.Year = nzb.IMDBYear
-		} else {
-			r.Title = p.parseTitle(nzb.Title)
 		}
 		r.Description = nzb.Description
 		r.Size = nzb.Size
 		r.PublishedAt = nzb.PubDate
+		r.Downloader = "nzb"
+		if nzb.IsTorrent {
+			r.Downloader = "torrent"
+		}
 
-		info, err := parser.Parse(r.Title)
+		info, err := parser.Parse(nzb.Title)
 		if err != nil {
 			return nil, err
 		}
@@ -79,24 +81,15 @@ func (p *Parser) Parse(list []*newznab.NZB) ([]*Release, error) {
 		r.Season = info.Season
 		r.Episode = info.Episode
 		r.Year = info.Year
+		r.Group = info.Group
+		r.Website = info.Website
 		r.Resolution = info.Resolution
 		r.Quality = info.Quality
-		// r.Codec = info.Codec
-		// r.Audio = info.Audio
-		r.Group = info.Group
-		// r.Region = info.Region
-		// r.Extended = info.Extended
-		// r.Hardcoded = info.Hardcoded
-		// r.Proper = info.Proper
-		// r.Repack = info.Repack
-		// r.Container = info.Container
-		// r.Widescreen = info.Widescreen
-		// r.Website = info.Website
-		// r.Language = info.Language
-		// r.Sbs = info.Sbs
-		// r.Unrated = info.Unrated
-		// r.Size = info.Size
-		// r.ThreeD = info.ThreeD
+		r.Encodings = info.Encodings
+		r.Unrated = info.Unrated
+		r.Uncensored = info.Uncensored
+		r.ThreeD = info.ThreeD
+		r.Bluray = info.Bluray
 
 		releases = append(releases, r)
 	}

@@ -10,9 +10,10 @@ type TorrentInfo struct {
 	Website    string   `json:"website,omitempty"`
 	Resolution string   `json:"resolution,omitempty"`
 	Quality    string   `json:"quality,omitempty"`
-	Encodings  []string `json:"codec,omitempty"`
+	Encodings  []string `json:"encodings,omitempty"`
 	Unrated    bool     `json:"unrated,omitempty"`
 	Uncensored bool     `json:"uncensored,omitempty"`
 	ThreeD     bool     `json:"3d,omitempty"`
 	Bluray     bool     `json:"bluray,omitempty"`
+	Verified   bool     `json:"verified"`
 }
