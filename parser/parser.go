@@ -65,6 +65,9 @@ func parseTitle(title string, catType string) (int, map[string]string) {
 	for i, r := range list {
 		params := regexParams(r, title)
 		if params != nil {
+			if params["episode"] != "" {
+				params["episode"] = CleanEpisode(params["episode"])
+			}
 			return i, params
 		}
 	}

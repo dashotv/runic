@@ -105,3 +105,7 @@ func CleanTitle(title string) string {
 	}
 	return title
 }
+
+func CleanEpisode(episode string) string {
+	return regexp.MustCompile(`[\W\.]+`).ReplaceAllString(episode, "")
+}
