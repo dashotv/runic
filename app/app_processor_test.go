@@ -3,6 +3,8 @@ package app
 import (
 	"fmt"
 	"testing"
+
+	_ "github.com/dotenv-org/godotenvvault/autoload"
 )
 
 func TestParser_Parse(t *testing.T) {

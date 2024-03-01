@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // func init() {
@@ -64,8 +65,8 @@ func TestRunic_GeekCats(t *testing.T) {
 }
 func TestRunic_NyaaCats(t *testing.T) {
 	r := &Runic{}
-	err := r.AddTorznab("nyaasi", "http://10.0.4.62:9117/api/v2.0/indexers/nyaasi/results/torznab", os.Getenv("JACKETT_KEY"), 0, false)
-	assert.NoError(t, err)
+	err := r.AddTorznab("nyaasi", fmt.Sprintf("%s/api/v2.0/indexers/nyaasi/results/torznab", os.Getenv("JACKETT_URL")), os.Getenv("JACKETT_KEY"), 0, false)
+	require.NoError(t, err)
 
 	source, ok := r.Source("nyaasi")
 	assert.True(t, ok, "runic.Source() should return true")
@@ -99,7 +100,7 @@ func TestRunic_JackettRead(t *testing.T) {
 
 func TestRunic_NyaaRead(t *testing.T) {
 	r := &Runic{}
-	err := r.AddTorznab("nyaa", "http://10.0.4.62:9117/api/v2.0/indexers/nyaasi/results/torznab", os.Getenv("JACKETT_KEY"), 0, false)
+	err := r.AddTorznab("nyaa", fmt.Sprintf("%s/api/v2.0/indexers/nyaasi/results/torznab", os.Getenv("JACKETT_URL")), os.Getenv("JACKETT_KEY"), 0, false)
 	assert.NoError(t, err)
 
 	results, err := r.Read("nyaa", []int{5000})

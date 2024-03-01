@@ -174,6 +174,11 @@ func TestWebsite(t *testing.T) {
 		{"Hercules (2014) 1080p BrRip H264 - YIFY", "yify"},
 		{"[AniSuki] Ayakashi Triangle Volume 5 (BD) (x265 HEVC OPUS) (Uncensored)", ""},
 		{"[AE] Tokyo Ghoul - [Batch] [UNCEN] [720p]", ""},
+		// TODO: fix this
+		{"thomas.and.friends.s19e09_s20e14.convert.hdtv.x264-w4f[eztv].mkv", ""},
+		{"Doctor.Who.2005.8x11.Dark.Water.720p.HDTV.x264-FoV[rartv]", ""},
+		{"The Simpsons S26E05 HDTV x264 PROPER-LOL [eztv]", ""},
+		{"The Flash 2014 S01E01 HDTV x264-LOL[ettv]", ""},
 	}
 	for _, tt := range testdata {
 		t.Run(tt.subject, func(t *testing.T) {

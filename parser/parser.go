@@ -41,11 +41,14 @@ func getGroup(title string) string {
 	return strings.ToLower(results[1])
 }
 func getWebsite(title string) string {
-	results := website.FindStringSubmatch(title)
-	if len(results) < 2 {
+	results := regexList(website, title)
+	if len(results) < 1 {
 		return ""
 	}
-	return strings.ToLower(results[1])
+	if getResolution(results[0]) != "" {
+		return ""
+	}
+	return strings.ToLower(results[0])
 }
 
 func parseTitle(title string, catType string) (int, map[string]string) {
@@ -66,6 +69,20 @@ func parseTitle(title string, catType string) (int, map[string]string) {
 		}
 	}
 	return -1, nil
+}
+
+func regexList(r *regexp.Regexp, title string) []string {
+	list := []string{}
+	results := r.FindStringSubmatch(title)
+	if len(results) == 0 {
+		return nil
+	}
+	for i, name := range r.SubexpNames() {
+		if i != 0 && name != "" {
+			list = append(list, results[i])
+		}
+	}
+	return lo.Compact(list)
 }
 
 func regexParams(r *regexp.Regexp, title string) map[string]string {

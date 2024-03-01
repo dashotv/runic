@@ -25,6 +25,13 @@ var titleGreedy = `(?P<title>.*)`
 var year = `[\(\[]*(?P<year>\d{4})[\(\[]*`
 var date = `(?P<date>\d{4}-\d{2}-\d{2})`
 
+// -[\w]+\[(\w+)\]
+// \[([\w]+)\]
+// sp+`*\[([\w]+)\]`
+// \[([\w]+)\]\.\w{3,4}
+// ((-*\[*(\w+)\]*)|(-[\w]+\[(\w+)\])|(\[([\w]+)\])|(\[([\w]+)\]\.\w{3,4}))$
+// (?P<group>-*\s*[\[]*([\w]+))[\]]*$
+// var _website = `(?:(?:-*\[*(?P<website>\w+)\]*)|(?:-[\w]+\[(?P<website>\w+)\])|(?:\[(?P<website>[\w]+)\])|(?:\[(?P<website>[\w]+)\]\.\w{3,4}))`
 var group *regexp.Regexp
 var _group = `[\[\(]\s*(?P<group>[^\]\)]+?)\s*[\)\]]`
 var website *regexp.Regexp

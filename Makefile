@@ -6,7 +6,7 @@ NAME := runic
 all: test
 
 test: generate
-	[ -f .env ] && source .env; go test -v ./...
+	go test ./...
 
 generate:
 	golem generate
