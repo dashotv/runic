@@ -1,0 +1,18 @@
+{
+  "title": "The Hateful Eight",
+  "season": 0,
+  "episode": 0,
+  "year": 2015,
+  "group": "",
+  "website": "",
+  "resolution": "720",
+  "quality": "bluray",
+  "encodings": [
+    "x265",
+    "hevc"
+  ],
+  "unrated": false,
+  "uncensored": false,
+  "3d": false,
+  "bluray": true
+}

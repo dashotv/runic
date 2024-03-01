@@ -7,6 +7,10 @@ import (
 	"github.com/samber/lo"
 )
 
+var group *regexp.Regexp
+var _group = `[\[\(]\s*(?P<group>[^\]\)]+?)\s*[\)\]]`
+var website *regexp.Regexp
+var _website = sp + `*[_-]+` + sp + `*(?P<website>[\w_-]+?)`
 var uncensored *regexp.Regexp
 var encodings *regexp.Regexp
 var _encodings = []string{
@@ -83,6 +87,8 @@ func init() {
 	qualities = regexp.MustCompile(`(?i)\b(` + strings.Join(_qualities, "|") + `)\b`)
 	bluray = regexp.MustCompile(`(?i)\b(` + strings.Join(_bluray, "|") + `)\b`)
 	uncensored = regexp.MustCompile(`(?i)\b(unc(en)*(sored)*)\b`)
+	group = regexp.MustCompile(`(?i)^` + _group)
+	website = regexp.MustCompile(`(?i)` + _website + `$`)
 }
 
 func isUncensored(title string) bool {
@@ -111,15 +117,73 @@ func getQuality(title string) string {
 	}
 	return strings.ToLower(results[0])
 }
+func getGroup(title string) string {
+	results := group.FindStringSubmatch(title)
+	if len(results) < 2 {
+		return ""
+	}
+	return strings.ToLower(results[1])
+}
+func getWebsite(title string) string {
+	results := website.FindStringSubmatch(title)
+	if len(results) < 2 {
+		return ""
+	}
+	return strings.ToLower(results[1])
+}
 
-func Parse(title string) (*TorrentInfo, error) {
+func parseTitle(title string, catType string) (int, map[string]string) {
+	list := regexes
+	switch catType {
+	case "movies":
+		list = regexesMovies
+	case "tv":
+		list = regexesTV
+	case "anime":
+		list = regexesAnime
+	}
+
+	for i, r := range list {
+		params := regexParams(r, title)
+		if params != nil {
+			return i, params
+		}
+	}
+	return -1, nil
+}
+
+func regexParams(r *regexp.Regexp, title string) map[string]string {
+	results := r.FindStringSubmatch(title)
+	if len(results) == 0 {
+		return nil
+	}
+	params := make(map[string]string)
+	for i, name := range r.SubexpNames() {
+		if i != 0 && name != "" {
+			params[name] = results[i]
+		}
+	}
+	return params
+}
+
+func Parse(title, catType string) (*TorrentInfo, error) {
 	info := &TorrentInfo{
-		Title:      title,
+		// Title:      ,
 		Resolution: getResolution(title),
 		Quality:    getQuality(title),
 		Encodings:  getEncodings(title),
 		Bluray:     isBluray(title),
 		Uncensored: isUncensored(title),
+		Group:      getGroup(title),
+		Website:    getWebsite(title),
+	}
+	i, params := parseTitle(title, catType)
+	if i >= 0 {
+		info.Title = CleanTitle(params["title"])
+		info.setSeason(params["season"])
+		info.setEpisode(params["episode"])
+		info.setYear(params["year"])
+		// info.Volume = params["volume"]
 	}
 	return info, nil
 }

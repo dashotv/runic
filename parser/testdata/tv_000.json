@@ -1,0 +1,17 @@
+{
+  "title": "The Walking Dead",
+  "season": 5,
+  "episode": 3,
+  "year": 0,
+  "group": "",
+  "website": "",
+  "resolution": "720",
+  "quality": "hdtv",
+  "encodings": [
+    "x264"
+  ],
+  "unrated": false,
+  "uncensored": false,
+  "3d": false,
+  "bluray": false
+}

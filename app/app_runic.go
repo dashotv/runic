@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/pkg/errors"
+	"github.com/samber/lo"
 
 	"github.com/dashotv/runic/jackett"
 	"github.com/dashotv/runic/newznab"
@@ -28,8 +29,8 @@ func setupRunic(app *Application) error {
 }
 
 type Runic struct {
-	sources map[string]*Source
-	parser  *Parser
+	sources   map[string]*Source
+	processor *Processor
 
 	jackett struct {
 		client   *jackett.Jackett
@@ -39,11 +40,28 @@ type Runic struct {
 
 func New() *Runic {
 	r := &Runic{
-		sources: make(map[string]*Source),
-		parser:  &Parser{},
+		sources:   make(map[string]*Source),
+		processor: &Processor{},
 	}
 
 	return r
+}
+
+func identifyType(categories []int) string {
+	if len(categories) == 0 {
+		return ""
+	}
+
+	if lo.Contains(categories, 5070) {
+		return "anime"
+	}
+	if lo.Contains(categories, 5000) {
+		return "tv"
+	}
+	if lo.Contains(categories, 2000) {
+		return "movies"
+	}
+	return ""
 }
 
 func (r *Runic) Parse(source string, categories []int) ([]*Release, error) {
@@ -52,7 +70,7 @@ func (r *Runic) Parse(source string, categories []int) ([]*Release, error) {
 		return nil, err
 	}
 
-	return r.parser.Parse(list)
+	return r.processor.Process(list)
 }
 
 func (r *Runic) Read(source string, categories []int) ([]*newznab.NZB, error) {
