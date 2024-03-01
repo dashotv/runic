@@ -22,7 +22,7 @@ func TestParser_Parse(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	releases, err := app.Runic.processor.Process(list)
+	releases, err := app.Runic.processor.Process("geek", list)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -48,7 +48,7 @@ func TestParser_Parse2(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	releases, err := app.Runic.processor.Process(list)
+	releases, err := app.Runic.processor.Process("geek", list)
 	if err != nil {
 		t.Fatal(err)
 	}

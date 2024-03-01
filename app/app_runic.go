@@ -70,7 +70,7 @@ func (r *Runic) Parse(source string, categories []int) ([]*Release, error) {
 		return nil, err
 	}
 
-	return r.processor.Process(list)
+	return r.processor.Process(source, list)
 }
 
 func (r *Runic) Read(source string, categories []int) ([]*newznab.NZB, error) {

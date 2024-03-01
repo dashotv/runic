@@ -25,12 +25,13 @@ func catsToInt(cats []string) []int {
 
 type Processor struct{}
 
-func (p *Processor) Process(list []*newznab.NZB) ([]*Release, error) {
+func (p *Processor) Process(source string, list []*newznab.NZB) ([]*Release, error) {
 	releases := []*Release{}
 
 	for _, nzb := range list {
 		t := identifyType(catsToInt(nzb.Category))
 		r := &Release{
+			Source:      source,
 			Type:        t,
 			Raw:         nzb,
 			Download:    nzb.DownloadURL,
