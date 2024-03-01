@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var err error
@@ -198,7 +199,7 @@ func TestParser_anime(t *testing.T) {
 			assert.NoError(t, err)
 
 			gold, err := loadGolden("anime", i)
-			assert.NoError(t, err)
+			require.NoError(t, err)
 			assert.Equal(t, gold, info)
 		})
 	}

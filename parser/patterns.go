@@ -16,7 +16,8 @@ func init() {
 }
 
 var sp = `[\s_.]`
-var episode = `((?:(e(p)*(isode)*` + sp + `+)*(?P<episode>\d{1,3})\b)|(?P<episode>\d{4}.\d{2}.\d{2}))`
+var episode = `(?:(e(p)*(isode)*` + sp + `+)*(?P<episode>\d{1,3})\b)` // |(?P<episode>\d{4}.\d{2}.\d{2}))
+var episodeDate = `((?:(e(p)*(isode)*` + sp + `+)*(?P<episode>\d{1,3})\b)|(?P<episode>\d{4}.\d{2}.\d{2}))`
 var se = `s(eason)*` + sp + `*(?P<season>\d+)` + sp + `*e(pisode)*` + sp + `*(?P<episode>\d{1,3})\b`
 var sx = `\b(?P<season>\d+)x(?P<episode>\d{1,3})\b`
 var volume = `(?P<volume>(vol(ume)*|part)` + sp + `+(?P<volnum>\d+))+`
@@ -127,8 +128,8 @@ var regexesMovies = []*regexp.Regexp{
 var regexesTV = []*regexp.Regexp{
 	regexp.MustCompile(`(?i)^` + title + `` + sp + `+` + se),
 	regexp.MustCompile(`(?i)^` + title + `` + sp + `+` + sx),
-	regexp.MustCompile(`(?i)^` + title + `` + sp + `+` + year + sp + `+` + episode),
-	regexp.MustCompile(`(?i)^` + title + `` + sp + `+` + episode),
+	regexp.MustCompile(`(?i)^` + title + `` + sp + `+` + year + sp + `+` + episodeDate),
+	regexp.MustCompile(`(?i)^` + title + `` + sp + `+` + episodeDate),
 }
 
 var regexesAnime = []*regexp.Regexp{
