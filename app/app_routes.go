@@ -96,6 +96,14 @@ func (a *Application) Routes() {
 	indexers.PATCH("/:id", a.IndexersSettingsHandler)
 	indexers.DELETE("/:id", a.IndexersDeleteHandler)
 
+	minion := a.Router.Group("/minion")
+	minion.GET("/", a.MinionIndexHandler)
+	minion.POST("/", a.MinionCreateHandler)
+	minion.GET("/:id", a.MinionShowHandler)
+	minion.PUT("/:id", a.MinionUpdateHandler)
+	minion.PATCH("/:id", a.MinionSettingsHandler)
+	minion.DELETE("/:id", a.MinionDeleteHandler)
+
 	sources := a.Router.Group("/sources")
 	sources.GET("/", a.SourcesIndexHandler)
 	sources.POST("/", a.SourcesCreateHandler)
@@ -114,6 +122,7 @@ func (a *Application) indexHandler(c echo.Context) error {
 		"name": "runic",
 		"routes": H{
 			"indexers": "/indexers",
+			"minion":   "/minion",
 			"sources":  "/sources",
 		},
 	})
@@ -151,6 +160,32 @@ func (a *Application) IndexersSettingsHandler(c echo.Context) error {
 func (a *Application) IndexersDeleteHandler(c echo.Context) error {
 	id := c.Param("id")
 	return a.IndexersDelete(c, id)
+}
+
+// Minion (/minion)
+func (a *Application) MinionIndexHandler(c echo.Context) error {
+	page := QueryInt(c, "page")
+	limit := QueryInt(c, "limit")
+	return a.MinionIndex(c, page, limit)
+}
+func (a *Application) MinionCreateHandler(c echo.Context) error {
+	return a.MinionCreate(c)
+}
+func (a *Application) MinionShowHandler(c echo.Context) error {
+	id := c.Param("id")
+	return a.MinionShow(c, id)
+}
+func (a *Application) MinionUpdateHandler(c echo.Context) error {
+	id := c.Param("id")
+	return a.MinionUpdate(c, id)
+}
+func (a *Application) MinionSettingsHandler(c echo.Context) error {
+	id := c.Param("id")
+	return a.MinionSettings(c, id)
+}
+func (a *Application) MinionDeleteHandler(c echo.Context) error {
+	id := c.Param("id")
+	return a.MinionDelete(c, id)
 }
 
 // Sources (/sources)

@@ -3,7 +3,6 @@ package app
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/labstack/echo/v4"
 )
 
@@ -12,7 +11,7 @@ func (a *Application) IndexersIndex(c echo.Context, page int, limit int) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, gin.H{"count": count, "results": indexers})
+	return c.JSON(http.StatusOK, H{"count": count, "results": indexers})
 }
 
 func (a *Application) IndexersCreate(c echo.Context) error {
@@ -25,7 +24,7 @@ func (a *Application) IndexersCreate(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, gin.H{"error": false, "result": indexer})
+	return c.JSON(http.StatusOK, H{"error": false, "result": indexer})
 }
 
 func (a *Application) IndexersShow(c echo.Context, id string) error {
@@ -34,7 +33,7 @@ func (a *Application) IndexersShow(c echo.Context, id string) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, gin.H{"error": false, "result": subject})
+	return c.JSON(http.StatusOK, H{"error": false, "result": subject})
 }
 
 func (a *Application) IndexersUpdate(c echo.Context, id string) error {
@@ -47,7 +46,7 @@ func (a *Application) IndexersUpdate(c echo.Context, id string) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, gin.H{"error": false, "result": subject})
+	return c.JSON(http.StatusOK, H{"error": false, "result": subject})
 }
 
 type Setting struct {
@@ -75,7 +74,7 @@ func (a *Application) IndexersSettings(c echo.Context, id string) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, gin.H{"error": false})
+	return c.JSON(http.StatusOK, H{"error": false})
 }
 
 func (a *Application) IndexersDelete(c echo.Context, id string) error {
@@ -89,5 +88,5 @@ func (a *Application) IndexersDelete(c echo.Context, id string) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, gin.H{"error": false})
+	return c.JSON(http.StatusOK, H{"error": false})
 }

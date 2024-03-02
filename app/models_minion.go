@@ -11,8 +11,11 @@ func (c *Connector) MinionGet(id string) (*Minion, error) {
 	return m, nil
 }
 
-func (c *Connector) MinionList() ([]*Minion, error) {
-	list, err := c.Minion.Query().Limit(10).Run()
+func (c *Connector) MinionList(limit, skip int) ([]*Minion, error) {
+	if limit == 0 {
+		limit = 25
+	}
+	list, err := c.Minion.Query().Limit(limit).Skip(skip).Desc("created_at").Run()
 	if err != nil {
 		return nil, err
 	}
