@@ -13,13 +13,20 @@ func (c *Connector) ReleaseGet(id string) (*Release, error) {
 	return m, nil
 }
 
-func (c *Connector) ReleaseList() ([]*Release, error) {
-	list, err := c.Release.Query().Limit(10).Run()
+func (c *Connector) ReleaseList(page, limit int) ([]*Release, int64, error) {
+	q := c.Release.Query().Limit(limit).Skip((page - 1) * limit).Desc("created_at")
+
+	total, err := q.Count()
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	return list, nil
+	list, err := c.Release.Query().Limit(limit).Skip((page - 1) * limit).Run()
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return list, total, nil
 }
 
 func (c *Connector) ReleasesAll() ([]*Release, error) {

@@ -26,3 +26,12 @@ func (c *Connector) IndexerList(page, limit int) ([]*Indexer, int64, error) {
 
 	return indexers, count, nil
 }
+
+func (c *Connector) IndexerActive() ([]*Indexer, error) {
+	indexers, err := c.Indexer.Query().Where("active", true).Desc("created_at").Run()
+	if err != nil {
+		return nil, err
+	}
+
+	return indexers, nil
+}

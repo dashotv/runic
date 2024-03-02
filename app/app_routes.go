@@ -104,6 +104,14 @@ func (a *Application) Routes() {
 	minion.PATCH("/:id", a.MinionSettingsHandler)
 	minion.DELETE("/:id", a.MinionDeleteHandler)
 
+	releases := a.Router.Group("/releases")
+	releases.GET("/", a.ReleasesIndexHandler)
+	releases.POST("/", a.ReleasesCreateHandler)
+	releases.GET("/:id", a.ReleasesShowHandler)
+	releases.PUT("/:id", a.ReleasesUpdateHandler)
+	releases.PATCH("/:id", a.ReleasesSettingsHandler)
+	releases.DELETE("/:id", a.ReleasesDeleteHandler)
+
 	sources := a.Router.Group("/sources")
 	sources.GET("/", a.SourcesIndexHandler)
 	sources.POST("/", a.SourcesCreateHandler)
@@ -123,6 +131,7 @@ func (a *Application) indexHandler(c echo.Context) error {
 		"routes": H{
 			"indexers": "/indexers",
 			"minion":   "/minion",
+			"releases": "/releases",
 			"sources":  "/sources",
 		},
 	})
@@ -186,6 +195,32 @@ func (a *Application) MinionSettingsHandler(c echo.Context) error {
 func (a *Application) MinionDeleteHandler(c echo.Context) error {
 	id := c.Param("id")
 	return a.MinionDelete(c, id)
+}
+
+// Releases (/releases)
+func (a *Application) ReleasesIndexHandler(c echo.Context) error {
+	page := QueryInt(c, "page")
+	limit := QueryInt(c, "limit")
+	return a.ReleasesIndex(c, page, limit)
+}
+func (a *Application) ReleasesCreateHandler(c echo.Context) error {
+	return a.ReleasesCreate(c)
+}
+func (a *Application) ReleasesShowHandler(c echo.Context) error {
+	id := c.Param("id")
+	return a.ReleasesShow(c, id)
+}
+func (a *Application) ReleasesUpdateHandler(c echo.Context) error {
+	id := c.Param("id")
+	return a.ReleasesUpdate(c, id)
+}
+func (a *Application) ReleasesSettingsHandler(c echo.Context) error {
+	id := c.Param("id")
+	return a.ReleasesSettings(c, id)
+}
+func (a *Application) ReleasesDeleteHandler(c echo.Context) error {
+	id := c.Param("id")
+	return a.ReleasesDelete(c, id)
 }
 
 // Sources (/sources)

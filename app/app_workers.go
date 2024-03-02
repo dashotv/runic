@@ -59,6 +59,10 @@ func setupWorkers(app *Application) error {
 		return errors.Wrap(err, "scheduling worker: parse_active (ParseActive)")
 	}
 
+	if err := minion.Register[*ParseIndexer](m, &ParseIndexer{}); err != nil {
+		return errors.Wrap(err, "registering worker: parse_indexer (ParseIndexer)")
+	}
+
 	app.Workers = m
 	return nil
 }
