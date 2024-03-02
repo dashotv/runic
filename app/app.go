@@ -3,10 +3,11 @@ package app
 import (
 	"fmt"
 
-	"github.com/dashotv/minion"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
+
+	"github.com/dashotv/minion"
 )
 
 var app *Application
