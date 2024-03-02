@@ -2,16 +2,20 @@
 package app
 
 import (
+	"context"
+	"fmt"
 	"net/http"
-	"time"
 
-	ginzap "github.com/gin-contrib/zap"
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"github.com/pkg/errors"
+	"go.infratographer.com/x/echox/echozap"
 )
 
 func init() {
 	initializers = append(initializers, setupRoutes)
 	healthchecks["routes"] = checkRoutes
+	starters = append(starters, startRoutes)
 }
 
 func checkRoutes(app *Application) error {
@@ -19,22 +23,27 @@ func checkRoutes(app *Application) error {
 	return nil
 }
 
-func setupRoutes(app *Application) error {
-	if app.Config.Mode == "release" {
-		gin.SetMode(gin.ReleaseMode)
+func startRoutes(ctx context.Context, app *Application) error {
+	app.Routes()
+	app.Log.Info("starting routes...")
+	if err := app.Engine.Start(fmt.Sprintf(":%d", app.Config.Port)); err != nil {
+		return errors.Wrap(err, "starting router")
 	}
+	return nil
+}
 
+func setupRoutes(app *Application) error {
 	logger := app.Log.Named("routes").Desugar()
+	e := echo.New()
+	e.HideBanner = true
+	e.Use(middleware.Recover())
+	e.Use(echozap.Middleware(logger))
 
-	app.Engine = gin.New()
-	app.Engine.Use(
-		ginzap.Ginzap(logger, time.RFC3339, true),
-		ginzap.RecoveryWithZap(logger, true),
-	)
+	app.Engine = e
 	// unauthenticated routes
-	app.Default = app.Engine.Group("/")
+	app.Default = app.Engine.Group("")
 	// authenticated routes (if enabled, otherwise same as default)
-	app.Router = app.Engine.Group("/")
+	app.Router = app.Engine.Group("")
 
 	// if app.Config.Auth {
 	// 	clerkSecret := app.Config.ClerkSecretKey
@@ -57,7 +66,7 @@ func setupRoutes(app *Application) error {
 // also add this import: "github.com/clerkinc/clerk-sdk-go/clerk"
 //
 // requireSession wraps the clerk.RequireSession middleware
-// func requireSession(client clerk.Client) gin.HandlerFunc {
+// func requireSession(client clerk.Client) HandlerFunc {
 // 	requireActiveSession := clerk.RequireSessionV2(client)
 // 	return func(gctx *gin.Context) {
 // 		var skip = true
@@ -67,7 +76,7 @@ func setupRoutes(app *Application) error {
 // 		requireActiveSession(handler).ServeHTTP(gctx.Writer, gctx.Request)
 // 		switch {
 // 		case skip:
-// 			gctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "session required"})
+// 			gctx.AbortWithStatusJSON(http.StatusBadRequest, H{"error": "session required"})
 // 		default:
 // 			gctx.Next()
 // 		}
@@ -99,89 +108,86 @@ func (a *Application) Routes() {
 
 }
 
-func (a *Application) indexHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
+func (a *Application) indexHandler(c echo.Context) error {
+	return c.JSON(http.StatusOK, H{
 		"name": "runic",
-		"routes": gin.H{
+		"routes": H{
 			"indexers": "/indexers",
 			"sources":  "/sources",
 		},
 	})
 }
 
-func (a *Application) healthHandler(c *gin.Context) {
+func (a *Application) healthHandler(c echo.Context) error {
 	health, err := a.Health()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
+		return err
 	}
-	c.JSON(http.StatusOK, gin.H{"name": "runic", "health": health})
+	return c.JSON(http.StatusOK, H{"name": "runic", "health": health})
 }
 
 // Indexers (/indexers)
-func (a *Application) IndexersIndexHandler(c *gin.Context) {
+func (a *Application) IndexersIndexHandler(c echo.Context) error {
 	page := QueryInt(c, "page")
 	limit := QueryInt(c, "limit")
-	a.IndexersIndex(c, page, limit)
+	return a.IndexersIndex(c, page, limit)
 }
-func (a *Application) IndexersCreateHandler(c *gin.Context) {
-	a.IndexersCreate(c)
+func (a *Application) IndexersCreateHandler(c echo.Context) error {
+	return a.IndexersCreate(c)
 }
-func (a *Application) IndexersShowHandler(c *gin.Context) {
+func (a *Application) IndexersShowHandler(c echo.Context) error {
 	id := c.Param("id")
-	a.IndexersShow(c, id)
+	return a.IndexersShow(c, id)
 }
-func (a *Application) IndexersUpdateHandler(c *gin.Context) {
+func (a *Application) IndexersUpdateHandler(c echo.Context) error {
 	id := c.Param("id")
-	a.IndexersUpdate(c, id)
+	return a.IndexersUpdate(c, id)
 }
-func (a *Application) IndexersSettingsHandler(c *gin.Context) {
+func (a *Application) IndexersSettingsHandler(c echo.Context) error {
 	id := c.Param("id")
-	a.IndexersSettings(c, id)
+	return a.IndexersSettings(c, id)
 }
-func (a *Application) IndexersDeleteHandler(c *gin.Context) {
+func (a *Application) IndexersDeleteHandler(c echo.Context) error {
 	id := c.Param("id")
-	a.IndexersDelete(c, id)
+	return a.IndexersDelete(c, id)
 }
 
 // Sources (/sources)
-func (a *Application) SourcesIndexHandler(c *gin.Context) {
+func (a *Application) SourcesIndexHandler(c echo.Context) error {
 	page := QueryInt(c, "page")
 	limit := QueryInt(c, "limit")
-	a.SourcesIndex(c, page, limit)
+	return a.SourcesIndex(c, page, limit)
 }
-func (a *Application) SourcesCreateHandler(c *gin.Context) {
-	a.SourcesCreate(c)
+func (a *Application) SourcesCreateHandler(c echo.Context) error {
+	return a.SourcesCreate(c)
 }
-func (a *Application) SourcesShowHandler(c *gin.Context) {
+func (a *Application) SourcesShowHandler(c echo.Context) error {
 	id := c.Param("id")
-	a.SourcesShow(c, id)
+	return a.SourcesShow(c, id)
 }
-func (a *Application) SourcesUpdateHandler(c *gin.Context) {
+func (a *Application) SourcesUpdateHandler(c echo.Context) error {
 	id := c.Param("id")
-	a.SourcesUpdate(c, id)
+	return a.SourcesUpdate(c, id)
 }
-func (a *Application) SourcesSettingsHandler(c *gin.Context) {
+func (a *Application) SourcesSettingsHandler(c echo.Context) error {
 	id := c.Param("id")
-	a.SourcesSettings(c, id)
+	return a.SourcesSettings(c, id)
 }
-func (a *Application) SourcesDeleteHandler(c *gin.Context) {
+func (a *Application) SourcesDeleteHandler(c echo.Context) error {
 	id := c.Param("id")
-	a.SourcesDelete(c, id)
+	return a.SourcesDelete(c, id)
 }
-func (a *Application) SourcesReadHandler(c *gin.Context) {
+func (a *Application) SourcesReadHandler(c echo.Context) error {
 	id := c.Param("id")
-	a.SourcesRead(c, id)
+	return a.SourcesRead(c, id)
 }
-func (a *Application) SourcesSearchHandler(c *gin.Context) {
+func (a *Application) SourcesSearchHandler(c echo.Context) error {
 	id := c.Param("id")
 	q := QueryString(c, "q")
 	t := QueryString(c, "t")
-	a.SourcesSearch(c, id, q, t)
+	return a.SourcesSearch(c, id, q, t)
 }
-func (a *Application) SourcesParseHandler(c *gin.Context) {
+func (a *Application) SourcesParseHandler(c echo.Context) error {
 	id := c.Param("id")
-	a.SourcesParse(c, id)
+	return a.SourcesParse(c, id)
 }

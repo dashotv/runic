@@ -6,7 +6,7 @@ services:
     command: server
     container_name: runic
     ports:
-      - '<no value>:<no value>'
+      - '$PORT:$PORT'
     volumes:
       - ./:/app
     # depends_on:
