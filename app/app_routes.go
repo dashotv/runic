@@ -8,7 +8,6 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/pkg/errors"
 	"go.infratographer.com/x/echox/echozap"
 )
 
@@ -24,11 +23,13 @@ func checkRoutes(app *Application) error {
 }
 
 func startRoutes(ctx context.Context, app *Application) error {
-	app.Routes()
-	app.Log.Info("starting routes...")
-	if err := app.Engine.Start(fmt.Sprintf(":%d", app.Config.Port)); err != nil {
-		return errors.Wrap(err, "starting router")
-	}
+	go func() {
+		app.Routes()
+		app.Log.Info("starting routes...")
+		if err := app.Engine.Start(fmt.Sprintf(":%d", app.Config.Port)); err != nil {
+			app.Log.Errorf("routes: %s", err)
+		}
+	}()
 	return nil
 }
 

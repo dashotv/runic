@@ -12,6 +12,12 @@ type ParseActive struct {
 
 func (j *ParseActive) Kind() string { return "parse_active" }
 func (j *ParseActive) Work(ctx context.Context, job *minion.Job[*ParseActive]) error {
-	//args := job.Args
+	log := app.Log.Named("parse_active")
+	list, count, err := app.DB.IndexerList(1, 100)
+	if err != nil {
+		return err
+	}
+
+	log.Debugf("found %d indexers, processing %d", count, len(list))
 	return nil
 }
