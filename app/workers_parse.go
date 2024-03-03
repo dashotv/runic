@@ -53,6 +53,14 @@ func (j *ParseIndexer) Work(ctx context.Context, job *minion.Job[*ParseIndexer])
 	}
 
 	for _, result := range results {
+		// TODO: change this to a unique index?
+		count, err := app.DB.Release.Query().Where("checksum", result.Checksum).Count()
+		if err != nil {
+			return err
+		}
+		if count > 0 {
+			continue
+		}
 		if err := app.DB.Release.Save(result); err != nil {
 			return err
 		}

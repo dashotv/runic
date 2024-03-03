@@ -39,7 +39,13 @@ func (p *Processor) Process(source string, list []*newznab.NZB) ([]*Release, err
 			Size:        nzb.Size,
 			PublishedAt: nzb.PubDate,
 			Infohash:    nzb.InfoHash,
+			Checksum:    nzb.ID,
 		}
+
+		if r.Checksum == "" && nzb.IsTorrent && nzb.InfoHash != "" {
+			r.Checksum = nzb.InfoHash
+		}
+
 		if nzb.IMDBTitle != "" {
 			r.Title = nzb.IMDBTitle
 			r.Year = nzb.IMDBYear

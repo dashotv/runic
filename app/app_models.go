@@ -142,5 +142,6 @@ type Release struct { // model
 	Raw         *newznab.NZB        `bson:"raw" json:"raw"`
 	Info        *parser.TorrentInfo `bson:"info" json:"info"`
 	Downloader  string              `bson:"downloader" json:"downloader"`
+	Checksum    string              `bson:"checksum" json:"checksum"`
 	PublishedAt time.Time           `bson:"published_at" json:"published_at"`
 }

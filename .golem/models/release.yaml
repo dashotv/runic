@@ -55,5 +55,7 @@ fields:
     type: "*parser.TorrentInfo"
   - name: downloader
     type: string # torrent | nzb | metube
+  - name: checksum
+    type: string
   - name: published_at
     type: time.Time
