@@ -55,11 +55,15 @@ func identifyType(categories []int) string {
 	if lo.Contains(categories, 5070) {
 		return "anime"
 	}
-	if lo.Contains(categories, 5000) {
-		return "tv"
+	for _, c := range categories {
+		if c >= 5000 && c < 6000 {
+			return "tv"
+		}
 	}
-	if lo.Contains(categories, 2000) {
-		return "movies"
+	for _, c := range categories {
+		if c >= 2000 && c < 3000 {
+			return "movies"
+		}
 	}
 	return ""
 }
