@@ -84,11 +84,11 @@ type Indexer struct { // model
 	//ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
 	//CreatedAt time.Time          `bson:"created_at" json:"created_at"`
 	//UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
-	Name        string           `bson:"name" json:"name"`
-	Url         string           `bson:"url" json:"url"`
-	Active      bool             `bson:"active" json:"active"`
-	Categories  map[string][]int `bson:"categories" json:"categories"`
-	ProcessedAt time.Time        `bson:"processed_at" json:"processed_at"`
+	Name        string    `bson:"name" json:"name"`
+	Url         string    `bson:"url" json:"url"`
+	Active      bool      `bson:"active" json:"active"`
+	Categories  []int     `bson:"categories" json:"categories"`
+	ProcessedAt time.Time `bson:"processed_at" json:"processed_at"`
 }
 
 type Minion struct { // model

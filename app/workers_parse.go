@@ -47,12 +47,7 @@ func (j *ParseIndexer) Work(ctx context.Context, job *minion.Job[*ParseIndexer])
 		log.Debugf("processing indexer: %s: done %s", indexer.Name, time.Since(start))
 	}()
 
-	cats := []int{}
-	for _, v := range indexer.Categories {
-		cats = append(cats, v...)
-	}
-
-	results, err := app.Runic.Parse(indexer.Name, cats)
+	results, err := app.Runic.Parse(indexer.Name, indexer.Categories)
 	if err != nil {
 		return err
 	}

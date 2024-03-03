@@ -8,6 +8,6 @@ fields:
   - name: active
     type: bool
   - name: categories
-    type: "map[string][]int"
+    type: "[]int"
   - name: processed_at
     type: time.Time
