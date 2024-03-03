@@ -62,5 +62,12 @@ func (j *ParseIndexer) Work(ctx context.Context, job *minion.Job[*ParseIndexer])
 			return err
 		}
 	}
+
+	indexer.ProcessedAt = time.Now()
+
+	if err := app.DB.Indexer.Save(indexer); err != nil {
+		return err
+	}
+
 	return nil
 }
