@@ -8,6 +8,12 @@ import (
 
 // GET /releases/
 func (a *Application) ReleasesIndex(c echo.Context, page int, limit int) error {
+	if limit == 0 {
+		limit = 25
+	}
+	if page == 0 {
+		page = 1
+	}
 	list, total, err := a.DB.ReleaseList(page, limit)
 	if err != nil {
 		return err
