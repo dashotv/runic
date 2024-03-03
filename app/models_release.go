@@ -1,6 +1,19 @@
 package app
 
+import (
+	"context"
+
+	"go.mongodb.org/mongo-driver/mongo"
+)
+
 var releaseTypes = []string{"tv", "anime", "movies"}
+
+func (r *Release) Created(ctx context.Context, result *mongo.UpdateResult) error {
+	return app.Events.Send("runic.releases", r)
+}
+func (r *Release) Updated(ctx context.Context, result *mongo.UpdateResult) error {
+	return app.Events.Send("runic.releases", r)
+}
 
 func (c *Connector) ReleaseGet(id string) (*Release, error) {
 	m, err := c.Release.Get(id, &Release{})

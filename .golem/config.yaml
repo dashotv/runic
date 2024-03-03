@@ -8,7 +8,7 @@ plugins:
     routes: true
     workers: true
     cache: false
-    events: false
+    events: true
 definitions:
     models: .golem/models
     routes: .golem/routes

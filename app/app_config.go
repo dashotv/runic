@@ -33,6 +33,9 @@ type Config struct {
 	Auth           bool   `env:"AUTH" envDefault:"false"`
 	ClerkSecretKey string `env:"CLERK_SECRET_KEY"`
 
+	// Events
+	NatsURL string `env:"NATS_URL"`
+
 	// Workers
 	MinionConcurrency int    `env:"MINION_CONCURRENCY" envDefault:"10"`
 	MinionDebug       bool   `env:"MINION_DEBUG" envDefault:"false"`
