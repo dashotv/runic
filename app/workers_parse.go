@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"time"
 
 	"github.com/dashotv/minion"
 )
@@ -40,6 +41,10 @@ func (j *ParseIndexer) Work(ctx context.Context, job *minion.Job[*ParseIndexer])
 	}
 
 	log.Debugf("processing indexer: %s", indexer.Name)
+	start := time.Now()
+	defer func() {
+		log.Debugf("processing indexer: %s: done %s", indexer.Name, time.Since(start))
+	}()
 
 	cats := []int{}
 	for _, v := range indexer.Categories {
