@@ -21,14 +21,15 @@ func (j *ParseActive) Work(ctx context.Context, job *minion.Job[*ParseActive]) e
 
 	log.Debugf("processing %d indexers", len(list))
 	for _, indexer := range list {
-		app.Workers.Enqueue(&ParseIndexer{ID: indexer.ID.Hex()})
+		app.Workers.Enqueue(&ParseIndexer{ID: indexer.ID.Hex(), Title: indexer.Name})
 	}
 	return nil
 }
 
 type ParseIndexer struct {
 	minion.WorkerDefaults[*ParseIndexer]
-	ID string `bson:"id" json:"id"`
+	ID    string `bson:"id" json:"id"`
+	Title string `bson:"title" json:"title"`
 }
 
 func (j *ParseIndexer) Kind() string { return "parse_indexer" }

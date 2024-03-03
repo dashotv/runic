@@ -96,7 +96,7 @@ func (a *Application) Routes() {
 	indexers.PATCH("/:id", a.IndexersSettingsHandler)
 	indexers.DELETE("/:id", a.IndexersDeleteHandler)
 
-	minion := a.Router.Group("/minion")
+	minion := a.Router.Group("/jobs")
 	minion.GET("/", a.MinionIndexHandler)
 	minion.POST("/", a.MinionCreateHandler)
 	minion.GET("/:id", a.MinionShowHandler)
@@ -130,7 +130,7 @@ func (a *Application) indexHandler(c echo.Context) error {
 		"name": "runic",
 		"routes": H{
 			"indexers": "/indexers",
-			"minion":   "/minion",
+			"minion":   "/jobs",
 			"releases": "/releases",
 			"sources":  "/sources",
 		},
@@ -171,7 +171,7 @@ func (a *Application) IndexersDeleteHandler(c echo.Context) error {
 	return a.IndexersDelete(c, id)
 }
 
-// Minion (/minion)
+// Minion (/jobs)
 func (a *Application) MinionIndexHandler(c echo.Context) error {
 	page := QueryInt(c, "page")
 	limit := QueryInt(c, "limit")

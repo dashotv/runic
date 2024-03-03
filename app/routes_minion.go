@@ -19,7 +19,7 @@ func (a *Application) MinionIndex(c echo.Context, page int, limit int) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, H{"error": true, "message": "error loading Minion"})
 	}
-	return c.JSON(http.StatusOK, H{"error": false, "results": list})
+	return c.JSON(http.StatusOK, H{"error": false, "jobs": list})
 }
 
 // POST /minion/
