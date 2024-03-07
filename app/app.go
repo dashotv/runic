@@ -8,6 +8,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/dashotv/minion"
+	rift "github.com/dashotv/rift/client"
 	"github.com/dashotv/runic/reader"
 )
 
@@ -24,6 +25,7 @@ type Application struct {
 	Config    *Config
 	Log       *zap.SugaredLogger
 	Reader    *reader.Reader
+	Rift      *rift.Client
 	Processor *Processor
 
 	//golem:template:app/app_partial_definitions

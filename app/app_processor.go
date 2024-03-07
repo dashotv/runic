@@ -4,6 +4,7 @@ import (
 	"os"
 	"strconv"
 
+	rift "github.com/dashotv/rift/client"
 	"github.com/dashotv/runic/newznab"
 	"github.com/dashotv/runic/parser"
 	"github.com/dashotv/runic/reader"
@@ -35,6 +36,13 @@ func setupReader(app *Application) error {
 
 	return nil
 }
+
+func setupRift(app *Application) error {
+	r := rift.New(app.Config.RiftURL)
+	app.Rift = r
+	return nil
+}
+
 func catsToInt(cats []string) []int {
 	out := make([]int, len(cats))
 	for i, c := range cats {

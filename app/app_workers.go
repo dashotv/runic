@@ -63,6 +63,13 @@ func setupWorkers(app *Application) error {
 		return errors.Wrap(err, "registering worker: parse_indexer (ParseIndexer)")
 	}
 
+	if err := minion.Register[*ParseRift](m, &ParseRift{}); err != nil {
+		return errors.Wrap(err, "registering worker: parse_rift (ParseRift)")
+	}
+	if _, err := m.Schedule("0 */15 * * * *", &ParseRift{}); err != nil {
+		return errors.Wrap(err, "scheduling worker: parse_rift (ParseRift)")
+	}
+
 	app.Workers = m
 	return nil
 }

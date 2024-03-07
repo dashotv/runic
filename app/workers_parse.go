@@ -2,9 +2,13 @@ package app
 
 import (
 	"context"
+	"fmt"
 	"time"
 
+	"github.com/pkg/errors"
+
 	"github.com/dashotv/minion"
+	rift "github.com/dashotv/rift/client"
 )
 
 type ParseActive struct {
@@ -75,34 +79,54 @@ func (j *ParseIndexer) Work(ctx context.Context, job *minion.Job[*ParseIndexer])
 	return nil
 }
 
-// type ParseRift struct {
-// 	minion.WorkerDefaults[*ParseRift]
-// }
-//
-// func (j *ParseRift) Kind() string { return "parse_rift" }
-// func (j *ParseRift) Work(ctx context.Context, job *minion.Job[*ParseRift]) error {
-// 	url := app.Config.RiftURL
-// 	log := app.Log.Named("parse_rift")
-// 	log.Debugf("parsing rift: %s", url)
-//
-// 	results, err := app.Runic.ParseRift(url)
-// 	if err != nil {
-// 		return err
-// 	}
-//
-// 	for _, result := range results {
-// 		// TODO: change this to a unique index?
-// 		count, err := app.DB.Release.Query().Where("checksum", result.Checksum).Count()
-// 		if err != nil {
-// 			return err
-// 		}
-// 		if count > 0 {
-// 			continue
-// 		}
-// 		if err := app.DB.Release.Save(result); err != nil {
-// 			return err
-// 		}
-// 	}
-//
-// 	return nil
-// }
+type ParseRift struct {
+	minion.WorkerDefaults[*ParseRift]
+}
+
+func (j *ParseRift) Kind() string { return "parse_rift" }
+func (j *ParseRift) Work(ctx context.Context, job *minion.Job[*ParseRift]) error {
+	url := app.Config.RiftURL
+	log := app.Log.Named("parse_rift")
+	log.Debugf("parsing rift: %s", url)
+
+	resp, err := app.Rift.VideoService.Index(context.Background(), &rift.Request{Limit: 1000})
+	if err != nil {
+		return err
+	}
+
+	results, ok := resp.Results.([]*rift.Video)
+	if !ok {
+		return errors.New("invalid response")
+	}
+
+	for _, video := range results {
+		result := &Release{
+			Title:       video.Title,
+			Season:      video.Season,
+			Episode:     video.Episode,
+			Checksum:    video.DisplayID,
+			Size:        video.Size,
+			Resolution:  fmt.Sprintf("%d", video.Resolution),
+			Source:      "rift",
+			Type:        "anime",
+			Downloader:  "metube",
+			Download:    video.Download,
+			View:        video.Source,
+			PublishedAt: time.Now(),
+		}
+
+		// TODO: change this to a unique index?
+		count, err := app.DB.Release.Query().Where("checksum", result.Checksum).Count()
+		if err != nil {
+			return err
+		}
+		if count > 0 {
+			continue
+		}
+		if err := app.DB.Release.Save(result); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
