@@ -12,12 +12,12 @@ function App() {
   const tabsMap: RoutingTabsRoute[] = [
     {
       label: 'Releases',
-      to: `releases`,
+      to: '',
       element: <Releases />,
     },
     {
       label: 'Indexers',
-      to: `indexers`,
+      to: 'indexers',
       element: <div>Indexers</div>,
     },
   ];

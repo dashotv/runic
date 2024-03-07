@@ -11,12 +11,12 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': {
+      '/api/runic': {
         target: 'http://localhost:9002',
         changeOrigin: true,
         secure: false,
         ws: true,
-        rewrite: path => path.replace(/^\/api/, ''),
+        rewrite: path => path.replace(/^\/api\/runic/, ''),
       },
     },
   },

@@ -1,4 +1,3 @@
-export * from './Release';
-export * from './ReleaseList';
+export * from './List';
 export * from './types';
 export * from './query';

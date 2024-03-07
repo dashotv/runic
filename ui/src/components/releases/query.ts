@@ -5,12 +5,12 @@ import { useQuery } from '@tanstack/react-query';
 import { ReleaseResponse, ReleasesResponse } from './types';
 
 export const getReleases = async (limit: number, skip: number, queryString: string) => {
-  const response = await axios.get(`/api/releases/?limit=${limit}&skip=${skip}&${queryString}`);
+  const response = await axios.get(`/api/runic/releases/?limit=${limit}&skip=${skip}&${queryString}`);
   return response.data as ReleasesResponse;
 };
 
 export const getRelease = async (id: string) => {
-  const response = await axios.get(`/api/releases/${id}`);
+  const response = await axios.get(`/api/runic/releases/${id}`);
   return response.data as ReleaseResponse;
 };
 
