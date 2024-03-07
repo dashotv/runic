@@ -5,7 +5,6 @@ package newznab
 import (
 	"crypto/tls"
 	"encoding/xml"
-	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -203,12 +202,12 @@ func (c *Client) details(vals url.Values) (Details, error) {
 
 func (c *Client) process(vals url.Values, path string) ([]*NZB, error) {
 	var nzbs []*NZB
+
 	resp, err := c.getURL(c.buildURL(vals, path))
 	if err != nil {
 		return nzbs, err
 	}
-	u, _ := c.buildURL(vals, path)
-	fmt.Printf("URL: %s\n", u)
+
 	var feed SearchResponse
 	err = xml.Unmarshal(resp, &feed)
 	if err != nil {
