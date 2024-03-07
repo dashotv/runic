@@ -12,6 +12,7 @@ import (
 
 func init() {
 	initializers = append(initializers, setupReader)
+	initializers = append(initializers, setupRift)
 	initializers = append(initializers, setupProcessor)
 }
 

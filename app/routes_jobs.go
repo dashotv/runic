@@ -11,10 +11,11 @@ import (
 
 var workerlist = map[string]minion.Payload{
 	"parse_active": &ParseActive{},
+	"parse_rift":   &ParseRift{},
 }
 
 // GET /minion/
-func (a *Application) MinionIndex(c echo.Context, page int, limit int) error {
+func (a *Application) JobsIndex(c echo.Context, page int, limit int) error {
 	list, err := a.DB.MinionList(limit, (page-1)*limit)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, H{"error": true, "message": "error loading Minion"})
@@ -23,7 +24,7 @@ func (a *Application) MinionIndex(c echo.Context, page int, limit int) error {
 }
 
 // POST /minion/
-func (a *Application) MinionCreate(c echo.Context) error {
+func (a *Application) JobsCreate(c echo.Context) error {
 	name := QueryString(c, "name")
 	j, ok := workerlist[name]
 	if !ok {
@@ -38,7 +39,7 @@ func (a *Application) MinionCreate(c echo.Context) error {
 }
 
 // GET /minion/:id
-func (a *Application) MinionShow(c echo.Context, id string) error {
+func (a *Application) JobsShow(c echo.Context, id string) error {
 	// subject, err := a.DB.Minion.Get(id)
 	// if err != nil {
 	//     return c.JSON(http.StatusNotFound, H{"error": true, "message": "not found"})
@@ -50,7 +51,7 @@ func (a *Application) MinionShow(c echo.Context, id string) error {
 }
 
 // PUT /minion/:id
-func (a *Application) MinionUpdate(c echo.Context, id string) error {
+func (a *Application) JobsUpdate(c echo.Context, id string) error {
 	// subject, err := a.DB.Minion.Get(id)
 	// if err != nil {
 	//     return c.JSON(http.StatusNotFound, H{"error": true, "message": "not found"})
@@ -62,7 +63,7 @@ func (a *Application) MinionUpdate(c echo.Context, id string) error {
 }
 
 // PATCH /minion/:id
-func (a *Application) MinionSettings(c echo.Context, id string) error {
+func (a *Application) JobsSettings(c echo.Context, id string) error {
 	// subject, err := a.DB.Minion.Get(id)
 	// if err != nil {
 	//     return c.JSON(http.StatusNotFound, H{"error": true, "message": "not found"})
@@ -74,7 +75,7 @@ func (a *Application) MinionSettings(c echo.Context, id string) error {
 }
 
 // DELETE /minion/:id
-func (a *Application) MinionDelete(c echo.Context, id string) error {
+func (a *Application) JobsDelete(c echo.Context, id string) error {
 	// subject, err := a.DB.Minion.Get(id)
 	// if err != nil {
 	//     return c.JSON(http.StatusNotFound, H{"error": true, "message": "not found"})

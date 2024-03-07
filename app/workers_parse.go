@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/pkg/errors"
-
 	"github.com/dashotv/minion"
 	rift "github.com/dashotv/rift/client"
 )
@@ -94,12 +92,8 @@ func (j *ParseRift) Work(ctx context.Context, job *minion.Job[*ParseRift]) error
 		return err
 	}
 
-	results, ok := resp.Results.([]*rift.Video)
-	if !ok {
-		return errors.New("invalid response")
-	}
-
-	for _, video := range results {
+	for _, video := range resp.Results {
+		// log.Debugf("video: %s", video.Title)
 		result := &Release{
 			Title:       video.Title,
 			Season:      video.Season,

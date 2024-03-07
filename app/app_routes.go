@@ -96,13 +96,13 @@ func (a *Application) Routes() {
 	indexers.PATCH("/:id", a.IndexersSettingsHandler)
 	indexers.DELETE("/:id", a.IndexersDeleteHandler)
 
-	minion := a.Router.Group("/jobs")
-	minion.GET("/", a.MinionIndexHandler)
-	minion.POST("/", a.MinionCreateHandler)
-	minion.GET("/:id", a.MinionShowHandler)
-	minion.PUT("/:id", a.MinionUpdateHandler)
-	minion.PATCH("/:id", a.MinionSettingsHandler)
-	minion.DELETE("/:id", a.MinionDeleteHandler)
+	jobs := a.Router.Group("/jobs")
+	jobs.GET("/", a.JobsIndexHandler)
+	jobs.POST("/", a.JobsCreateHandler)
+	jobs.GET("/:id", a.JobsShowHandler)
+	jobs.PUT("/:id", a.JobsUpdateHandler)
+	jobs.PATCH("/:id", a.JobsSettingsHandler)
+	jobs.DELETE("/:id", a.JobsDeleteHandler)
 
 	releases := a.Router.Group("/releases")
 	releases.GET("/", a.ReleasesIndexHandler)
@@ -130,7 +130,7 @@ func (a *Application) indexHandler(c echo.Context) error {
 		"name": "runic",
 		"routes": H{
 			"indexers": "/indexers",
-			"minion":   "/jobs",
+			"jobs":     "/jobs",
 			"releases": "/releases",
 			"sources":  "/sources",
 		},
@@ -171,30 +171,30 @@ func (a *Application) IndexersDeleteHandler(c echo.Context) error {
 	return a.IndexersDelete(c, id)
 }
 
-// Minion (/jobs)
-func (a *Application) MinionIndexHandler(c echo.Context) error {
+// Jobs (/jobs)
+func (a *Application) JobsIndexHandler(c echo.Context) error {
 	page := QueryInt(c, "page")
 	limit := QueryInt(c, "limit")
-	return a.MinionIndex(c, page, limit)
+	return a.JobsIndex(c, page, limit)
 }
-func (a *Application) MinionCreateHandler(c echo.Context) error {
-	return a.MinionCreate(c)
+func (a *Application) JobsCreateHandler(c echo.Context) error {
+	return a.JobsCreate(c)
 }
-func (a *Application) MinionShowHandler(c echo.Context) error {
+func (a *Application) JobsShowHandler(c echo.Context) error {
 	id := c.Param("id")
-	return a.MinionShow(c, id)
+	return a.JobsShow(c, id)
 }
-func (a *Application) MinionUpdateHandler(c echo.Context) error {
+func (a *Application) JobsUpdateHandler(c echo.Context) error {
 	id := c.Param("id")
-	return a.MinionUpdate(c, id)
+	return a.JobsUpdate(c, id)
 }
-func (a *Application) MinionSettingsHandler(c echo.Context) error {
+func (a *Application) JobsSettingsHandler(c echo.Context) error {
 	id := c.Param("id")
-	return a.MinionSettings(c, id)
+	return a.JobsSettings(c, id)
 }
-func (a *Application) MinionDeleteHandler(c echo.Context) error {
+func (a *Application) JobsDeleteHandler(c echo.Context) error {
 	id := c.Param("id")
-	return a.MinionDelete(c, id)
+	return a.JobsDelete(c, id)
 }
 
 // Releases (/releases)
