@@ -27,14 +27,12 @@ func (c *Connector) ReleaseGet(id string) (*Release, error) {
 }
 
 func (c *Connector) ReleaseList(page, limit int) ([]*Release, int64, error) {
-	q := c.Release.Query().Limit(limit).Skip((page - 1) * limit).Desc("published_at").Desc("created_at")
-
-	total, err := q.Count()
+	total, err := c.Release.Query().Count()
 	if err != nil {
 		return nil, 0, err
 	}
 
-	list, err := c.Release.Query().Limit(limit).Skip((page - 1) * limit).Run()
+	list, err := c.Release.Query().Limit(limit).Skip((page - 1) * limit).Desc("published_at").Desc("created_at").Run()
 	if err != nil {
 		return nil, 0, err
 	}
