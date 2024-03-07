@@ -9,6 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
+
+	"github.com/dashotv/runic/reader"
 )
 
 type RunicSourceSimple struct {
@@ -18,13 +20,13 @@ type RunicSourceSimple struct {
 }
 
 func (a *Application) SourcesIndex(c echo.Context, page int, limit int) error {
-	out := make([]*Source, 0)
+	out := make([]reader.Source, 0)
 
-	list := a.Runic.Sources()
+	list := a.Reader.Sources()
 	sort.Strings(list)
 
 	for _, n := range list {
-		s, ok := a.Runic.Source(n)
+		s, ok := a.Reader.Source(n)
 		if !ok {
 			return errors.New("indexer does not exist")
 		}
@@ -39,7 +41,7 @@ func (a *Application) SourcesCreate(c echo.Context) error {
 }
 
 func (a *Application) SourcesShow(c echo.Context, id string) error {
-	s, ok := a.Runic.Source(id)
+	s, ok := a.Reader.Source(id)
 	if !ok {
 		return errors.New("indexer does not exist")
 	}
@@ -83,7 +85,7 @@ func (a *Application) SourcesRead(c echo.Context, id string) error {
 		return err
 	}
 
-	results, err := a.Runic.Read(id, cats)
+	results, err := a.Reader.Read(id, cats)
 	if err != nil {
 		return err
 	}
@@ -97,7 +99,7 @@ func (a *Application) SourcesParse(c echo.Context, id string) error {
 		return err
 	}
 
-	results, err := a.Runic.Parse(id, cats)
+	results, err := a.Processor.Parse(id, cats)
 	if err != nil {
 		return err
 	}
@@ -106,7 +108,7 @@ func (a *Application) SourcesParse(c echo.Context, id string) error {
 }
 
 func (a *Application) SourcesSearch(c echo.Context, id string, query string, searchType string) error {
-	results, err := a.Runic.Search(id, []int{5000}, query)
+	results, err := a.Reader.Search(id, []int{5000}, query)
 	if err != nil {
 		return err
 	}

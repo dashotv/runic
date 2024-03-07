@@ -12,7 +12,7 @@ func TestParser_Parse(t *testing.T) {
 	funcs := []func(*Application) error{
 		setupConfig,
 		setupLogger,
-		setupRunic,
+		setupReader,
 		setupProcessor,
 	}
 	for _, f := range funcs {
@@ -20,11 +20,11 @@ func TestParser_Parse(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	list, err := app.Runic.Read("geek", []int{5000})
+	list, err := app.Reader.Read("geek", []int{5000})
 	if err != nil {
 		t.Fatal(err)
 	}
-	releases, err := app.Runic.processor.Process("geek", list)
+	releases, err := app.Processor.Process("geek", list)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -38,7 +38,7 @@ func TestParser_Parse2(t *testing.T) {
 	funcs := []func(*Application) error{
 		setupConfig,
 		setupLogger,
-		setupRunic,
+		setupReader,
 		setupProcessor,
 	}
 	for _, f := range funcs {
@@ -46,11 +46,11 @@ func TestParser_Parse2(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	list, err := app.Runic.Read("geek", []int{2000})
+	list, err := app.Reader.Read("geek", []int{2000})
 	if err != nil {
 		t.Fatal(err)
 	}
-	releases, err := app.Runic.processor.Process("geek", list)
+	releases, err := app.Processor.Process("geek", list)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -1,20 +1,40 @@
 package app
 
 import (
+	"os"
 	"strconv"
 
 	"github.com/dashotv/runic/newznab"
 	"github.com/dashotv/runic/parser"
+	"github.com/dashotv/runic/reader"
 )
 
 func init() {
+	initializers = append(initializers, setupReader)
 	initializers = append(initializers, setupProcessor)
 }
 
 func setupProcessor(a *Application) error {
+	app.Processor = &Processor{
+		db:     a.DB,
+		reader: a.Reader,
+	}
 	return nil
 }
 
+func setupReader(app *Application) error {
+	r := &reader.Reader{}
+	app.Reader = r
+
+	if err := r.Add("geek", os.Getenv("NZBGEEK_URL"), os.Getenv("NZBGEEK_KEY"), 0, false); err != nil {
+		return err
+	}
+	if err := r.AddJackett(os.Getenv("JACKETT_URL"), os.Getenv("JACKETT_KEY")); err != nil {
+		return err
+	}
+
+	return nil
+}
 func catsToInt(cats []string) []int {
 	out := make([]int, len(cats))
 	for i, c := range cats {
@@ -23,13 +43,25 @@ func catsToInt(cats []string) []int {
 	return out
 }
 
-type Processor struct{}
+type Processor struct {
+	db     *Connector
+	reader *reader.Reader
+}
+
+func (p *Processor) Parse(source string, categories []int) ([]*Release, error) {
+	list, err := p.reader.Read(source, categories)
+	if err != nil {
+		return nil, err
+	}
+
+	return p.Process(source, list)
+}
 
 func (p *Processor) Process(source string, list []*newznab.NZB) ([]*Release, error) {
 	releases := []*Release{}
 
 	for _, nzb := range list {
-		t := identifyType(catsToInt(nzb.Category))
+		t := reader.IdentifyType(catsToInt(nzb.Category))
 		r := &Release{
 			Source:      source,
 			Type:        t,

@@ -47,7 +47,7 @@ func (j *ParseIndexer) Work(ctx context.Context, job *minion.Job[*ParseIndexer])
 		log.Debugf("processing indexer: %s: done %s", indexer.Name, time.Since(start))
 	}()
 
-	results, err := app.Runic.Parse(indexer.Name, indexer.Categories)
+	results, err := app.Processor.Parse(indexer.Name, indexer.Categories)
 	if err != nil {
 		return err
 	}
@@ -74,3 +74,35 @@ func (j *ParseIndexer) Work(ctx context.Context, job *minion.Job[*ParseIndexer])
 
 	return nil
 }
+
+// type ParseRift struct {
+// 	minion.WorkerDefaults[*ParseRift]
+// }
+//
+// func (j *ParseRift) Kind() string { return "parse_rift" }
+// func (j *ParseRift) Work(ctx context.Context, job *minion.Job[*ParseRift]) error {
+// 	url := app.Config.RiftURL
+// 	log := app.Log.Named("parse_rift")
+// 	log.Debugf("parsing rift: %s", url)
+//
+// 	results, err := app.Runic.ParseRift(url)
+// 	if err != nil {
+// 		return err
+// 	}
+//
+// 	for _, result := range results {
+// 		// TODO: change this to a unique index?
+// 		count, err := app.DB.Release.Query().Where("checksum", result.Checksum).Count()
+// 		if err != nil {
+// 			return err
+// 		}
+// 		if count > 0 {
+// 			continue
+// 		}
+// 		if err := app.DB.Release.Save(result); err != nil {
+// 			return err
+// 		}
+// 	}
+//
+// 	return nil
+// }

@@ -46,7 +46,8 @@ type Config struct {
 
 	//golem:template:app/config_partial_struct
 
-	Words []string `env:"WORDS"`
+	RiftURL string   `env:"RIFT_URL"`
+	Words   []string `env:"WORDS"`
 }
 
 func (c *Config) Validate() error {

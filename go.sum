@@ -23,6 +23,8 @@ github.com/dashotv/mercury v0.3.2 h1:88bvWsp5l823wTR1XbIB+LBiAFeCRZfe+JyIKf4nV/0
 github.com/dashotv/mercury v0.3.2/go.mod h1:OZ140gozVBT0iyOwKIJSoSd3yyPgjgq2fI4baqtFBGs=
 github.com/dashotv/minion v0.3.3 h1:7aQurgQhQoRS5zaE+T7ef7wnGc9Z7BWHG23ViF/gd0U=
 github.com/dashotv/minion v0.3.3/go.mod h1:DP5zwm4BtCczsa8AUKwovXfWIIozX5+NF+bqnsUp7N0=
+github.com/dashotv/rift v0.0.0-20240306172157-165b9faedb42 h1:dU3UKd0JdlimrgwFQcgzWPwQd/NvJfU0kPCbe6ZO2Sk=
+github.com/dashotv/rift v0.0.0-20240306172157-165b9faedb42/go.mod h1:6UWKxe9CGJzzOTDO9dAsxfvTU3994z2diQUHpVE0gjQ=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1VwoXQT9A3Wy9MM3WgvqSxFWenqJduM=

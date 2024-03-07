@@ -8,6 +8,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/dashotv/minion"
+	"github.com/dashotv/runic/reader"
 )
 
 var app *Application
@@ -20,9 +21,10 @@ var healthchecks = map[string]healthFunc{}
 var starters = []func(ctx context.Context, app *Application) error{}
 
 type Application struct {
-	Config *Config
-	Log    *zap.SugaredLogger
-	Runic  *Runic
+	Config    *Config
+	Log       *zap.SugaredLogger
+	Reader    *reader.Reader
+	Processor *Processor
 
 	//golem:template:app/app_partial_definitions
 	// DO NOT EDIT. This section is managed by github.com/dashotv/golem.
