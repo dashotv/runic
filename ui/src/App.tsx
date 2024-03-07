@@ -1,13 +1,38 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 
-import { ReleaseList, useReleasesQuery } from 'components/releases';
+import Container from '@mui/material/Container';
 
-import './App.css';
+import { RoutingTabs, RoutingTabsRoute } from 'components/common';
+import Releases from 'pages/releases';
 
 function App() {
-  const { data } = useReleasesQuery(100, 0, '');
+  // limit, skip, queries, etc
 
-  return <>{data && <ReleaseList data={data?.results} />}</>;
+  const tabsMap: RoutingTabsRoute[] = [
+    {
+      label: 'Releases',
+      to: `releases`,
+      element: <Releases />,
+    },
+    {
+      label: 'Indexers',
+      to: `indexers`,
+      element: <div>Indexers</div>,
+    },
+  ];
+
+  return (
+    <>
+      <Helmet>
+        <title>Runic</title>
+        <meta name="description" content="runic" />
+      </Helmet>
+      <Container>
+        <RoutingTabs data={tabsMap} route={'/'} />
+      </Container>
+    </>
+  );
 }
 
 export default App;
