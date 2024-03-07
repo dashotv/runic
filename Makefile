@@ -24,7 +24,9 @@ docker:
 	docker build -t $(NAME) .
 
 docker-run:
-	docker run -d --rm --name $(NAME) -p $(PORT):$(PORT) $(NAME)
+	docker run --rm --name $(NAME)-test -p 1$(PORT):1$(PORT) \
+	-e DOTENV_KEY="dotenv://:key_35ced16628fdf84621dfe41854d304f6ea44f6d12958a51920e71ecb5a4d2ce8@dotenv.local/vault/.env.vault?environment=development" \
+	$(NAME)
 
 dotenv:
 	npx dotenv-vault local build
