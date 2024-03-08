@@ -20,11 +20,10 @@ RUN --mount=type=cache,target=/go/pkg/mod \
   --mount=type=bind,source=go.mod,target=go.mod \
   go mod download
 
+COPY . .
 COPY --from=ui-builder /app/static ./static
-RUN ls -R
 
 RUN --mount=type=cache,target=/go/pkg/mod \
-  --mount=type=bind,target=. \
   go install
 
 ############################
