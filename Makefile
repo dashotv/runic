@@ -21,7 +21,7 @@ server:
 	go run main.go server
 
 docker:
-	docker build -t $(NAME) .
+	docker build --progress=plain -t $(NAME) .
 
 docker-run:
 	docker run --rm --name $(NAME)-test -p 1$(PORT):1$(PORT) \

@@ -5,9 +5,9 @@ FROM node:20-alpine as ui-builder
 
 WORKDIR /app/ui
 COPY ui/package.json ui/yarn.lock ui/.yarn ./
-RUN yarn install
+RUN  --mount=type=cache,target=/app/ui/node_modules yarn install
 COPY ui/ ./
-RUN yarn build
+RUN --mount=type=cache,target=/app/ui/node_modules yarn build
 
 ############################
 # STEP 1b build go binary
