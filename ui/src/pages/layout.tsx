@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import Container from '@mui/material/Container';
 
 import { RoutingTabs, RoutingTabsRoute } from 'components/common';
+import { IndexersList } from 'components/indexers';
 import Releases from 'pages/releases';
 
 const Layout = () => {
@@ -17,7 +18,7 @@ const Layout = () => {
     {
       label: 'Indexers',
       to: 'indexers',
-      element: <div>Indexers</div>,
+      element: <IndexersList />,
     },
   ];
 
