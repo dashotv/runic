@@ -14,7 +14,7 @@ func init() {
 
 func setupStatic(a *Application) error {
 	app.Default.Use(middleware.StaticWithConfig(middleware.StaticConfig{
-		Root:       "",
+		Root:       ".",
 		Index:      "index.html", // This is the default html page for your SPA
 		Browse:     false,
 		HTML5:      true,
