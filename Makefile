@@ -5,6 +5,9 @@ NAME := runic
 
 all: test
 
+clean:
+	rm -rf static/index.html static/assets
+
 test: generate
 	go test ./...
 
@@ -31,8 +34,11 @@ docker-run:
 dotenv:
 	npx dotenv-vault local build
 
+ui: clean
+	cd ui && yarn build
+
 deps:
 	go install golang.org/x/tools/cmd/goimports@latest
 	go install github.com/dashotv/golem@latest
 
-.PHONY: server receiver test deps docker docker-run
+.PHONY: server receiver test deps docker docker-run ui

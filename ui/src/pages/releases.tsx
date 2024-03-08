@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ReleaseList, useReleasesQuery } from 'components/releases';
 
 const Releases = () => {

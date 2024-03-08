@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link, Route, Routes, matchPath, useLocation } from 'react-router-dom';
 
 import Box from '@mui/material/Box';

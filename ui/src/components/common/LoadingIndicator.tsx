@@ -1,4 +1,3 @@
-import React from 'react';
 import { ThreeDots } from 'react-loader-spinner';
 
 import Box from '@mui/material/Box';

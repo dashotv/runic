@@ -1,4 +1,3 @@
-import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import Container from '@mui/material/Container';
@@ -6,7 +5,7 @@ import Container from '@mui/material/Container';
 import { RoutingTabs, RoutingTabsRoute } from 'components/common';
 import Releases from 'pages/releases';
 
-function App() {
+const Layout = () => {
   // limit, skip, queries, etc
 
   const tabsMap: RoutingTabsRoute[] = [
@@ -33,6 +32,6 @@ function App() {
       </Container>
     </>
   );
-}
+};
 
-export default App;
+export default Layout;

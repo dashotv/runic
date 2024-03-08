@@ -13,9 +13,20 @@ export default defineConfig({
       name: 'runic',
       filename: 'remote.js',
       exposes: {
-        './Releases': './src/pages/releases.tsx',
+        './App': './src/pages/app.tsx',
       },
-      shared: ['react', 'react-dom', 'react-router-dom'],
+      shared: [
+        'react',
+        'react-dom',
+        'react-router-dom',
+        'axios',
+        'react-truncate-inside',
+        'dayjs',
+        'react-helmet-async',
+        '@mui/material',
+        '@mui/icons-material',
+        '@tanstack/react-query',
+      ],
     }),
   ],
   build: {

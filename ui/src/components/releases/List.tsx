@@ -1,4 +1,3 @@
-import React from 'react';
 import Truncate from 'react-truncate-inside';
 
 import Paper from '@mui/material/Paper';
