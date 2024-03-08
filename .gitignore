@@ -6,3 +6,6 @@ runic
 .flaskenv*
 !.env.project
 !.env.vault
+
+/static
+!/static/embed.go
