@@ -18,7 +18,7 @@ WORKDIR /go/src/app
 RUN --mount=type=cache,target=/go/pkg/mod \
   --mount=type=bind,source=go.sum,target=go.sum \
   --mount=type=bind,source=go.mod,target=go.mod \
-  go mod download -x
+  go mod download
 
 COPY --from=ui-builder /app/static ./static
 
