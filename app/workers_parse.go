@@ -87,16 +87,21 @@ func (j *ParseRift) Work(ctx context.Context, job *minion.Job[*ParseRift]) error
 	log := app.Log.Named("parse_rift")
 	log.Debugf("parsing rift: %s", url)
 
-	resp, err := app.Rift.VideoService.Index(context.Background(), &rift.Request{Limit: 1000})
+	resp, err := app.Rift.VideoService.Index(context.Background(), &rift.Request{Limit: 100})
 	if err != nil {
 		return err
 	}
 
 	for _, video := range resp.Results {
 		// log.Debugf("video: %s", video.Title)
+		season := 1
+		if video.Season != 0 {
+			season = video.Season
+		}
+
 		result := &Release{
 			Title:       video.Title,
-			Season:      video.Season,
+			Season:      season,
 			Episode:     video.Episode,
 			Checksum:    video.DisplayID,
 			Size:        video.Size,

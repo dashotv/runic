@@ -78,7 +78,7 @@ export const ReleaseList = ({ data }: { data: Release[] }) => {
                 <Typography fontWeight="bolder" minWidth="125px" noWrap color="gray">
                   {row.raw?.category?.join(',')}
                 </Typography>
-                {row.size && <Megabytes ord="bytes" value={row.size} />}
+                {row.size ? <Megabytes ord="bytes" value={row.size} /> : null}
                 <Typography noWrap variant="subtitle2" color="gray" pl="3px" width="100%">
                   {row.published_at && <Chrono fromNow>{row.published_at}</Chrono>}
                 </Typography>
