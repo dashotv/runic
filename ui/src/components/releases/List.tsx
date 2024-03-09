@@ -28,7 +28,7 @@ export const ReleaseList = ({ data }: { data: Release[] }) => {
                 noWrap
                 color="primary"
                 sx={{ pr: 1, '& a': { color: 'primary.main' } }}
-                title={row.raw.title}
+                title={row.raw?.title}
               >
                 <Truncate
                   text={

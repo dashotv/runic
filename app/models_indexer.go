@@ -24,6 +24,7 @@ func (c *Connector) IndexerList(page, limit int) ([]*Indexer, int64, error) {
 		return nil, 0, err
 	}
 
+	indexers = append(indexers, &Indexer{Name: "rift", Url: "https://rift.com", Active: true, Categories: []int{5070}})
 	return indexers, count, nil
 }
 
