@@ -6,7 +6,7 @@ NAME := runic
 all: test
 
 clean:
-	rm -rf static/index.html static/assets
+	rm -rf static/index.html static/assets/*
 
 test: generate
 	go test ./...
