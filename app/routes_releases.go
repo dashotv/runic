@@ -83,14 +83,17 @@ func (a *Application) ReleasesUpdate(c echo.Context, id string) error {
 
 // PATCH /releases/:id
 func (a *Application) ReleasesSettings(c echo.Context, id string) error {
-	// subject, err := a.DB.Releases.Get(id)
-	// if err != nil {
-	//     return c.JSON(http.StatusNotFound, H{"error": true, "message": "not found"})
-	// }
+	subject, err := a.DB.Release.Get(id, &Release{})
+	if err != nil {
+		return c.JSON(http.StatusNotFound, H{"error": true, "message": "not found"})
+	}
 
-	// TODO: implement the route
-	return c.JSON(http.StatusNotImplemented, H{"error": "not implmented"})
-	// return c.JSON(http.StatusOK, H{"error": false})
+	subject.Verified = !subject.Verified
+	if err := a.DB.Release.Save(subject); err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, H{"error": false})
 }
 
 // DELETE /releases/:id

@@ -8,7 +8,7 @@ import (
 
 var releaseTypes = []string{"tv", "anime", "movies"}
 
-func (r *Release) Created(ctx context.Context, result *mongo.UpdateResult) error {
+func (r *Release) Created(ctx context.Context) error {
 	return app.Events.Send("runic.releases", r)
 }
 func (r *Release) Updated(ctx context.Context, result *mongo.UpdateResult) error {
