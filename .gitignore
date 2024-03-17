@@ -9,5 +9,4 @@ runic
 
 /static
 !/static/embed.go
-!/static/index.html
-!/static/assets/index.js
+!/static/assets/.keep
