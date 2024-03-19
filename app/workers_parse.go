@@ -15,13 +15,13 @@ type ParseActive struct {
 
 func (j *ParseActive) Kind() string { return "parse_active" }
 func (j *ParseActive) Work(ctx context.Context, job *minion.Job[*ParseActive]) error {
-	log := app.Log.Named("parse_active")
+	// log := app.Log.Named("parse_active")
 	list, err := app.DB.IndexerActive()
 	if err != nil {
 		return err
 	}
 
-	log.Debugf("processing %d indexers", len(list))
+	// log.Debugf("processing %d indexers", len(list))
 	for _, indexer := range list {
 		app.Workers.Enqueue(&ParseIndexer{ID: indexer.ID.Hex(), Title: indexer.Name})
 	}
@@ -37,17 +37,17 @@ type ParseIndexer struct {
 func (j *ParseIndexer) Kind() string { return "parse_indexer" }
 func (j *ParseIndexer) Work(ctx context.Context, job *minion.Job[*ParseIndexer]) error {
 	id := job.Args.ID
-	log := app.Log.Named("parse_indexer")
+	// log := app.Log.Named("parse_indexer")
 	indexer, err := app.DB.IndexerGet(id)
 	if err != nil {
 		return err
 	}
 
-	log.Debugf("processing indexer: %s", indexer.Name)
-	start := time.Now()
-	defer func() {
-		log.Debugf("processing indexer: %s: done %s", indexer.Name, time.Since(start))
-	}()
+	// log.Debugf("processing indexer: %s", indexer.Name)
+	// start := time.Now()
+	// defer func() {
+	// 	log.Debugf("processing indexer: %s: done %s", indexer.Name, time.Since(start))
+	// }()
 
 	results, err := app.Processor.Parse(indexer.Name, indexer.Categories)
 	if err != nil {
@@ -83,9 +83,9 @@ type ParseRift struct {
 
 func (j *ParseRift) Kind() string { return "parse_rift" }
 func (j *ParseRift) Work(ctx context.Context, job *minion.Job[*ParseRift]) error {
-	url := app.Config.RiftURL
-	log := app.Log.Named("parse_rift")
-	log.Debugf("parsing rift: %s", url)
+	// url := app.Config.RiftURL
+	// log := app.Log.Named("parse_rift")
+	// log.Debugf("parsing rift: %s", url)
 
 	resp, err := app.Rift.VideoService.Index(context.Background(), &rift.Request{Limit: 100})
 	if err != nil {
