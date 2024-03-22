@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Truncate from 'react-truncate-inside';
 
 import Paper from '@mui/material/Paper';
@@ -6,9 +8,18 @@ import Typography from '@mui/material/Typography';
 
 import { Chrono, Group, Megabytes, Resolution, Row } from 'components/common';
 
+import { DownloaderIcon } from '.';
+import { ReleaseDialog } from './Dialog';
 import { Release } from './types';
 
 export const ReleaseList = ({ data }: { data: Release[] }) => {
+  const [open, setOpen] = useState(false);
+  const [viewing, setViewing] = useState<Release | null>(null);
+  const handleClose = () => setOpen(false);
+  const view = (row: Release) => {
+    setViewing(row);
+    setOpen(true);
+  };
   return (
     <Paper elevation={0} sx={{ width: '100%' }}>
       {data?.map((row: Release) => (
@@ -22,6 +33,7 @@ export const ReleaseList = ({ data }: { data: Release[] }) => {
               pr="3px"
               alignItems="center"
             >
+              <DownloaderIcon downloader={row.downloader} />
               <Typography
                 component="div"
                 fontWeight="bolder"
@@ -30,16 +42,18 @@ export const ReleaseList = ({ data }: { data: Release[] }) => {
                 sx={{ pr: 1, '& a': { color: 'primary.main' } }}
                 title={row.raw?.title}
               >
-                <Truncate
-                  text={
-                    `${row.title}${row.year ? ` (${row.year})` : ''}${
-                      row.episode ? ` [${row.season}x${row.episode}]` : ''
-                    }` ||
-                    row.raw.title ||
-                    ''
-                  }
-                  ellipsis=" ... "
-                />
+                <Link to={``} onClick={() => view(row)}>
+                  <Truncate
+                    text={
+                      `${row.title}${row.year ? ` (${row.year})` : ''}${
+                        row.episode ? ` [${row.season}x${row.episode}]` : ''
+                      }` ||
+                      row.raw.title ||
+                      ''
+                    }
+                    ellipsis=" ... "
+                  />
+                </Link>
               </Typography>
               <Stack
                 display={{ xs: 'none', md: 'inherit' }}
@@ -87,6 +101,7 @@ export const ReleaseList = ({ data }: { data: Release[] }) => {
           </Stack>
         </Row>
       ))}
+      {viewing && <ReleaseDialog {...{ open, handleClose }} release={viewing} />}
     </Paper>
   );
 };
