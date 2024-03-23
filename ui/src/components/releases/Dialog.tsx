@@ -28,6 +28,7 @@ export const ReleaseDialog = ({
   handleClose,
   // actions,
   release: {
+    id,
     title,
     raw,
     description,
@@ -91,6 +92,12 @@ export const ReleaseDialog = ({
       </DialogTitle>
       <DialogContent>
         <Stack width="100%" direction="column" spacing={1}>
+          <Typography variant="subtitle2" color="textSecondary" sx={{ position: 'relative', bottom: '-4px' }}>
+            ID
+          </Typography>
+          <Typography minHeight="24px" variant="body1" color="primary">
+            {id}
+          </Typography>
           <Typography variant="subtitle2" color="textSecondary" sx={{ position: 'relative', bottom: '-4px' }}>
             Title
           </Typography>
