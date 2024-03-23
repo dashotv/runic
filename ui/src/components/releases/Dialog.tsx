@@ -1,8 +1,5 @@
-import { HiOutlineNewspaper } from 'react-icons/hi2';
-import { SiUtorrent } from 'react-icons/si';
 import { Link } from 'react-router-dom';
 
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
@@ -12,14 +9,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
-import SvgIcon from '@mui/material/SvgIcon';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { Chrono, Group, Megabytes, Resolution } from 'components/common';
 
-import { Release } from '.';
+import { DownloaderIcon, Release } from '.';
 
 export type ReleaseDialogProps = {
   open: boolean;
@@ -61,29 +57,8 @@ export const ReleaseDialog = ({
           {title}
         </Typography>
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={1} alignItems="center">
-          <Stack width={{ xs: '100%', md: 'inherit' }} direction="row" alignItems="center">
-            <IconButton size="small" title="verified">
-              <CheckCircleIcon color={verified ? 'secondary' : 'disabled'} fontSize="small" />
-            </IconButton>
-            <IconButton size="small">
-              {downloader == 'nzb' ? (
-                <SvgIcon
-                  sx={{ width: '20px', height: '20px' }}
-                  component={HiOutlineNewspaper}
-                  inheritViewBox
-                  fontSize="small"
-                  color="disabled"
-                />
-              ) : (
-                <SvgIcon
-                  sx={{ width: '18px', height: '18px' }}
-                  component={SiUtorrent}
-                  inheritViewBox
-                  fontSize="small"
-                  color="disabled"
-                />
-              )}
-            </IconButton>
+          <Stack width={{ xs: '100%', md: 'inherit' }} direction="row" spacing={1} alignItems="center">
+            <DownloaderIcon downloader={downloader} verified={verified} />
             <Stack direction="row" spacing={1} alignItems="center">
               <Resolution resolution={resolution} variant="default" />
               <Group group={group} author={website} variant="default" />

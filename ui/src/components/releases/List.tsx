@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Truncate from 'react-truncate-inside';
 
+import { IconButton } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -10,15 +11,27 @@ import { Chrono, Group, Megabytes, Resolution, Row } from 'components/common';
 
 import { DownloaderIcon } from '.';
 import { ReleaseDialog } from './Dialog';
+import { useReleaseSettingMutation } from './query';
 import { Release } from './types';
 
 export const ReleaseList = ({ data }: { data: Release[] }) => {
   const [open, setOpen] = useState(false);
   const [viewing, setViewing] = useState<Release | null>(null);
+  const releaseUpdate = useReleaseSettingMutation();
   const handleClose = () => setOpen(false);
   const view = (row: Release) => {
     setViewing(row);
     setOpen(true);
+  };
+  const toggle = (row: Release) => {
+    releaseUpdate.mutate(
+      { id: row.id, setting: { setting: 'verified', value: !row.verified } },
+      {
+        onSuccess: () => {
+          row.verified = !row.verified;
+        },
+      },
+    );
   };
   return (
     <Paper elevation={0} sx={{ width: '100%' }}>
@@ -33,7 +46,15 @@ export const ReleaseList = ({ data }: { data: Release[] }) => {
               pr="3px"
               alignItems="center"
             >
-              <DownloaderIcon downloader={row.downloader} />
+              <IconButton
+                size="small"
+                onClick={e => {
+                  e.preventDefault();
+                  toggle(row);
+                }}
+              >
+                <DownloaderIcon downloader={row.downloader} verified={row.verified} />
+              </IconButton>
               <Typography
                 component="div"
                 fontWeight="bolder"
@@ -54,7 +75,7 @@ export const ReleaseList = ({ data }: { data: Release[] }) => {
                       `${row.title}${row.year ? ` (${row.year})` : ''}${
                         row.episode ? ` [${row.season}x${row.episode}]` : ''
                       }` ||
-                      row.raw.title ||
+                      row.raw?.title ||
                       ''
                     }
                     ellipsis=" ... "

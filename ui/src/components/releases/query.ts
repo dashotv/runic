@@ -1,8 +1,17 @@
 import axios from 'axios';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { ReleaseResponse, ReleasesResponse, SearchResponse } from './types';
+
+export interface Setting {
+  setting: string;
+  value: boolean;
+}
+export interface SettingsArgs {
+  id: string;
+  setting: Setting;
+}
 
 export const getReleases = async (limit: number, skip: number, queryString: string) => {
   const response = await axios.get(`/api/runic/releases/?limit=${limit}&skip=${skip}&${queryString}`);
@@ -12,6 +21,11 @@ export const getReleases = async (limit: number, skip: number, queryString: stri
 export const getRelease = async (id: string) => {
   const response = await axios.get(`/api/runic/releases/${id}`);
   return response.data as ReleaseResponse;
+};
+
+export const patchRelease = async (id: string, setting: Setting) => {
+  const response = await axios.patch(`/api/runic/releases/${id}`, setting);
+  return response.data;
 };
 
 export const getSearch = async (limit: number, skip: number, queryString: string) => {
@@ -32,6 +46,16 @@ export const useReleaseQuery = (id: string) =>
     queryKey: ['releases', id],
     queryFn: () => getRelease(id),
   });
+
+export const useReleaseSettingMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (args: SettingsArgs) => patchRelease(args.id, args.setting),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['releases'] });
+    },
+  });
+};
 
 export const useSearchQuery = (limit: number, skip: number, queryString: string) =>
   useQuery({
