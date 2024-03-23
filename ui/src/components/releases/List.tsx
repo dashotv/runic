@@ -42,7 +42,13 @@ export const ReleaseList = ({ data }: { data: Release[] }) => {
                 sx={{ pr: 1, '& a': { color: 'primary.main' } }}
                 title={row.raw?.title}
               >
-                <Link to={``} onClick={() => view(row)}>
+                <Link
+                  to="#"
+                  onClick={e => {
+                    e.preventDefault();
+                    view(row);
+                  }}
+                >
                   <Truncate
                     text={
                       `${row.title}${row.year ? ` (${row.year})` : ''}${

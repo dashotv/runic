@@ -3,6 +3,13 @@ export interface ReleasesResponse {
   results: Release[];
 }
 
+export interface SearchResponse {
+  Count: number;
+  Releases: Release[];
+  Search: string;
+  Total: number;
+}
+
 export interface ReleaseResponse {
   release: Release;
 }

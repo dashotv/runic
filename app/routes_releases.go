@@ -15,11 +15,6 @@ func (a *Application) ReleasesIndex(c echo.Context, page int, limit int) error {
 		page = 1
 	}
 
-	total, err := a.DB.Release.Query().Count()
-	if err != nil {
-		return err
-	}
-
 	q := a.DB.Release.Query()
 
 	source := c.QueryParam("source")
@@ -41,6 +36,11 @@ func (a *Application) ReleasesIndex(c echo.Context, page int, limit int) error {
 	website := c.QueryParam("website")
 	if website != "" {
 		q = q.Where("website", website)
+	}
+
+	total, err := q.Count()
+	if err != nil {
+		return err
 	}
 
 	list, err := q.Desc("published_at").Desc("created_at").Limit(limit).Skip((page - 1) * limit).Run()

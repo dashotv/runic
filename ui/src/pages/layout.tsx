@@ -5,14 +5,20 @@ import Container from '@mui/material/Container';
 import { RoutingTabs, RoutingTabsRoute } from 'components/common';
 import { IndexersList } from 'components/indexers';
 import Releases from 'pages/releases';
+import Search from 'pages/search';
 
 const Layout = () => {
   // limit, skip, queries, etc
 
   const tabsMap: RoutingTabsRoute[] = [
     {
-      label: 'Releases',
+      label: 'Search',
       to: '',
+      element: <Search />,
+    },
+    {
+      label: 'Releases',
+      to: 'releases',
       element: <Releases />,
     },
     {
