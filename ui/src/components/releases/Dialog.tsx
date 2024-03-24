@@ -54,7 +54,7 @@ export const ReleaseDialog = ({
   return (
     <Dialog open={open} onClose={handleClose} fullWidth fullScreen={fullScreen} maxWidth="md">
       <DialogTitle>
-        <Typography noWrap color="primary" variant="h6">
+        <Typography noWrap color="primary">
           {title}
         </Typography>
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={1} alignItems="center">
@@ -113,7 +113,7 @@ export const ReleaseDialog = ({
           <Typography variant="subtitle2" color="textSecondary" sx={{ position: 'relative', bottom: '-4px' }}>
             Size
           </Typography>
-          <Typography minHeight="24px" variant="body1" color="primary">
+          <Typography component="div" minHeight="24px" variant="body1" color="primary">
             {size ? <Megabytes ord="bytes" value={size} /> : '?'}
           </Typography>
           <Typography variant="subtitle2" color="textSecondary" sx={{ position: 'relative', bottom: '-4px' }}>
