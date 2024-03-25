@@ -70,6 +70,14 @@ func setupWorkers(app *Application) error {
 		return errors.Wrap(err, "scheduling worker: parse_rift (ParseRift)")
 	}
 
+	if err := minion.Register[*ParseRiftAll](m, &ParseRiftAll{}); err != nil {
+		return errors.Wrap(err, "registering worker: parse_rift_all (ParseRiftAll)")
+	}
+
+	if err := minion.Register[*UpdateIndexes](m, &UpdateIndexes{}); err != nil {
+		return errors.Wrap(err, "registering worker: update_indexes (UpdateIndexes)")
+	}
+
 	app.Workers = m
 	return nil
 }

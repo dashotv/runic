@@ -92,7 +92,54 @@ func (j *ParseRift) Work(ctx context.Context, job *minion.Job[*ParseRift]) error
 		return err
 	}
 
+	err = processRift(resp)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+type ParseRiftAll struct {
+	minion.WorkerDefaults[*ParseRiftAll]
+}
+
+func (j *ParseRiftAll) Kind() string { return "parse_rift_all" }
+func (j *ParseRiftAll) Work(ctx context.Context, job *minion.Job[*ParseRiftAll]) error {
+	count, err := app.Rift.VideoService.Index(context.Background(), &rift.Request{Limit: 0})
+	if err != nil {
+		return err
+	}
+
+	limit := 100
+	for skip := 0; skip < int(count.Total); skip += limit {
+		resp, err := app.Rift.VideoService.Index(context.Background(), &rift.Request{Limit: 100, Skip: skip})
+		if err != nil {
+			return err
+		}
+
+		err = processRift(resp)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func processRift(resp *rift.VideosResponse) error {
 	for _, video := range resp.Results {
+		// app.Log.Debugf("processRift: %s %02dx%02d", video.Title, video.Season, video.Episode)
+		// TODO: change this to a unique index?
+		// Skip if it exists
+		count, err := app.DB.Release.Query().Where("checksum", video.DisplayID).Count()
+		if err != nil {
+			return err
+		}
+		if count > 0 {
+			continue
+		}
+
 		// log.Debugf("video: %s", video.Title)
 		season := 1
 		if video.Season != 0 {
@@ -114,14 +161,6 @@ func (j *ParseRift) Work(ctx context.Context, job *minion.Job[*ParseRift]) error
 			PublishedAt: time.Now(),
 		}
 
-		// TODO: change this to a unique index?
-		count, err := app.DB.Release.Query().Where("checksum", result.Checksum).Count()
-		if err != nil {
-			return err
-		}
-		if count > 0 {
-			continue
-		}
 		if err := app.DB.Release.Save(result); err != nil {
 			return err
 		}

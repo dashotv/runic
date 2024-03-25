@@ -10,8 +10,10 @@ import (
 )
 
 var workerlist = map[string]minion.Payload{
-	"parse_active": &ParseActive{},
-	"parse_rift":   &ParseRift{},
+	"parse_active":   &ParseActive{},
+	"parse_rift":     &ParseRift{},
+	"parse_rift_all": &ParseRiftAll{},
+	"update_indexes": &UpdateIndexes{},
 }
 
 // GET /minion/

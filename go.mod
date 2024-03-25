@@ -21,6 +21,7 @@ require (
 	github.com/stretchr/testify v1.9.0
 	go.infratographer.com/x v0.3.9
 	go.mongodb.org/mongo-driver v1.14.0
+	go.uber.org/ratelimit v0.3.1
 	go.uber.org/zap v1.27.0
 	golang.org/x/net v0.22.0
 	golang.org/x/term v0.18.0
@@ -28,6 +29,7 @@ require (
 
 require (
 	github.com/MicahParks/keyfunc/v2 v2.1.0 // indirect
+	github.com/benbjohnson/clock v1.3.0 // indirect
 	github.com/blendle/zapdriver v1.3.1 // indirect
 	github.com/bytedance/sonic v1.11.2 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
