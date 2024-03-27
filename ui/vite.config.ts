@@ -4,6 +4,8 @@ import viteTsconfigPaths from 'vite-tsconfig-paths';
 import federation from '@originjs/vite-plugin-federation';
 import react from '@vitejs/plugin-react';
 
+// TODO: replace with -swc
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [

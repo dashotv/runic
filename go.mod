@@ -6,7 +6,7 @@ require (
 	github.com/caarlos0/env/v10 v10.0.0
 	github.com/dashotv/grimoire v0.5.1
 	github.com/dashotv/mercury v0.3.2
-	github.com/dashotv/minion v0.3.3
+	github.com/dashotv/minion v0.4.0
 	github.com/dashotv/rift v0.1.2
 	github.com/dotenv-org/godotenvvault v0.6.0
 	github.com/gin-gonic/gin v1.9.1
@@ -74,7 +74,6 @@ require (
 	github.com/pelletier/go-toml/v2 v2.1.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
-	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
@@ -105,7 +104,6 @@ require (
 	golang.org/x/time v0.5.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
-	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
