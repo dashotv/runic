@@ -4,8 +4,12 @@ import viteTsconfigPaths from 'vite-tsconfig-paths';
 import federation from '@originjs/vite-plugin-federation';
 import react from '@vitejs/plugin-react';
 
-// TODO: replace with -swc
+// @ts-ignore
+import pkg from './package.json';
 
+const { dependencies } = pkg;
+
+// TODO: replace with -swc
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -17,20 +21,15 @@ export default defineConfig({
       exposes: {
         './App': './src/pages/app.tsx',
       },
-      shared: [
-        'react',
-        'react-dom',
-        'react-router-dom',
-        'axios',
-        'react-truncate-inside',
-        'dayjs',
-        'radash',
-        'react-helmet-async',
-        'react-hook-form',
-        '@mui/material',
-        '@mui/icons-material',
-        '@tanstack/react-query',
-      ],
+      shared: {
+        ...dependencies,
+        react: {
+          requiredVersion: dependencies['react'],
+        },
+        'react-dom': {
+          requiredVersion: dependencies['react-dom'],
+        },
+      },
     }),
   ],
   build: {

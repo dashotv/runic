@@ -6,7 +6,7 @@ require (
 	github.com/caarlos0/env/v10 v10.0.0
 	github.com/dashotv/grimoire v0.5.1
 	github.com/dashotv/mercury v0.3.2
-	github.com/dashotv/minion v0.4.1
+	github.com/dashotv/minion v0.4.3
 	github.com/dashotv/rift v0.1.2
 	github.com/dotenv-org/godotenvvault v0.6.0
 	github.com/gin-gonic/gin v1.9.1
