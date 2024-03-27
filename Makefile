@@ -32,7 +32,7 @@ docker-run:
 	$(NAME)
 
 dotenv:
-	npx dotenv-vault local build
+	npx @dotenvx/dotenvx encrypt
 
 ui: clean
 	cd ui && yarn build
