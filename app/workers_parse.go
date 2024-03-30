@@ -87,7 +87,7 @@ func (j *ParseRift) Work(ctx context.Context, job *minion.Job[*ParseRift]) error
 	// log := app.Log.Named("parse_rift")
 	// log.Debugf("parsing rift: %s", url)
 
-	resp, err := app.Rift.VideoService.Index(context.Background(), &rift.Request{Limit: 100})
+	resp, err := app.Rift.Video.Index(context.Background(), &rift.VideoIndexRequest{Limit: 100})
 	if err != nil {
 		return err
 	}
@@ -106,14 +106,15 @@ type ParseRiftAll struct {
 
 func (j *ParseRiftAll) Kind() string { return "parse_rift_all" }
 func (j *ParseRiftAll) Work(ctx context.Context, job *minion.Job[*ParseRiftAll]) error {
-	count, err := app.Rift.VideoService.Index(context.Background(), &rift.Request{Limit: 0})
+	count, err := app.Rift.Video.Index(context.Background(), &rift.VideoIndexRequest{Limit: 0})
 	if err != nil {
 		return err
 	}
 
+	pages := int(count.Total)/100 + 1
 	limit := 100
-	for skip := 0; skip < int(count.Total); skip += limit {
-		resp, err := app.Rift.VideoService.Index(context.Background(), &rift.Request{Limit: 100, Skip: skip})
+	for page := 1; page <= pages; page++ {
+		resp, err := app.Rift.Video.Index(context.Background(), &rift.VideoIndexRequest{Limit: limit, Page: page})
 		if err != nil {
 			return err
 		}
@@ -127,12 +128,12 @@ func (j *ParseRiftAll) Work(ctx context.Context, job *minion.Job[*ParseRiftAll])
 	return nil
 }
 
-func processRift(resp *rift.VideosResponse) error {
-	for _, video := range resp.Results {
+func processRift(resp *rift.VideoIndexResponse) error {
+	for _, video := range resp.Result {
 		// app.Log.Debugf("processRift: %s %02dx%02d", video.Title, video.Season, video.Episode)
 		// TODO: change this to a unique index?
 		// Skip if it exists
-		count, err := app.DB.Release.Query().Where("checksum", video.DisplayID).Count()
+		count, err := app.DB.Release.Query().Where("checksum", video.DisplayId).Count()
 		if err != nil {
 			return err
 		}
@@ -150,7 +151,7 @@ func processRift(resp *rift.VideosResponse) error {
 			Title:       video.Title,
 			Season:      season,
 			Episode:     video.Episode,
-			Checksum:    video.DisplayID,
+			Checksum:    video.DisplayId,
 			Size:        video.Size,
 			Resolution:  fmt.Sprintf("%d", video.Resolution),
 			Source:      "rift",
