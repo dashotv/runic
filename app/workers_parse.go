@@ -87,7 +87,7 @@ func (j *ParseRift) Work(ctx context.Context, job *minion.Job[*ParseRift]) error
 	// log := app.Log.Named("parse_rift")
 	// log.Debugf("parsing rift: %s", url)
 
-	resp, err := app.Rift.Video.Index(context.Background(), &rift.VideoIndexRequest{Limit: 100})
+	resp, err := app.Rift.Video.Index(ctx, &rift.VideoIndexRequest{Limit: 100})
 	if err != nil {
 		return err
 	}
@@ -106,7 +106,11 @@ type ParseRiftAll struct {
 
 func (j *ParseRiftAll) Kind() string { return "parse_rift_all" }
 func (j *ParseRiftAll) Work(ctx context.Context, job *minion.Job[*ParseRiftAll]) error {
-	count, err := app.Rift.Video.Index(context.Background(), &rift.VideoIndexRequest{Limit: 0})
+	return getRiftAll(ctx)
+}
+
+func getRiftAll(ctx context.Context) error {
+	count, err := app.Rift.Video.Index(ctx, &rift.VideoIndexRequest{Limit: 0})
 	if err != nil {
 		return err
 	}
@@ -114,7 +118,7 @@ func (j *ParseRiftAll) Work(ctx context.Context, job *minion.Job[*ParseRiftAll])
 	pages := int(count.Total)/100 + 1
 	limit := 100
 	for page := 1; page <= pages; page++ {
-		resp, err := app.Rift.Video.Index(context.Background(), &rift.VideoIndexRequest{Limit: limit, Page: page})
+		resp, err := app.Rift.Video.Index(ctx, &rift.VideoIndexRequest{Limit: limit, Page: page})
 		if err != nil {
 			return err
 		}
@@ -124,7 +128,6 @@ func (j *ParseRiftAll) Work(ctx context.Context, job *minion.Job[*ParseRiftAll])
 			return err
 		}
 	}
-
 	return nil
 }
 
