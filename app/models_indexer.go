@@ -12,7 +12,7 @@ func (c *Connector) IndexerGet(id string) (*Indexer, error) {
 }
 
 func (c *Connector) IndexerList(page, limit int) ([]*Indexer, int64, error) {
-	q := c.Indexer.Query().Limit(limit).Skip((page - 1) * limit).Desc("processed_at").Asc("name")
+	q := c.Indexer.Query().Limit(limit).Skip((page - 1) * limit).Asc("name")
 
 	count, err := q.Count()
 	if err != nil {
@@ -24,6 +24,7 @@ func (c *Connector) IndexerList(page, limit int) ([]*Indexer, int64, error) {
 		return nil, 0, err
 	}
 
+	indexers = append([]*Indexer{{Name: "rift", Url: app.Config.RiftURL, Active: true, Categories: []int{5070}}}, indexers...)
 	return indexers, count, nil
 }
 
