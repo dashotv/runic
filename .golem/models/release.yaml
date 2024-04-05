@@ -2,6 +2,8 @@ name: release
 type: model
 imports:
   - time
+  - github.com/dashotv/runic/newznab
+  - github.com/dashotv/runic/parser
 fields:
   - name: type
     type: string
