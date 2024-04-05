@@ -8,19 +8,7 @@ import { MenuItem, Stack, TextField } from '@mui/material';
 import { Option } from 'components/Form';
 import { useIndexersAllQuery } from 'components/indexers';
 import { ReleaseList, useReleasesSearchQuery } from 'components/releases';
-
-const resolutions: Option[] = [
-  { label: 'All', value: '' },
-  { label: '720p', value: '720' },
-  { label: '1080p', value: '1080' },
-  { label: '2160p', value: '2160' },
-];
-const types: Option[] = [
-  { label: 'All', value: '' },
-  { label: 'Movie', value: 'movie' },
-  { label: 'TV', value: 'tv' },
-  { label: 'Anime', value: 'anime' },
-];
+import { ReleaseTypes, Resolutions } from 'types/constants';
 
 const Releases = () => {
   const { page } = useParams();
@@ -74,7 +62,7 @@ const Releases = () => {
           onChange={e => setKind(e.target.value)}
           sx={{ width: '125px' }}
         >
-          {types.map((option: Option) => (
+          {ReleaseTypes.map((option: Option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
             </MenuItem>
@@ -89,7 +77,7 @@ const Releases = () => {
           onChange={e => setResolution(e.target.value)}
           sx={{ width: '125px' }}
         >
-          {resolutions.map((option: Option) => (
+          {Resolutions.map((option: Option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
             </MenuItem>

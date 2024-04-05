@@ -1,9 +1,13 @@
+import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import Layout from 'pages/layout';
+import { RoutingTabs, RoutingTabsRoute } from 'components/common';
+import { IndexersList } from 'components/indexers';
+import Releases from 'pages/releases';
+import Search from 'pages/search';
 
 const darkTheme = createTheme({
   palette: {
@@ -22,11 +26,30 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
+  const tabsMap: RoutingTabsRoute[] = [
+    {
+      label: 'Search',
+      to: '',
+      element: <Search />,
+    },
+    {
+      label: 'Releases',
+      to: 'releases',
+      element: <Releases />,
+    },
+    {
+      label: 'Indexers',
+      to: 'indexers',
+      element: <IndexersList />,
+    },
+  ];
   return (
     <ThemeProvider theme={darkTheme}>
       <QueryClientProvider client={queryClient}>
         <CssBaseline />
-        <Layout />
+        <Container>
+          <RoutingTabs data={tabsMap} route={'/'} />
+        </Container>
       </QueryClientProvider>
     </ThemeProvider>
   );
