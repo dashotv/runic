@@ -12,7 +12,6 @@ export interface SelectProps {
   render?: (option: Option) => React.ReactNode;
 }
 export const Select = ({ name, label, disabled, options, control, sx, render, onChange }: InputProps & SelectProps) => {
-  console.log('SELECT', name, options);
   const renderDefault = (option: Option) => (
     <MenuItem key={option.value} value={option.value}>
       <span>{render ? render(option) : option.label}</span>
