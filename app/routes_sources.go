@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gin-gonic/gin"
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
 
@@ -33,11 +32,11 @@ func (a *Application) SourcesIndex(c echo.Context, page int, limit int) error {
 		out = append(out, s)
 	}
 
-	return c.JSON(http.StatusOK, gin.H{"error": false, "results": out})
+	return c.JSON(http.StatusOK, &Response{Error: false, Result: out})
 }
 
 func (a *Application) SourcesCreate(c echo.Context) error {
-	return c.JSON(http.StatusOK, gin.H{"error": false})
+	return c.JSON(http.StatusOK, &Response{Error: false})
 }
 
 func (a *Application) SourcesShow(c echo.Context, id string) error {
@@ -46,19 +45,7 @@ func (a *Application) SourcesShow(c echo.Context, id string) error {
 		return errors.New("indexer does not exist")
 	}
 
-	return c.JSON(http.StatusOK, gin.H{"error": false, "source": s})
-}
-
-func (a *Application) SourcesUpdate(c echo.Context, id string) error {
-	return errors.New("not implemented")
-}
-
-func (a *Application) SourcesSettings(c echo.Context, id string) error {
-	return errors.New("not implemented")
-}
-
-func (a *Application) SourcesDelete(c echo.Context, id string) error {
-	return errors.New("not implemented")
+	return c.JSON(http.StatusOK, &Response{Error: false, Result: s})
 }
 
 func parseCategories(categories string) ([]int, error) {
@@ -90,7 +77,7 @@ func (a *Application) SourcesRead(c echo.Context, id string) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, gin.H{"error": false, "source": id, "results": results})
+	return c.JSON(http.StatusOK, &Response{Error: false, Result: results})
 }
 
 func (a *Application) SourcesParse(c echo.Context, id string) error {
@@ -104,7 +91,7 @@ func (a *Application) SourcesParse(c echo.Context, id string) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, gin.H{"error": false, "source": id, "results": results})
+	return c.JSON(http.StatusOK, &Response{Error: false, Result: results})
 }
 
 func (a *Application) SourcesSearch(c echo.Context, id string, query string, searchType string) error {
@@ -113,5 +100,5 @@ func (a *Application) SourcesSearch(c echo.Context, id string, query string, sea
 		return err
 	}
 
-	return c.JSON(http.StatusOK, gin.H{"error": false, "source": id, "results": results})
+	return c.JSON(http.StatusOK, &Response{Error: false, Result: results})
 }

@@ -1,28 +1,48 @@
 name: sources
 path: /sources
-rest: true
 routes:
-    - name: read
-      path: /:id/read
-      method: GET
-      params:
-        - name: id
-          type: string
-    - name: search
-      path: /:id/search
-      method: GET
-      params:
-        - name: id
-          type: string
-        - name: q
-          type: string
-          query: true
-        - name: t
-          type: string
-          query: true
-    - name: parse
-      path: /:id/parse
-      method: GET
-      params:
-        - name: id
-          type: string
+  - name: index
+    path: /
+    method: GET
+    result: "[]string"
+    params:
+      - name: page
+        type: int
+        query: true
+      - name: per_page
+        type: int
+        query: true
+  - name: show
+    path: /:id
+    method: GET
+    result: "reader.Source"
+    params:
+      - name: id
+        type: string
+  - name: read
+    path: /:id/read
+    method: GET
+    result: "[]*newznab.NZB"
+    params:
+      - name: id
+        type: string
+  - name: search
+    path: /:id/search
+    method: GET
+    result: "[]*newznab.NZB"
+    params:
+      - name: id
+        type: string
+      - name: q
+        type: string
+        query: true
+      - name: t
+        type: string
+        query: true
+  - name: parse
+    path: /:id/parse
+    method: GET
+    result: "[]*Release"
+    params:
+      - name: id
+        type: string

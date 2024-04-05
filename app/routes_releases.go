@@ -8,13 +8,6 @@ import (
 
 // GET /releases/
 func (a *Application) ReleasesIndex(c echo.Context, page int, limit int) error {
-	if limit == 0 {
-		limit = 25
-	}
-	if page == 0 {
-		page = 1
-	}
-
 	q := a.DB.Release.Query()
 
 	source := c.QueryParam("source")
@@ -47,45 +40,45 @@ func (a *Application) ReleasesIndex(c echo.Context, page int, limit int) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, H{"error": false, "results": list, "total": total})
+	return c.JSON(http.StatusOK, &Response{Error: false, Result: list, Total: total})
 }
 
 // POST /releases/
-func (a *Application) ReleasesCreate(c echo.Context) error {
+func (a *Application) ReleasesCreate(c echo.Context, subject *Release) error {
 	// TODO: implement the route
-	return c.JSON(http.StatusNotImplemented, H{"error": "not implmented"})
-	// return c.JSON(http.StatusOK, H{"error": false})
+	return c.JSON(http.StatusNotImplemented, &Response{Error: true, Message: "not implmented"})
+	// return c.JSON(http.StatusOK, &Response{Error: false})
 }
 
 // GET /releases/:id
 func (a *Application) ReleasesShow(c echo.Context, id string) error {
 	// subject, err := a.DB.Releases.Get(id)
 	// if err != nil {
-	//     return c.JSON(http.StatusNotFound, H{"error": true, "message": "not found"})
+	//     return c.JSON(http.StatusNotFound, &Response{Error: true, Message: "not found"})
 	// }
 
 	// TODO: implement the route
-	return c.JSON(http.StatusNotImplemented, H{"error": "not implmented"})
-	// return c.JSON(http.StatusOK, H{"error": false})
+	return c.JSON(http.StatusNotImplemented, &Response{Error: true, Message: "not implmented"})
+	// return c.JSON(http.StatusOK, &Response{Error: false})
 }
 
 // PUT /releases/:id
-func (a *Application) ReleasesUpdate(c echo.Context, id string) error {
+func (a *Application) ReleasesUpdate(c echo.Context, id string, subject *Release) error {
 	// subject, err := a.DB.Releases.Get(id)
 	// if err != nil {
-	//     return c.JSON(http.StatusNotFound, H{"error": true, "message": "not found"})
+	//     return c.JSON(http.StatusNotFound, &Response{Error: true, Message: "not found"})
 	// }
 
 	// TODO: implement the route
-	return c.JSON(http.StatusNotImplemented, H{"error": "not implmented"})
-	// return c.JSON(http.StatusOK, H{"error": false})
+	return c.JSON(http.StatusNotImplemented, &Response{Error: true, Message: "not implmented"})
+	// return c.JSON(http.StatusOK, &Response{Error: false})
 }
 
 // PATCH /releases/:id
-func (a *Application) ReleasesSettings(c echo.Context, id string) error {
+func (a *Application) ReleasesSettings(c echo.Context, id string, setting *Setting) error {
 	subject, err := a.DB.Release.Get(id, &Release{})
 	if err != nil {
-		return c.JSON(http.StatusNotFound, H{"error": true, "message": "not found"})
+		return c.JSON(http.StatusNotFound, &Response{Error: true, Message: "not found"})
 	}
 
 	subject.Verified = !subject.Verified
@@ -93,17 +86,17 @@ func (a *Application) ReleasesSettings(c echo.Context, id string) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, H{"error": false})
+	return c.JSON(http.StatusOK, &Response{Error: false})
 }
 
 // DELETE /releases/:id
 func (a *Application) ReleasesDelete(c echo.Context, id string) error {
 	// subject, err := a.DB.Releases.Get(id)
 	// if err != nil {
-	//     return c.JSON(http.StatusNotFound, H{"error": true, "message": "not found"})
+	//     return c.JSON(http.StatusNotFound, &Response{Error: true, Message: "not found"})
 	// }
 
 	// TODO: implement the route
-	return c.JSON(http.StatusNotImplemented, H{"error": "not implmented"})
-	// return c.JSON(http.StatusOK, H{"error": false})
+	return c.JSON(http.StatusNotImplemented, &Response{Error: true, Message: "not implmented"})
+	// return c.JSON(http.StatusOK, &Response{Error: false})
 }

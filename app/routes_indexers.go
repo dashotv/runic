@@ -8,27 +8,22 @@ import (
 )
 
 func (a *Application) IndexersIndex(c echo.Context, page int, limit int) error {
-	indexers, count, err := a.DB.IndexerList(page, limit)
+	list, count, err := a.DB.IndexerList(page, limit)
 	if err != nil {
 		return err
 	}
-	sort.Slice(indexers, func(i, j int) bool {
-		return indexers[i].Name < indexers[j].Name
+	sort.Slice(list, func(i, j int) bool {
+		return list[i].Name < list[j].Name
 	})
-	return c.JSON(http.StatusOK, H{"count": count, "results": indexers})
+	return c.JSON(http.StatusOK, &Response{Total: count, Result: list})
 }
 
-func (a *Application) IndexersCreate(c echo.Context) error {
-	indexer := &Indexer{}
-	if err := c.Bind(indexer); err != nil {
+func (a *Application) IndexersCreate(c echo.Context, subject *Indexer) error {
+	if err := a.DB.Indexer.Save(subject); err != nil {
 		return err
 	}
 
-	if err := a.DB.Indexer.Save(indexer); err != nil {
-		return err
-	}
-
-	return c.JSON(http.StatusOK, H{"error": false, "result": indexer})
+	return c.JSON(http.StatusOK, &Response{Error: false, Result: subject})
 }
 
 func (a *Application) IndexersShow(c echo.Context, id string) error {
@@ -37,39 +32,24 @@ func (a *Application) IndexersShow(c echo.Context, id string) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, H{"error": false, "result": subject})
+	return c.JSON(http.StatusOK, &Response{Error: false, Result: subject})
 }
 
-func (a *Application) IndexersUpdate(c echo.Context, id string) error {
-	subject := &Indexer{}
-	if err := c.Bind(subject); err != nil {
-		return err
-	}
-
+func (a *Application) IndexersUpdate(c echo.Context, id string, subject *Indexer) error {
 	if err := a.DB.Indexer.Save(subject); err != nil {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, H{"error": false, "result": subject})
+	return c.JSON(http.StatusOK, &Response{Error: false, Result: subject})
 }
 
-type Setting struct {
-	Key   string `json:"setting"`
-	Value bool   `json:"value"`
-}
-
-func (a *Application) IndexersSettings(c echo.Context, id string) error {
+func (a *Application) IndexersSettings(c echo.Context, id string, setting *Setting) error {
 	subject, err := a.DB.IndexerGet(id)
 	if err != nil {
 		return err
 	}
 
-	setting := &Setting{}
-	if err := c.Bind(setting); err != nil {
-		return err
-	}
-
-	switch setting.Key {
+	switch setting.Name {
 	case "active":
 		subject.Active = setting.Value
 	}
@@ -78,7 +58,7 @@ func (a *Application) IndexersSettings(c echo.Context, id string) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, H{"error": false})
+	return c.JSON(http.StatusOK, &Response{Error: false, Result: setting})
 }
 
 func (a *Application) IndexersDelete(c echo.Context, id string) error {
@@ -92,5 +72,5 @@ func (a *Application) IndexersDelete(c echo.Context, id string) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, H{"error": false})
+	return c.JSON(http.StatusOK, &Response{Error: false, Result: subject})
 }

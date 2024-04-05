@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/nats-io/nats.go"
-	"github.com/pkg/errors"
 	"go.uber.org/zap"
 
+	"github.com/dashotv/fae"
 	"github.com/dashotv/mercury"
 )
 
@@ -42,7 +42,7 @@ func checkEvents(app *Application) error {
 	case nats.CONNECTED:
 		return nil
 	default:
-		return errors.Errorf("nats status: %s", app.Events.Merc.Status())
+		return fae.Errorf("nats status: %s", app.Events.Merc.Status())
 	}
 }
 
@@ -88,7 +88,7 @@ func (e *Events) Send(topic EventsTopic, data any) error {
 	}
 	if err != nil {
 		e.Log.Errorf("sending: %s", err)
-		return errors.Wrap(err.(error), "events.send")
+		return fae.Wrap(err.(error), "events.send")
 	}
 	return nil
 }
@@ -98,7 +98,7 @@ func (e *Events) doSend(topic EventsTopic, data any) error {
 	case "runic.releases":
 		m, ok := data.(*Release)
 		if !ok {
-			return errors.Errorf("events.send: wrong data type: %t", data)
+			return fae.Errorf("events.send: wrong data type: %t", data)
 		}
 		e.Releases <- m
 	default:

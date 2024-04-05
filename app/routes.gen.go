@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/dashotv/fae"
+	"github.com/dashotv/golem/plugins/router"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"go.infratographer.com/x/echox/echozap"
 )
 
 func init() {
@@ -35,11 +35,10 @@ func startRoutes(ctx context.Context, app *Application) error {
 
 func setupRoutes(app *Application) error {
 	logger := app.Log.Named("routes").Desugar()
-	e := echo.New()
-	e.HideBanner = true
-	e.Use(middleware.Recover())
-	e.Use(echozap.Middleware(logger))
-
+	e, err := router.New(logger)
+	if err != nil {
+		return fae.Wrap(err, "router plugin")
+	}
 	app.Engine = e
 	// unauthenticated routes
 	app.Default = app.Engine.Group("")
@@ -47,21 +46,38 @@ func setupRoutes(app *Application) error {
 	app.Router = app.Engine.Group("")
 
 	// TODO: fix auth
-	// if app.Config.Auth {
-	// 	clerkSecret := app.Config.ClerkSecretKey
-	// 	if clerkSecret == "" {
-	// 		app.Log.Fatal("CLERK_SECRET_KEY is not set")
-	// 	}
-	//
-	// 	clerkClient, err := clerk.NewClient(clerkSecret)
-	// 	if err != nil {
-	// 		app.Log.Fatalf("clerk: %s", err)
-	// 	}
-	//
-	// 	app.Router.Use(requireSession(clerkClient))
-	// }
+	if app.Config.Auth {
+		clerkSecret := app.Config.ClerkSecretKey
+		if clerkSecret == "" {
+			app.Log.Fatal("CLERK_SECRET_KEY is not set")
+		}
+		clerkToken := app.Config.ClerkToken
+		if clerkToken == "" {
+			app.Log.Fatal("CLERK_TOKEN is not set")
+		}
+
+		app.Router.Use(router.ClerkAuth(clerkSecret, clerkToken))
+	}
 
 	return nil
+}
+
+type Setting struct {
+	Name  string `json:"name"`
+	Value bool   `json:"value"`
+}
+
+type SettingsBatch struct {
+	IDs   []string `json:"ids"`
+	Name  string   `json:"name"`
+	Value bool     `json:"value"`
+}
+
+type Response struct {
+	Error   bool        `json:"error"`
+	Message string      `json:"message,omitempty"`
+	Result  interface{} `json:"result,omitempty"`
+	Total   int64       `json:"total,omitempty"`
 }
 
 func (a *Application) Routes() {
@@ -76,14 +92,6 @@ func (a *Application) Routes() {
 	indexers.PATCH("/:id", a.IndexersSettingsHandler)
 	indexers.DELETE("/:id", a.IndexersDeleteHandler)
 
-	jobs := a.Router.Group("/jobs")
-	jobs.GET("/", a.JobsIndexHandler)
-	jobs.POST("/", a.JobsCreateHandler)
-	jobs.GET("/:id", a.JobsShowHandler)
-	jobs.PUT("/:id", a.JobsUpdateHandler)
-	jobs.PATCH("/:id", a.JobsSettingsHandler)
-	jobs.DELETE("/:id", a.JobsDeleteHandler)
-
 	releases := a.Router.Group("/releases")
 	releases.GET("/", a.ReleasesIndexHandler)
 	releases.POST("/", a.ReleasesCreateHandler)
@@ -94,11 +102,7 @@ func (a *Application) Routes() {
 
 	sources := a.Router.Group("/sources")
 	sources.GET("/", a.SourcesIndexHandler)
-	sources.POST("/", a.SourcesCreateHandler)
 	sources.GET("/:id", a.SourcesShowHandler)
-	sources.PUT("/:id", a.SourcesUpdateHandler)
-	sources.PATCH("/:id", a.SourcesSettingsHandler)
-	sources.DELETE("/:id", a.SourcesDeleteHandler)
 	sources.GET("/:id/read", a.SourcesReadHandler)
 	sources.GET("/:id/search", a.SourcesSearchHandler)
 	sources.GET("/:id/parse", a.SourcesParseHandler)
@@ -110,7 +114,6 @@ func (a *Application) indexHandler(c echo.Context) error {
 		"name": "runic",
 		"routes": H{
 			"indexers": "/indexers",
-			"jobs":     "/jobs",
 			"releases": "/releases",
 			"sources":  "/sources",
 		},
@@ -127,12 +130,16 @@ func (a *Application) healthHandler(c echo.Context) error {
 
 // Indexers (/indexers)
 func (a *Application) IndexersIndexHandler(c echo.Context) error {
-	page := QueryInt(c, "page")
-	limit := QueryInt(c, "limit")
+	page := QueryParamIntDefault(c, "page", "1")
+	limit := QueryParamIntDefault(c, "limit", "25")
 	return a.IndexersIndex(c, page, limit)
 }
 func (a *Application) IndexersCreateHandler(c echo.Context) error {
-	return a.IndexersCreate(c)
+	subject := &Indexer{}
+	if err := c.Bind(subject); err != nil {
+		return err
+	}
+	return a.IndexersCreate(c, subject)
 }
 func (a *Application) IndexersShowHandler(c echo.Context) error {
 	id := c.Param("id")
@@ -140,51 +147,37 @@ func (a *Application) IndexersShowHandler(c echo.Context) error {
 }
 func (a *Application) IndexersUpdateHandler(c echo.Context) error {
 	id := c.Param("id")
-	return a.IndexersUpdate(c, id)
+	subject := &Indexer{}
+	if err := c.Bind(subject); err != nil {
+		return err
+	}
+	return a.IndexersUpdate(c, id, subject)
 }
 func (a *Application) IndexersSettingsHandler(c echo.Context) error {
 	id := c.Param("id")
-	return a.IndexersSettings(c, id)
+	setting := &Setting{}
+	if err := c.Bind(setting); err != nil {
+		return err
+	}
+	return a.IndexersSettings(c, id, setting)
 }
 func (a *Application) IndexersDeleteHandler(c echo.Context) error {
 	id := c.Param("id")
 	return a.IndexersDelete(c, id)
 }
 
-// Jobs (/jobs)
-func (a *Application) JobsIndexHandler(c echo.Context) error {
-	page := QueryInt(c, "page")
-	limit := QueryInt(c, "limit")
-	return a.JobsIndex(c, page, limit)
-}
-func (a *Application) JobsCreateHandler(c echo.Context) error {
-	return a.JobsCreate(c)
-}
-func (a *Application) JobsShowHandler(c echo.Context) error {
-	id := c.Param("id")
-	return a.JobsShow(c, id)
-}
-func (a *Application) JobsUpdateHandler(c echo.Context) error {
-	id := c.Param("id")
-	return a.JobsUpdate(c, id)
-}
-func (a *Application) JobsSettingsHandler(c echo.Context) error {
-	id := c.Param("id")
-	return a.JobsSettings(c, id)
-}
-func (a *Application) JobsDeleteHandler(c echo.Context) error {
-	id := c.Param("id")
-	return a.JobsDelete(c, id)
-}
-
 // Releases (/releases)
 func (a *Application) ReleasesIndexHandler(c echo.Context) error {
-	page := QueryInt(c, "page")
-	limit := QueryInt(c, "limit")
+	page := QueryParamIntDefault(c, "page", "1")
+	limit := QueryParamIntDefault(c, "limit", "25")
 	return a.ReleasesIndex(c, page, limit)
 }
 func (a *Application) ReleasesCreateHandler(c echo.Context) error {
-	return a.ReleasesCreate(c)
+	subject := &Release{}
+	if err := c.Bind(subject); err != nil {
+		return err
+	}
+	return a.ReleasesCreate(c, subject)
 }
 func (a *Application) ReleasesShowHandler(c echo.Context) error {
 	id := c.Param("id")
@@ -192,11 +185,19 @@ func (a *Application) ReleasesShowHandler(c echo.Context) error {
 }
 func (a *Application) ReleasesUpdateHandler(c echo.Context) error {
 	id := c.Param("id")
-	return a.ReleasesUpdate(c, id)
+	subject := &Release{}
+	if err := c.Bind(subject); err != nil {
+		return err
+	}
+	return a.ReleasesUpdate(c, id, subject)
 }
 func (a *Application) ReleasesSettingsHandler(c echo.Context) error {
 	id := c.Param("id")
-	return a.ReleasesSettings(c, id)
+	setting := &Setting{}
+	if err := c.Bind(setting); err != nil {
+		return err
+	}
+	return a.ReleasesSettings(c, id, setting)
 }
 func (a *Application) ReleasesDeleteHandler(c echo.Context) error {
 	id := c.Param("id")
@@ -205,28 +206,13 @@ func (a *Application) ReleasesDeleteHandler(c echo.Context) error {
 
 // Sources (/sources)
 func (a *Application) SourcesIndexHandler(c echo.Context) error {
-	page := QueryInt(c, "page")
-	limit := QueryInt(c, "limit")
-	return a.SourcesIndex(c, page, limit)
-}
-func (a *Application) SourcesCreateHandler(c echo.Context) error {
-	return a.SourcesCreate(c)
+	page := QueryParamInt(c, "page")
+	per_page := QueryParamInt(c, "per_page")
+	return a.SourcesIndex(c, page, per_page)
 }
 func (a *Application) SourcesShowHandler(c echo.Context) error {
 	id := c.Param("id")
 	return a.SourcesShow(c, id)
-}
-func (a *Application) SourcesUpdateHandler(c echo.Context) error {
-	id := c.Param("id")
-	return a.SourcesUpdate(c, id)
-}
-func (a *Application) SourcesSettingsHandler(c echo.Context) error {
-	id := c.Param("id")
-	return a.SourcesSettings(c, id)
-}
-func (a *Application) SourcesDeleteHandler(c echo.Context) error {
-	id := c.Param("id")
-	return a.SourcesDelete(c, id)
 }
 func (a *Application) SourcesReadHandler(c echo.Context) error {
 	id := c.Param("id")
@@ -234,8 +220,8 @@ func (a *Application) SourcesReadHandler(c echo.Context) error {
 }
 func (a *Application) SourcesSearchHandler(c echo.Context) error {
 	id := c.Param("id")
-	q := QueryString(c, "q")
-	t := QueryString(c, "t")
+	q := QueryParamString(c, "q")
+	t := QueryParamString(c, "t")
 	return a.SourcesSearch(c, id, q, t)
 }
 func (a *Application) SourcesParseHandler(c echo.Context) error {

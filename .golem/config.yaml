@@ -9,9 +9,11 @@ plugins:
     workers: true
     cache: false
     events: true
+    clients: true
 definitions:
     models: .golem/models
     routes: .golem/routes
     events: .golem/events
     workers: .golem/workers
     queues: .golem/queues
+    clients: .golem/clients

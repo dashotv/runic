@@ -4,8 +4,8 @@ package app
 import (
 	"context"
 
+	"github.com/dashotv/fae"
 	"github.com/dashotv/minion"
-	"github.com/pkg/errors"
 )
 
 func init() {
@@ -41,7 +41,7 @@ func setupWorkers(app *Application) error {
 
 	m, err := minion.New("runic", mcfg)
 	if err != nil {
-		return errors.Wrap(err, "creating minion")
+		return fae.Wrap(err, "creating minion")
 	}
 
 	// add something like the below line in app.Start() (before the workers are
@@ -52,29 +52,29 @@ func setupWorkers(app *Application) error {
 	// are included at the end of this file.
 
 	if err := minion.Register[*ParseActive](m, &ParseActive{}); err != nil {
-		return errors.Wrap(err, "registering worker: parse_active (ParseActive)")
+		return fae.Wrap(err, "registering worker: parse_active (ParseActive)")
 	}
 	if _, err := m.Schedule("0 */15 * * * *", &ParseActive{}); err != nil {
-		return errors.Wrap(err, "scheduling worker: parse_active (ParseActive)")
+		return fae.Wrap(err, "scheduling worker: parse_active (ParseActive)")
 	}
 
 	if err := minion.Register[*ParseIndexer](m, &ParseIndexer{}); err != nil {
-		return errors.Wrap(err, "registering worker: parse_indexer (ParseIndexer)")
+		return fae.Wrap(err, "registering worker: parse_indexer (ParseIndexer)")
 	}
 
 	if err := minion.Register[*ParseRift](m, &ParseRift{}); err != nil {
-		return errors.Wrap(err, "registering worker: parse_rift (ParseRift)")
+		return fae.Wrap(err, "registering worker: parse_rift (ParseRift)")
 	}
 	if _, err := m.Schedule("0 */15 * * * *", &ParseRift{}); err != nil {
-		return errors.Wrap(err, "scheduling worker: parse_rift (ParseRift)")
+		return fae.Wrap(err, "scheduling worker: parse_rift (ParseRift)")
 	}
 
 	if err := minion.Register[*ParseRiftAll](m, &ParseRiftAll{}); err != nil {
-		return errors.Wrap(err, "registering worker: parse_rift_all (ParseRiftAll)")
+		return fae.Wrap(err, "registering worker: parse_rift_all (ParseRiftAll)")
 	}
 
 	if err := minion.Register[*UpdateIndexes](m, &UpdateIndexes{}); err != nil {
-		return errors.Wrap(err, "registering worker: update_indexes (UpdateIndexes)")
+		return fae.Wrap(err, "registering worker: update_indexes (UpdateIndexes)")
 	}
 
 	app.Workers = m

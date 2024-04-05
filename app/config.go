@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/caarlos0/env/v10"
+	"github.com/dashotv/fae"
 	"github.com/pkg/errors"
 )
 
@@ -32,6 +33,7 @@ type Config struct {
 	// Router Auth
 	Auth           bool   `env:"AUTH" envDefault:"false"`
 	ClerkSecretKey string `env:"CLERK_SECRET_KEY"`
+	ClerkToken     string `env:"CLERK_TOKEN"`
 
 	// Events
 	NatsURL string `env:"NATS_URL"`
@@ -94,7 +96,7 @@ func (c *Config) validateLogger() error {
 
 func (c *Config) validateDefaultConnection() error {
 	if len(c.Connections) == 0 {
-		return errors.New("you must specify a default connection")
+		return fae.New("you must specify a default connection")
 	}
 
 	var def *Connection
@@ -106,13 +108,13 @@ func (c *Config) validateDefaultConnection() error {
 	}
 
 	if def == nil {
-		return errors.New("no 'default' found in connections list")
+		return fae.New("no 'default' found in connections list")
 	}
 	if def.Database == "" {
-		return errors.New("default connection must specify database")
+		return fae.New("default connection must specify database")
 	}
 	if def.URI == "" {
-		return errors.New("default connection must specify URI")
+		return fae.New("default connection must specify URI")
 	}
 
 	return nil
@@ -151,12 +153,12 @@ func (c *ConnectionSet) UnmarshalText(text []byte) error {
 func (c *Config) ConnectionFor(name string) (*Connection, error) {
 	def, ok := c.Connections["default"]
 	if !ok {
-		return nil, errors.Errorf("connection for %s: no default connection found", name)
+		return nil, fae.Errorf("connection for %s: no default connection found", name)
 	}
 
 	conn, ok := c.Connections[name]
 	if !ok {
-		return nil, errors.Errorf("no connection named '%s'", name)
+		return nil, fae.Errorf("no connection named '%s'", name)
 	}
 
 	if conn.URI == "" {
