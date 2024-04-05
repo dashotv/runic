@@ -93,19 +93,6 @@ func (j *ParseRift) Work(ctx context.Context, job *minion.Job[*ParseRift]) error
 		return err
 	}
 
-	list, err := app.DB.Indexer.Query().Where("name", "rift").Run()
-	if err != nil {
-		return err
-	}
-	if len(list) != 1 {
-		return fmt.Errorf("expected 1 indexer, got %d", len(list))
-	}
-
-	list[0].ProcessedAt = time.Now()
-	if err := app.DB.Indexer.Save(list[0]); err != nil {
-		return err
-	}
-
 	return nil
 }
 
