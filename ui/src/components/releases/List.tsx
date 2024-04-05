@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Truncate from 'react-truncate-inside';
 
+import { Release } from 'client';
+
 import { IconButton } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
@@ -12,7 +14,6 @@ import { Chrono, Group, Megabytes, Resolution, Row } from 'components/common';
 import { DownloaderIcon } from '.';
 import { ReleaseDialog } from './Dialog';
 import { useReleaseSettingMutation } from './query';
-import { Release } from './types';
 
 export const ReleaseList = ({ data }: { data: Release[] }) => {
   const [open, setOpen] = useState(false);
@@ -24,8 +25,9 @@ export const ReleaseList = ({ data }: { data: Release[] }) => {
     setOpen(true);
   };
   const toggle = (row: Release) => {
+    if (!row.id) return;
     releaseUpdate.mutate(
-      { id: row.id, setting: { setting: 'verified', value: !row.verified } },
+      { id: row.id, setting: { name: 'verified', value: !row.verified } },
       {
         onSuccess: () => {
           row.verified = !row.verified;

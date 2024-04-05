@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+
+import { Indexer } from 'client';
 
 import { MenuItem, Stack, TextField } from '@mui/material';
 
 import { Option } from 'components/Form';
-import { Indexer, useIndexersAllQuery } from 'components/indexers';
-import { ReleaseList, useReleasesQuery } from 'components/releases';
+import { useIndexersAllQuery } from 'components/indexers';
+import { ReleaseList, useReleasesSearchQuery } from 'components/releases';
 
 const resolutions: Option[] = [
   { label: 'All', value: '' },
-  { label: '720p', value: '720p' },
-  { label: '1080p', value: '1080p' },
-  { label: '2160p', value: '2160p' },
+  { label: '720p', value: '720' },
+  { label: '1080p', value: '1080' },
+  { label: '2160p', value: '2160' },
 ];
 const types: Option[] = [
   { label: 'All', value: '' },
@@ -21,27 +23,27 @@ const types: Option[] = [
 ];
 
 const Releases = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { page } = useParams();
   const [source, setSource] = useState('');
-  const [type, setType] = useState('');
+  const [kind, setKind] = useState('');
   const [resolution, setResolution] = useState('');
   const [group, setGroup] = useState('');
   const [website, setWebsite] = useState('');
   const [indexers, setIndexers] = useState<Option[]>([]);
-
-  const { data } = useReleasesQuery(25, 0, searchParams.toString());
   const { data: indexersData } = useIndexersAllQuery();
 
-  useEffect(() => {
-    setSearchParams({ source, type, resolution, group, website });
-  }, [setSearchParams, source, type, resolution, group, website]);
+  const { data } = useReleasesSearchQuery(Number(page) || 1, 25, source, kind, resolution, group, website);
 
   useEffect(() => {
     setIndexers(() => {
-      if (!indexersData) return [];
-      return indexersData.results?.map((indexer: Indexer) => {
-        return { label: indexer.name, value: indexer.name };
-      });
+      if (!indexersData?.result) return [];
+      const list = [{ label: 'All', value: '' }];
+      const indexers = indexersData.result
+        .filter((indexer: Indexer) => indexer.name)
+        .map((indexer: Indexer) => {
+          return { label: indexer.name!, value: indexer.name! };
+        });
+      return list.concat(indexers);
     });
   }, [indexersData, setIndexers]);
 
@@ -66,10 +68,10 @@ const Releases = () => {
         <TextField
           label="Type"
           select
-          value={type}
+          value={kind}
           size="small"
           variant="standard"
-          onChange={e => setType(e.target.value)}
+          onChange={e => setKind(e.target.value)}
           sx={{ width: '125px' }}
         >
           {types.map((option: Option) => (
@@ -109,7 +111,7 @@ const Releases = () => {
         />
       </Stack>
 
-      {data && <ReleaseList data={data?.results} />}
+      {data && <ReleaseList data={data?.result} />}
     </>
   );
 };

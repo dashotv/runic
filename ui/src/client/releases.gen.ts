@@ -142,3 +142,34 @@ export const ReleasesDelete = async (params: ReleasesDeleteRequest) => {
 
   return response.data as ReleasesDeleteResponse;
 };
+
+export interface ReleasesSearchRequest {
+  page: number;
+  limit: number;
+  source: string;
+  kind: string;
+  resolution: string;
+  group: string;
+  website: string;
+}
+export interface ReleasesSearchResponse extends Response {
+  result: Release[];
+}
+export const ReleasesSearch = async (params: ReleasesSearchRequest) => {
+  const response = await runicClient.get(
+    `/releases/search?page=${params.page}&limit=${params.limit}&source=${params.source}&kind=${params.kind}&resolution=${params.resolution}&group=${params.group}&website=${params.website}`,
+  );
+
+  if (!response.data) {
+    throw new Error('response empty?');
+  }
+
+  if (response.data.error) {
+    if (response.data.message) {
+      throw new Error(response.data.message);
+    }
+    throw new Error('unknown error');
+  }
+
+  return response.data as ReleasesSearchResponse;
+};

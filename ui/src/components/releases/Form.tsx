@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { Indexer } from 'client';
+
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import CrisisAlertIcon from '@mui/icons-material/CrisisAlert';
 import SportsBarIcon from '@mui/icons-material/SportsBar';
@@ -14,7 +16,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 import { IconCheckbox, Option, Select, Text } from 'components/Form';
-import { Indexer, useIndexersAllQuery } from 'components/indexers';
+import { useIndexersAllQuery } from 'components/indexers';
 import { ReleaseTypes, Resolutions } from 'types/constants';
 
 export interface SearchForm {
@@ -52,12 +54,12 @@ export function ReleasesForm({
 
   useEffect(() => {
     setIndexers(() => {
-      if (!indexersData) return [];
-      const list: Option[] = [{ label: '', value: '' }];
-      const results = indexersData.results?.map((indexer: Indexer) => {
-        return { label: indexer.name, value: indexer.name };
-      });
-      return list.concat(results);
+      if (!indexersData?.result) return [];
+      return indexersData.result
+        .filter((indexer: Indexer) => indexer.name)
+        .map((indexer: Indexer) => {
+          return { label: indexer.name!, value: indexer.name! };
+        });
     });
   }, [indexersData, setIndexers]);
   return (

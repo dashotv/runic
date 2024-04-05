@@ -1,17 +1,17 @@
 import Truncate from 'react-truncate-inside';
 
+import { Release } from 'client';
+
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { Chrono, Group, Megabytes, Resolution, Row } from 'components/common';
 
-import { RunicRelease } from './types';
-
-export const IndexersReleases = ({ data }: { data: RunicRelease[] }) => {
+export const IndexersReleases = ({ data }: { data: Release[] }) => {
   return (
     <Paper elevation={0} sx={{ width: '100%' }}>
-      {data?.map((row: RunicRelease) => (
+      {data?.map((row: Release) => (
         <Row key={row.id}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 0, md: 1 }} alignItems="center">
             <Stack
@@ -28,14 +28,14 @@ export const IndexersReleases = ({ data }: { data: RunicRelease[] }) => {
                 noWrap
                 color="primary"
                 sx={{ pr: 1, '& a': { color: 'primary.main' } }}
-                title={row.raw.title}
+                title={row.raw?.title}
               >
                 <Truncate
                   text={
                     `${row.title}${row.year ? ` (${row.year})` : ''}${
                       row.episode ? ` [${row.season}x${row.episode}]` : ''
                     }` ||
-                    row.raw.title ||
+                    row.raw?.title ||
                     ''
                   }
                   ellipsis=" ... "

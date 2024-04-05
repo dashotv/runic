@@ -66,8 +66,8 @@ func parseCategories(categories string) ([]int, error) {
 	return catsInt, nil
 }
 
-func (a *Application) SourcesRead(c echo.Context, id string) error {
-	cats, err := parseCategories(QueryString(c, "categories"))
+func (a *Application) SourcesRead(c echo.Context, id string, categories string) error {
+	cats, err := parseCategories(categories)
 	if err != nil {
 		return err
 	}
@@ -80,8 +80,8 @@ func (a *Application) SourcesRead(c echo.Context, id string) error {
 	return c.JSON(http.StatusOK, &Response{Error: false, Result: results})
 }
 
-func (a *Application) SourcesParse(c echo.Context, id string) error {
-	cats, err := parseCategories(QueryString(c, "categories"))
+func (a *Application) SourcesParse(c echo.Context, id string, categories string) error {
+	cats, err := parseCategories(categories)
 	if err != nil {
 		return err
 	}

@@ -2,3 +2,32 @@ name: releases
 path: /releases
 model: "*Release"
 rest: true
+routes:
+  - name: search
+    path: /search
+    result: "[]*Release"
+    method: GET
+    params:
+      - name: page
+        type: int
+        query: true
+        default: 1
+      - name: limit
+        type: int
+        query: true
+        default: 25
+      - name: source
+        type: string
+        query: true
+      - name: kind # type is reserved word
+        type: string
+        query: true
+      - name: resolution
+        type: string
+        query: true
+      - name: group
+        type: string
+        query: true
+      - name: website
+        type: string
+        query: true

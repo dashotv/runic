@@ -202,3 +202,45 @@ func (s *ReleasesService) Delete(ctx context.Context, req *ReleasesDeleteRequest
 
 	return result, nil
 }
+
+type ReleasesSearchRequest struct {
+	Page       int    `json:"page"`
+	Limit      int    `json:"limit"`
+	Source     string `json:"source"`
+	Kind       string `json:"kind"`
+	Resolution string `json:"resolution"`
+	Group      string `json:"group"`
+	Website    string `json:"website"`
+}
+
+type ReleasesSearchResponse struct {
+	*Response
+	Result []*Release `json:"result"`
+}
+
+func (s *ReleasesService) Search(ctx context.Context, req *ReleasesSearchRequest) (*ReleasesSearchResponse, error) {
+	result := &ReleasesSearchResponse{Response: &Response{}}
+	resp, err := s.client.Resty.R().
+		SetContext(ctx).
+		SetBody(req).
+		SetResult(result).
+		SetQueryParam("page", fmt.Sprintf("%v", req.Page)).
+		SetQueryParam("limit", fmt.Sprintf("%v", req.Limit)).
+		SetQueryParam("source", fmt.Sprintf("%v", req.Source)).
+		SetQueryParam("kind", fmt.Sprintf("%v", req.Kind)).
+		SetQueryParam("resolution", fmt.Sprintf("%v", req.Resolution)).
+		SetQueryParam("group", fmt.Sprintf("%v", req.Group)).
+		SetQueryParam("website", fmt.Sprintf("%v", req.Website)).
+		Get("/releases/search")
+	if err != nil {
+		return nil, fae.Wrap(err, "failed to make request")
+	}
+	if !resp.IsSuccess() {
+		return nil, fae.Errorf("%d: %v", resp.StatusCode(), resp.String())
+	}
+	if result.Error {
+		return nil, fae.New(result.Message)
+	}
+
+	return result, nil
+}

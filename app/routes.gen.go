@@ -99,6 +99,7 @@ func (a *Application) Routes() {
 	releases.PUT("/:id", a.ReleasesUpdateHandler)
 	releases.PATCH("/:id", a.ReleasesSettingsHandler)
 	releases.DELETE("/:id", a.ReleasesDeleteHandler)
+	releases.GET("/search", a.ReleasesSearchHandler)
 
 	sources := a.Router.Group("/sources")
 	sources.GET("/", a.SourcesIndexHandler)
@@ -203,12 +204,22 @@ func (a *Application) ReleasesDeleteHandler(c echo.Context) error {
 	id := c.Param("id")
 	return a.ReleasesDelete(c, id)
 }
+func (a *Application) ReleasesSearchHandler(c echo.Context) error {
+	page := QueryParamIntDefault(c, "page", "1")
+	limit := QueryParamIntDefault(c, "limit", "25")
+	source := QueryParamString(c, "source")
+	kind := QueryParamString(c, "kind")
+	resolution := QueryParamString(c, "resolution")
+	group := QueryParamString(c, "group")
+	website := QueryParamString(c, "website")
+	return a.ReleasesSearch(c, page, limit, source, kind, resolution, group, website)
+}
 
 // Sources (/sources)
 func (a *Application) SourcesIndexHandler(c echo.Context) error {
 	page := QueryParamInt(c, "page")
-	per_page := QueryParamInt(c, "per_page")
-	return a.SourcesIndex(c, page, per_page)
+	limit := QueryParamInt(c, "limit")
+	return a.SourcesIndex(c, page, limit)
 }
 func (a *Application) SourcesShowHandler(c echo.Context) error {
 	id := c.Param("id")
@@ -216,7 +227,8 @@ func (a *Application) SourcesShowHandler(c echo.Context) error {
 }
 func (a *Application) SourcesReadHandler(c echo.Context) error {
 	id := c.Param("id")
-	return a.SourcesRead(c, id)
+	categories := QueryParamString(c, "categories")
+	return a.SourcesRead(c, id, categories)
 }
 func (a *Application) SourcesSearchHandler(c echo.Context) error {
 	id := c.Param("id")
@@ -226,5 +238,6 @@ func (a *Application) SourcesSearchHandler(c echo.Context) error {
 }
 func (a *Application) SourcesParseHandler(c echo.Context) error {
 	id := c.Param("id")
-	return a.SourcesParse(c, id)
+	categories := QueryParamString(c, "categories")
+	return a.SourcesParse(c, id, categories)
 }

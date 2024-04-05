@@ -10,23 +10,34 @@ import (
 func (a *Application) ReleasesIndex(c echo.Context, page int, limit int) error {
 	q := a.DB.Release.Query()
 
-	source := c.QueryParam("source")
+	total, err := q.Count()
+	if err != nil {
+		return err
+	}
+
+	list, err := q.Desc("published_at").Desc("created_at").Limit(limit).Skip((page - 1) * limit).Run()
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, &Response{Error: false, Result: list, Total: total})
+}
+
+// GET /releases/
+func (a *Application) ReleasesSearch(c echo.Context, page int, limit int, source, kind, resolution, group, website string) error {
+	q := a.DB.Release.Query()
+
 	if source != "" {
 		q = q.Where("source", source)
 	}
-	rType := c.QueryParam("type")
-	if rType != "" {
-		q = q.Where("type", rType)
+	if kind != "" {
+		q = q.Where("type", kind)
 	}
-	resolution := c.QueryParam("resolution")
 	if resolution != "" {
-		q = q.Where("resolution", resolution)
+		q = q.Where("resolution", resolution) // resolution might be a number?
 	}
-	group := c.QueryParam("group")
 	if group != "" {
 		q = q.Where("group", group)
 	}
-	website := c.QueryParam("website")
 	if website != "" {
 		q = q.Where("website", website)
 	}

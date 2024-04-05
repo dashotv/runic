@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { Indexer } from 'client';
+
 import { DialogActions, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -7,9 +9,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Stack from '@mui/material/Stack';
 
-import { Indexer, IndexersReleases, useRunicParseQuery } from '.';
+import { IndexersReleases, useRunicParseQuery } from '.';
 
 export const IndexersParse = ({ indexer, handleClose }: { indexer: Indexer; handleClose: () => void }) => {
+  if (!indexer.name) throw new Error('Indexer name is required');
   const [open, setOpen] = useState(true);
   const [cats] = useState<number[]>(indexer.categories ?? [5000, 2000, 5070]);
   const { isFetching, data } = useRunicParseQuery(indexer.name, cats);
@@ -30,7 +33,7 @@ export const IndexersParse = ({ indexer, handleClose }: { indexer: Indexer; hand
               {indexer.name}
             </Typography>
             <Typography noWrap color="gray">
-              ({data?.results?.length})
+              ({data?.result?.length})
             </Typography>
           </Stack>
           <Stack direction="row" spacing={2} width="100%" alignItems="baseline" justifyContent="end">
@@ -42,7 +45,7 @@ export const IndexersParse = ({ indexer, handleClose }: { indexer: Indexer; hand
       </DialogTitle>
       <DialogContent>
         {isFetching && <Typography variant="body1">Loading...</Typography>}
-        {data?.results ? <IndexersReleases data={data?.results} /> : null}
+        {data?.result ? <IndexersReleases data={data?.result} /> : null}
       </DialogContent>
       <DialogActions>
         <Button variant="contained" onClick={() => close()}>

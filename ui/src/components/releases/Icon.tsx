@@ -3,8 +3,8 @@ import { SiUtorrent, SiYoutube } from 'react-icons/si';
 
 import SvgIcon from '@mui/material/SvgIcon';
 
-export const DownloaderIcon = ({ downloader, verified }: { downloader: string; verified?: boolean }) => {
-  const component = (downloader: string) => {
+export const DownloaderIcon = ({ downloader, verified }: { downloader?: string; verified?: boolean }) => {
+  const component = (downloader?: string) => {
     switch (downloader) {
       case 'nzb':
         return HiOutlineNewspaper;

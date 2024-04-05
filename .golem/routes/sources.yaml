@@ -4,12 +4,12 @@ routes:
   - name: index
     path: /
     method: GET
-    result: "[]string"
+    result: "[]*reader.Source"
     params:
       - name: page
         type: int
         query: true
-      - name: per_page
+      - name: limit
         type: int
         query: true
   - name: show
@@ -26,6 +26,9 @@ routes:
     params:
       - name: id
         type: string
+      - name: categories
+        type: string
+        query: true
   - name: search
     path: /:id/search
     method: GET
@@ -46,3 +49,6 @@ routes:
     params:
       - name: id
         type: string
+      - name: categories
+        type: string
+        query: true

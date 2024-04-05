@@ -22,14 +22,14 @@ func NewSourcesService(client *Client) *SourcesService {
 }
 
 type SourcesIndexRequest struct {
-	Page    int `json:"page"`
-	PerPage int `json:"per_page"`
+	Page  int `json:"page"`
+	Limit int `json:"limit"`
 }
 
 type SourcesIndexResponse struct {
 	*Response
-	Result []string `json:"result"`
-	Total  int64    `json:"total"`
+	Result []*reader.Source `json:"result"`
+	Total  int64            `json:"total"`
 }
 
 func (s *SourcesService) Index(ctx context.Context, req *SourcesIndexRequest) (*SourcesIndexResponse, error) {
@@ -39,7 +39,7 @@ func (s *SourcesService) Index(ctx context.Context, req *SourcesIndexRequest) (*
 		SetBody(req).
 		SetResult(result).
 		SetQueryParam("page", fmt.Sprintf("%v", req.Page)).
-		SetQueryParam("per_page", fmt.Sprintf("%v", req.PerPage)).
+		SetQueryParam("limit", fmt.Sprintf("%v", req.Limit)).
 		Get("/sources/")
 	if err != nil {
 		return nil, fae.Wrap(err, "failed to make request")
@@ -85,7 +85,8 @@ func (s *SourcesService) Show(ctx context.Context, req *SourcesShowRequest) (*So
 }
 
 type SourcesReadRequest struct {
-	Id string `json:"id"`
+	Id         string `json:"id"`
+	Categories string `json:"categories"`
 }
 
 type SourcesReadResponse struct {
@@ -99,6 +100,7 @@ func (s *SourcesService) Read(ctx context.Context, req *SourcesReadRequest) (*So
 		SetContext(ctx).
 		SetBody(req).
 		SetResult(result).
+		SetQueryParam("categories", fmt.Sprintf("%v", req.Categories)).
 		SetPathParam("id", fmt.Sprintf("%v", req.Id)).
 		Get("/sources/{id}/read")
 	if err != nil {
@@ -149,7 +151,8 @@ func (s *SourcesService) Search(ctx context.Context, req *SourcesSearchRequest) 
 }
 
 type SourcesParseRequest struct {
-	Id string `json:"id"`
+	Id         string `json:"id"`
+	Categories string `json:"categories"`
 }
 
 type SourcesParseResponse struct {
@@ -163,6 +166,7 @@ func (s *SourcesService) Parse(ctx context.Context, req *SourcesParseRequest) (*
 		SetContext(ctx).
 		SetBody(req).
 		SetResult(result).
+		SetQueryParam("categories", fmt.Sprintf("%v", req.Categories)).
 		SetPathParam("id", fmt.Sprintf("%v", req.Id)).
 		Get("/sources/{id}/parse")
 	if err != nil {

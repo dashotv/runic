@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { Indexer } from 'client';
+
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ClassIcon from '@mui/icons-material/Class';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -16,7 +18,6 @@ import { Container } from 'components/Layout';
 import { LoadingIndicator, Published, Row } from 'components/common';
 
 import {
-  Indexer,
   IndexerDialog,
   useIndexerCreateMutation,
   useIndexerDeleteMutation,
@@ -59,8 +60,9 @@ export const IndexersList = () => {
     setParsing(row);
   };
 
-  const toggle = (id: string, name: string, value: boolean) => {
-    setting.mutate({ id, setting: { setting: name, value: value } });
+  const toggle = (id?: string, name?: string, value?: boolean) => {
+    if (!id || !name) return;
+    setting.mutate({ id, setting: { name: name, value: value! } });
   };
 
   const newIndexer = () => {
@@ -72,7 +74,8 @@ export const IndexersList = () => {
       categories: [],
     });
   };
-  const deleteIndexer = (id: string) => {
+  const deleteIndexer = (id?: string) => {
+    if (!id) return;
     destroy.mutate(id);
   };
 
@@ -97,7 +100,7 @@ export const IndexersList = () => {
         {isFetching && <LoadingIndicator />}
 
         <Paper elevation={0} sx={{ width: '100%' }}>
-          {data?.results?.map((row: Indexer) => (
+          {data?.result?.map((row: Indexer) => (
             <Row key={row.id}>
               <Stack direction={{ xs: 'column', md: 'row' }} spacing={1} alignItems="center">
                 <Stack
@@ -142,7 +145,7 @@ export const IndexersList = () => {
   );
 };
 
-const Categories = ({ categories }: { categories: number[] }) => {
+const Categories = ({ categories }: { categories?: number[] }) => {
   if (!categories || categories.length === 0) return null;
   return (
     <Stack direction="row" spacing={0.75} alignItems="baseline">

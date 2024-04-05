@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { Indexer } from 'client';
+import {
+  Source,
+  SourceCapsCategories,
+  SourceCapsCategoriesCategory,
+  SourceCapsCategoriesCategorySubcat,
+} from 'client/reader';
+
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import { Typography } from '@mui/material';
@@ -13,14 +21,7 @@ import Stack from '@mui/material/Stack';
 
 import { IconCheckbox, Option, Select, Text } from 'components/Form';
 
-import {
-  Indexer,
-  RunicSource,
-  RunicSourceCapsCategories,
-  RunicSourceCapsCategoriesCategory,
-  RunicSourceCapsCategoriesCategorySubcat,
-  useRunicSourcesQuery,
-} from '.';
+import { useRunicSourcesQuery } from '.';
 
 export type IndexerDialogProps = {
   indexer: Indexer;
@@ -31,7 +32,7 @@ export const IndexerDialog = ({ indexer, handleClose }: IndexerDialogProps) => {
   const [open, setOpen] = useState(false);
   const { isFetched, data } = useRunicSourcesQuery();
   const [sources, setSources] = useState<Option[]>([]);
-  const [categories, setCategories] = useState<RunicSourceCapsCategories>();
+  const [categories, setCategories] = useState<SourceCapsCategories>();
   const [cats, setCats] = useState<number[]>(indexer.categories ?? []);
   const close = () => {
     setOpen(false);
@@ -44,20 +45,20 @@ export const IndexerDialog = ({ indexer, handleClose }: IndexerDialogProps) => {
   };
 
   useEffect(() => {
-    setSources(data?.results?.map((s: RunicSource) => ({ label: s.Name, value: s.Name })) ?? []);
+    setSources(data?.result?.map((s: Source) => ({ label: s.Name, value: s.Name })) ?? []);
     setOpen(true);
 
-    const source = data?.results?.find((s: RunicSource) => s.Name === indexer.name);
+    const source = data?.result?.find((s: Source) => s.Name === indexer.name);
     if (source) {
       setCategories(source.Caps.Categories);
       if (!indexer.url) {
         setValue('url', source.URL);
       }
     }
-  }, [data?.results, indexer.name, indexer.url, setValue]);
+  }, [data?.result, indexer.name, indexer.url, setValue]);
 
   const onChangeSource = (value: string) => {
-    const source = data?.results?.find((s: RunicSource) => s.Name === value);
+    const source = data?.result?.find((s: Source) => s.Name === value);
     if (source) {
       setValue('url', source.URL);
       setCategories(source.Caps.Categories);
@@ -124,7 +125,7 @@ const Categories = ({
   isSet,
   set,
 }: {
-  categories: RunicSourceCapsCategories;
+  categories: SourceCapsCategories;
   isSet: (id: number) => boolean;
   set: (id: number, value: boolean) => void;
 }) => {
@@ -133,10 +134,10 @@ const Categories = ({
       <Typography variant="body1" color="primary" fontWeight="bold" sx={{ ml: '29px' }}>
         Name
       </Typography>
-      {categories.Category.map((c: RunicSourceCapsCategoriesCategory) => (
+      {categories.Category.map((c: SourceCapsCategoriesCategory) => (
         <Box key={c.ID} sx={{ mb: 1 }}>
           <Category category={c} {...{ set, isSet }} />
-          {c.Subcat?.map((s: RunicSourceCapsCategoriesCategorySubcat) => (
+          {c.Subcat?.map((s: SourceCapsCategoriesCategorySubcat) => (
             <Category key={s.ID} category={s} {...{ set, isSet }} />
           ))}
         </Box>
@@ -150,7 +151,7 @@ const Category = ({
   set,
   disabled,
 }: {
-  category: RunicSourceCapsCategoriesCategory | RunicSourceCapsCategoriesCategorySubcat;
+  category: SourceCapsCategoriesCategory | SourceCapsCategoriesCategorySubcat;
   disabled?: boolean;
   isSet: (id: number) => boolean;
   set: (id: number, value: boolean) => void;

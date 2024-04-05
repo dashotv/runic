@@ -1,58 +1,57 @@
-import axios from 'axios';
+import * as runic from 'client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { Setting, SettingsArgs } from './setting';
-import { Indexer, IndexersResponse, RunicParseResponse, RunicReadResponse, RunicSourcesResponse } from './types';
-
-export const getRunicSources = async () => {
-  const response = await axios.get('/api/runic/sources/');
-  return response.data as RunicSourcesResponse;
+export const getRunicSources = async (page: number = 1, limit: number = 100) => {
+  const response = await runic.SourcesIndex({ page, limit });
+  return response;
 };
 
 export const getRunicSource = async (id: string) => {
-  const response = await axios.get(`/api/runic/sources/${id}`);
-  return response.data as RunicReadResponse;
+  const response = await runic.SourcesShow({ id });
+  return response;
 };
 
-export const getRunicRead = async (id: string, categories: number[]) => {
-  const response = await axios.get(`/api/runic/sources/${id}/read?categories=${categories.join(',')}`);
-  return response.data as RunicReadResponse;
+export const getRunicRead = async (id: string, cats: number[]) => {
+  const categories = cats.join(',');
+  const response = await runic.SourcesRead({ id, categories });
+  return response;
 };
 
-export const getRunicParse = async (id: string, categories: number[]) => {
-  const response = await axios.get(`/api/runic/sources/${id}/parse?categories=${categories.join(',')}`);
-  return response.data as RunicParseResponse;
+export const getRunicParse = async (id: string, cats: number[]) => {
+  const categories = cats.join(',');
+  const response = await runic.SourcesParse({ id, categories });
+  return response;
 };
 
-export const getIndexersAll = async () => {
-  const response = await axios.get('/api/runic/indexers/');
-  return response.data as IndexersResponse;
+export const getIndexersAll = async (page: number = 1, limit: number = 50) => {
+  const response = await runic.IndexersIndex({ page, limit });
+  return response;
 };
 
-export const getIndexer = async id => {
-  const response = await axios.get(`/api/runic/indexers/${id}`);
-  return response.data;
+export const getIndexer = async (id: string) => {
+  const response = await runic.IndexersShow({ id });
+  return response;
 };
 
-export const postIndexer = async (indexer: Indexer) => {
-  const response = await axios.post(`/api/runic/indexers/`, indexer);
-  return response.data;
+export const postIndexer = async (subject: runic.Indexer) => {
+  const response = await runic.IndexersCreate({ subject });
+  return response;
 };
 
-export const putIndexer = async (id: string, indexer: Indexer) => {
-  const response = await axios.put(`/api/runic/indexers/${id}`, indexer);
-  return response.data;
+export const putIndexer = async (id: string, subject: runic.Indexer) => {
+  const response = await runic.IndexersUpdate({ id, subject });
+  return response;
 };
 
-export const patchIndexer = async (id: string, setting: Setting) => {
-  const response = await axios.patch(`/api/runic/indexers/${id}`, setting);
-  return response.data;
+export const patchIndexer = async (id: string, setting: runic.Setting) => {
+  const response = await runic.IndexersSettings({ id, setting });
+  return response;
 };
 
 export const deleteIndexer = async (id: string) => {
-  const response = await axios.delete(`/api/runic/indexers/${id}`);
-  return response.data;
+  const response = await runic.IndexersDelete({ id });
+  return response;
 };
 
 export const useRunicSourcesQuery = () =>
@@ -98,7 +97,12 @@ export const useIndexerQuery = id =>
 export const useIndexerMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (indexer: Indexer) => putIndexer(indexer.id, indexer),
+    mutationFn: (indexer: runic.Indexer) => {
+      if (!indexer?.id) {
+        throw new Error('Indexer ID is required');
+      }
+      return putIndexer(indexer.id, indexer);
+    },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['indexers', 'all'] });
     },
@@ -108,7 +112,7 @@ export const useIndexerMutation = () => {
 export const useIndexerCreateMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (indexer: Indexer) => postIndexer(indexer),
+    mutationFn: (indexer: runic.Indexer) => postIndexer(indexer),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['indexers', 'all'] });
     },
@@ -128,7 +132,7 @@ export const useIndexerDeleteMutation = () => {
 export const useIndexerSettingMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (args: SettingsArgs) => patchIndexer(args.id, args.setting),
+    mutationFn: (args: { id: string; setting: runic.Setting }) => patchIndexer(args.id, args.setting),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['indexers', 'all'] });
     },

@@ -1,8 +1,9 @@
 import axios from 'axios';
+import * as runic from 'client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { ReleaseResponse, ReleasesResponse, SearchResponse } from './types';
+import { SearchResponse } from './types';
 
 export interface Setting {
   setting: string;
@@ -13,19 +14,40 @@ export interface SettingsArgs {
   setting: Setting;
 }
 
-export const getReleases = async (limit: number, skip: number, queryString: string) => {
-  const response = await axios.get(`/api/runic/releases/?limit=${limit}&skip=${skip}&${queryString}`);
-  return response.data as ReleasesResponse;
+export const getReleases = async (page: number, limit: number) => {
+  const response = await runic.ReleasesIndex({ page, limit });
+  return response;
+};
+
+export const getReleasesSearch = async (
+  page: number,
+  limit: number,
+  source: string | null,
+  kind: string | null,
+  resolution: string | null,
+  group: string | null,
+  website: string | null,
+) => {
+  const response = await runic.ReleasesSearch({
+    page,
+    limit,
+    source: source || '',
+    kind: kind || '',
+    resolution: resolution || '',
+    group: group || '',
+    website: website || '',
+  });
+  return response;
 };
 
 export const getRelease = async (id: string) => {
-  const response = await axios.get(`/api/runic/releases/${id}`);
-  return response.data as ReleaseResponse;
+  const response = await runic.ReleasesShow({ id });
+  return response;
 };
 
-export const patchRelease = async (id: string, setting: Setting) => {
-  const response = await axios.patch(`/api/runic/releases/${id}`, setting);
-  return response.data;
+export const patchRelease = async (id: string, setting: runic.Setting) => {
+  const response = await runic.ReleasesSettings({ id, setting });
+  return response;
 };
 
 export const getSearch = async (limit: number, skip: number, queryString: string) => {
@@ -33,10 +55,26 @@ export const getSearch = async (limit: number, skip: number, queryString: string
   return response.data as SearchResponse;
 };
 
-export const useReleasesQuery = (limit: number, skip: number, queryString: string) =>
+export const useReleasesQuery = (page: number, limit: number) =>
   useQuery({
-    queryKey: ['releases', limit, skip, queryString],
-    queryFn: () => getReleases(limit, skip, queryString),
+    queryKey: ['releases', page, limit],
+    queryFn: () => getReleases(page, limit),
+    placeholderData: previousData => previousData,
+    retry: false,
+  });
+
+export const useReleasesSearchQuery = (
+  page: number,
+  limit: number,
+  source: string | null,
+  kind: string | null,
+  resolution: string | null,
+  group: string | null,
+  website: string | null,
+) =>
+  useQuery({
+    queryKey: ['releases', page, limit, source, kind, resolution, group, website],
+    queryFn: () => getReleasesSearch(page, limit, source, kind, resolution, group, website),
     placeholderData: previousData => previousData,
     retry: false,
   });
@@ -50,7 +88,7 @@ export const useReleaseQuery = (id: string) =>
 export const useReleaseSettingMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (args: SettingsArgs) => patchRelease(args.id, args.setting),
+    mutationFn: (args: { id: string; setting: runic.Setting }) => patchRelease(args.id, args.setting),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['releases'] });
     },

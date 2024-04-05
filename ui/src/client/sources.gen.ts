@@ -5,14 +5,14 @@ import * as reader from './reader';
 
 export interface SourcesIndexRequest {
   page: number;
-  per_page: number;
+  limit: number;
 }
 export interface SourcesIndexResponse extends Response {
-  result: string[];
+  result: reader.Source[];
   total: number;
 }
 export const SourcesIndex = async (params: SourcesIndexRequest) => {
-  const response = await runicClient.get(`/sources/?page=${params.page}&per_page=${params.per_page}`);
+  const response = await runicClient.get(`/sources/?page=${params.page}&limit=${params.limit}`);
 
   if (!response.data) {
     throw new Error('response empty?');
@@ -53,12 +53,13 @@ export const SourcesShow = async (params: SourcesShowRequest) => {
 
 export interface SourcesReadRequest {
   id: string;
+  categories: string;
 }
 export interface SourcesReadResponse extends Response {
   result: newznab.NZB[];
 }
 export const SourcesRead = async (params: SourcesReadRequest) => {
-  const response = await runicClient.get(`/sources/${params.id}/read?`);
+  const response = await runicClient.get(`/sources/${params.id}/read?categories=${params.categories}`);
 
   if (!response.data) {
     throw new Error('response empty?');
@@ -101,12 +102,13 @@ export const SourcesSearch = async (params: SourcesSearchRequest) => {
 
 export interface SourcesParseRequest {
   id: string;
+  categories: string;
 }
 export interface SourcesParseResponse extends Response {
   result: Release[];
 }
 export const SourcesParse = async (params: SourcesParseRequest) => {
-  const response = await runicClient.get(`/sources/${params.id}/parse?`);
+  const response = await runicClient.get(`/sources/${params.id}/parse?categories=${params.categories}`);
 
   if (!response.data) {
     throw new Error('response empty?');

@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 
+import { Release } from 'client';
+
 import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
@@ -15,7 +17,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { Chrono, Group, Megabytes, Resolution } from 'components/common';
 
-import { DownloaderIcon, Release } from '.';
+import { DownloaderIcon } from '.';
 
 export type ReleaseDialogProps = {
   open: boolean;
