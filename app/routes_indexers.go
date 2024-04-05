@@ -2,7 +2,6 @@ package app
 
 import (
 	"net/http"
-	"sort"
 
 	"github.com/labstack/echo/v4"
 )
@@ -12,9 +11,6 @@ func (a *Application) IndexersIndex(c echo.Context, page int, limit int) error {
 	if err != nil {
 		return err
 	}
-	sort.Slice(list, func(i, j int) bool {
-		return list[i].Name < list[j].Name
-	})
 	return c.JSON(http.StatusOK, &Response{Total: count, Result: list})
 }
 
