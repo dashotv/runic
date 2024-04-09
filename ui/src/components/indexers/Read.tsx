@@ -11,7 +11,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 
-import { Megabytes, Row } from 'components/common';
+import { Megabytes, Row } from '@dashotv/components';
 
 import { useRunicReadQuery } from '.';
 

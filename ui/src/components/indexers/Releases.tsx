@@ -6,7 +6,7 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { Chrono, Group, Megabytes, Resolution, Row } from 'components/common';
+import { Chrono, Group, Megabytes, Resolution, Row } from '@dashotv/components';
 
 export const IndexersReleases = ({ data }: { data: Release[] }) => {
   return (

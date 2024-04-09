@@ -5,7 +5,8 @@ import { Indexer } from 'client';
 
 import { MenuItem, Stack, TextField } from '@mui/material';
 
-import { Option } from 'components/Form';
+import { Option } from '@dashotv/components';
+
 import { useIndexersAllQuery } from 'components/indexers';
 import { ReleaseList, useReleasesSearchQuery } from 'components/releases';
 import { ReleaseTypes, Resolutions } from 'types/constants';

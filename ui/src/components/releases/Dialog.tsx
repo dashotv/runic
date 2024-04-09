@@ -15,7 +15,7 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { Chrono, Group, Megabytes, Resolution } from 'components/common';
+import { Chrono, Group, Megabytes, Resolution } from '@dashotv/components';
 
 import { DownloaderIcon } from '.';
 

@@ -14,8 +14,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import { Container } from 'components/Layout';
-import { LoadingIndicator, Published, Row } from 'components/common';
+import { Container, LoadingIndicator, Published, Row } from '@dashotv/components';
 
 import {
   IndexerDialog,

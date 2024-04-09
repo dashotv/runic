@@ -15,7 +15,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
-import { IconCheckbox, Option, Select, Text } from 'components/Form';
+import { IconCheckbox, Option, Select, Text } from '@dashotv/components';
+
 import { useIndexersAllQuery } from 'components/indexers';
 import { ReleaseTypes, Resolutions } from 'types/constants';
 

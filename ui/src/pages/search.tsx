@@ -7,7 +7,8 @@ import Pagination from '@mui/material/Pagination';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 
-import { LoadingIndicator } from 'components/common';
+import { LoadingIndicator } from '@dashotv/components';
+
 import { ReleaseList, ReleasesForm, SearchForm, useSearchQuery } from 'components/releases';
 
 const pagesize = 25;

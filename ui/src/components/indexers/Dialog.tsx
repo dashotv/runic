@@ -19,7 +19,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Stack from '@mui/material/Stack';
 
-import { IconCheckbox, Option, Select, Text } from 'components/Form';
+import { IconCheckbox, Option, Select, Text } from '@dashotv/components';
 
 import { useRunicSourcesQuery } from '.';
 
