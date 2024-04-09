@@ -3,11 +3,12 @@ import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
 import { createSearchParams } from 'react-router-dom';
 
+import { Box, Button } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 
-import { LoadingIndicator } from '@dashotv/components';
+import { Container, LoadingIndicator } from '@dashotv/components';
 
 import { ReleaseList, ReleasesForm, SearchForm, useSearchQuery } from 'components/releases';
 
@@ -68,31 +69,10 @@ export default function Search() {
     setSearchParams(encodeSearchParams(form));
   }, [form]);
 
-  // const renderActions = () => {
-  // const buttons: ButtonMapButton[] = [
-  //   {
-  //     Icon: SvgIcon,
-  //     Component: RiEditCircleFill,
-  //     color: 'primary',
-  //     click: click,
-  //     title: 'edit',
-  //   },
-  //   {
-  //     Icon: ReplayCircleFilledIcon,
-  //     color: 'warning',
-  //     click: click,
-  //     title: 're-process',
-  //   },
-  //   {
-  //     Icon: CancelIcon,
-  //     color: 'error',
-  //     click: click,
-  //     title: 'delete',
-  //   },
-  // ];
-  // return <ButtonMap buttons={buttons} size="small" />;
-  // return <></>;
-  // };
+  const setFormRift = () => {
+    setForm(() => ({ ...formDefaults, source: 'rift', type: 'anime' }));
+    setPage(1);
+  };
 
   return (
     <>
@@ -101,32 +81,38 @@ export default function Search() {
         <meta name="description" content="A React Boilerplate application homepage" />
       </Helmet>
 
-      <Paper sx={{ p: 1, mb: 2, width: '100%' }}>
-        {isFetching && <LoadingIndicator />}
-        <ReleasesForm form={form} setForm={setForm} reset={reset} />
-      </Paper>
+      <Container>
+        <Paper sx={{ p: 1, mb: 2, width: '100%' }}>
+          {isFetching && <LoadingIndicator />}
+          <ReleasesForm form={form} setForm={setForm} reset={reset} />
+        </Paper>
+      </Container>
 
-      <Paper sx={{ p: 1, mb: 2, width: '100%' }}>
-        <Stack
-          direction={{ xs: 'column', sm: 'row' }}
-          spacing={1}
-          alignItems="center"
-          sx={{ width: '100%', justifyContent: 'space-between' }}
-        >
-          <div></div>
-          {/* <ReleasesPresets {...{ setForm, setPage, formDefaults }} /> */}
-          <Pagination
-            boundaryCount={0}
-            page={page}
-            count={Math.ceil((data?.Total || 0) / pagesize)}
-            onChange={handleChange}
-          />
-        </Stack>
-      </Paper>
+      <Container>
+        <Paper sx={{ p: 1, mb: 2, width: '100%' }}>
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={1}
+            alignItems="center"
+            sx={{ width: '100%', justifyContent: 'space-between' }}
+          >
+            <Box>
+              <Button variant="contained" onClick={setFormRift}>
+                Rift
+              </Button>
+            </Box>
+            {/* <ReleasesPresets {...{ setForm, setPage, formDefaults }} /> */}
+            <Pagination
+              boundaryCount={0}
+              page={page}
+              count={Math.ceil((data?.Total || 0) / pagesize)}
+              onChange={handleChange}
+            />
+          </Stack>
+        </Paper>
+      </Container>
 
-      <Paper elevation={0} sx={{ p: 1, mb: 2, width: '100%' }}>
-        {data?.Releases && <ReleaseList data={data.Releases} />}
-      </Paper>
+      <Container>{data?.Releases && <ReleaseList data={data.Releases} />}</Container>
     </>
   );
 }

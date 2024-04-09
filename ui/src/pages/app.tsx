@@ -1,8 +1,7 @@
-import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-import { RoutingTabs, RoutingTabsRoute } from '@dashotv/components';
+import { Container, RoutingTabs, RoutingTabsRoute } from '@dashotv/components';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { IndexersList } from 'components/indexers';

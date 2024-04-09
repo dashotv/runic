@@ -5,7 +5,6 @@ import Truncate from 'react-truncate-inside';
 import { Release } from 'client';
 
 import { IconButton } from '@mui/material';
-import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
@@ -36,7 +35,7 @@ export const ReleaseList = ({ data }: { data: Release[] }) => {
     );
   };
   return (
-    <Paper elevation={0} sx={{ width: '100%' }}>
+    <>
       {data?.map((row: Release) => (
         <Row key={row.id}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 0, md: 1 }} alignItems="center">
@@ -117,10 +116,16 @@ export const ReleaseList = ({ data }: { data: Release[] }) => {
                   {row.source}:{row.type}
                 </Typography>
               </Stack>
-              <Stack width={{ xs: '100%', md: 'auto' }} direction="row" spacing={1} alignItems="center">
-                <Typography fontWeight="bolder" minWidth="125px" noWrap color="gray">
+              <Stack
+                width={{ xs: '100%', md: 'auto' }}
+                maxWidth="300px"
+                direction="row"
+                spacing={1}
+                alignItems="center"
+              >
+                {/* <Typography fontWeight="bolder" minWidth="125px" noWrap color="gray">
                   {row.raw?.category?.join(',')}
-                </Typography>
+                </Typography> */}
                 {row.size ? <Megabytes ord="bytes" value={row.size} /> : null}
                 <Typography noWrap variant="subtitle2" color="gray" pl="3px" width="100%">
                   {row.published_at && <Chrono fromNow>{row.published_at}</Chrono>}
@@ -131,6 +136,6 @@ export const ReleaseList = ({ data }: { data: Release[] }) => {
         </Row>
       ))}
       {viewing && <ReleaseDialog {...{ open, handleClose }} release={viewing} />}
-    </Paper>
+    </>
   );
 };

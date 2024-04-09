@@ -5,7 +5,7 @@ import { Indexer } from 'client';
 
 import { MenuItem, Stack, TextField } from '@mui/material';
 
-import { Option } from '@dashotv/components';
+import { Container, Option } from '@dashotv/components';
 
 import { useIndexersAllQuery } from 'components/indexers';
 import { ReleaseList, useReleasesSearchQuery } from 'components/releases';
@@ -37,7 +37,7 @@ const Releases = () => {
   }, [indexersData, setIndexers]);
 
   return (
-    <>
+    <Container>
       <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
         <TextField
           label="Source"
@@ -101,7 +101,7 @@ const Releases = () => {
       </Stack>
 
       {data && <ReleaseList data={data?.result} />}
-    </>
+    </Container>
   );
 };
 
