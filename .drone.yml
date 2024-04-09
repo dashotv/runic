@@ -12,6 +12,8 @@ steps:
     image: plugins/docker
     environment:
       DOCKER_BUILDKIT: 1
+      GITHUB_TOKEN:
+        from_secret: npm_github_token
     settings:
       registry: docker.dasho.tv
       username:
@@ -19,6 +21,7 @@ steps:
       password:
         from_secret: docker_dasho_password
       repo: docker.dasho.tv/dashotv/runic
+      build_args_from_env: [GITHUB_TOKEN]
       tags:
         - latest
         - ${DRONE_BUILD_NUMBER}
