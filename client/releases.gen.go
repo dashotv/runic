@@ -82,7 +82,7 @@ func (s *ReleasesService) Create(ctx context.Context, req *ReleasesCreateRequest
 }
 
 type ReleasesShowRequest struct {
-	Id string `json:"id"`
+	ID string `json:"id"`
 }
 
 type ReleasesShowResponse struct {
@@ -96,7 +96,7 @@ func (s *ReleasesService) Show(ctx context.Context, req *ReleasesShowRequest) (*
 		SetContext(ctx).
 		SetBody(req).
 		SetResult(result).
-		SetPathParam("id", fmt.Sprintf("%v", req.Id)).
+		SetPathParam("id", fmt.Sprintf("%v", req.ID)).
 		Get("/releases/{id}")
 	if err != nil {
 		return nil, fae.Wrap(err, "failed to make request")
@@ -112,7 +112,7 @@ func (s *ReleasesService) Show(ctx context.Context, req *ReleasesShowRequest) (*
 }
 
 type ReleasesUpdateRequest struct {
-	Id      string   `json:"id"`
+	ID      string   `json:"id"`
 	Subject *Release `json:"subject"`
 }
 
@@ -127,7 +127,7 @@ func (s *ReleasesService) Update(ctx context.Context, req *ReleasesUpdateRequest
 		SetContext(ctx).
 		SetBody(req).
 		SetResult(result).
-		SetPathParam("id", fmt.Sprintf("%v", req.Id)).
+		SetPathParam("id", fmt.Sprintf("%v", req.ID)).
 		Put("/releases/{id}")
 	if err != nil {
 		return nil, fae.Wrap(err, "failed to make request")
@@ -143,7 +143,7 @@ func (s *ReleasesService) Update(ctx context.Context, req *ReleasesUpdateRequest
 }
 
 type ReleasesSettingsRequest struct {
-	Id      string   `json:"id"`
+	ID      string   `json:"id"`
 	Setting *Setting `json:"setting"`
 }
 
@@ -158,7 +158,7 @@ func (s *ReleasesService) Settings(ctx context.Context, req *ReleasesSettingsReq
 		SetContext(ctx).
 		SetBody(req).
 		SetResult(result).
-		SetPathParam("id", fmt.Sprintf("%v", req.Id)).
+		SetPathParam("id", fmt.Sprintf("%v", req.ID)).
 		Patch("/releases/{id}")
 	if err != nil {
 		return nil, fae.Wrap(err, "failed to make request")
@@ -174,7 +174,7 @@ func (s *ReleasesService) Settings(ctx context.Context, req *ReleasesSettingsReq
 }
 
 type ReleasesDeleteRequest struct {
-	Id string `json:"id"`
+	ID string `json:"id"`
 }
 
 type ReleasesDeleteResponse struct {
@@ -188,7 +188,7 @@ func (s *ReleasesService) Delete(ctx context.Context, req *ReleasesDeleteRequest
 		SetContext(ctx).
 		SetBody(req).
 		SetResult(result).
-		SetPathParam("id", fmt.Sprintf("%v", req.Id)).
+		SetPathParam("id", fmt.Sprintf("%v", req.ID)).
 		Delete("/releases/{id}")
 	if err != nil {
 		return nil, fae.Wrap(err, "failed to make request")

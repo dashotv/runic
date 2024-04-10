@@ -55,7 +55,7 @@ func (s *SourcesService) Index(ctx context.Context, req *SourcesIndexRequest) (*
 }
 
 type SourcesShowRequest struct {
-	Id string `json:"id"`
+	ID string `json:"id"`
 }
 
 type SourcesShowResponse struct {
@@ -69,7 +69,7 @@ func (s *SourcesService) Show(ctx context.Context, req *SourcesShowRequest) (*So
 		SetContext(ctx).
 		SetBody(req).
 		SetResult(result).
-		SetPathParam("id", fmt.Sprintf("%v", req.Id)).
+		SetPathParam("id", fmt.Sprintf("%v", req.ID)).
 		Get("/sources/{id}")
 	if err != nil {
 		return nil, fae.Wrap(err, "failed to make request")
@@ -85,7 +85,7 @@ func (s *SourcesService) Show(ctx context.Context, req *SourcesShowRequest) (*So
 }
 
 type SourcesReadRequest struct {
-	Id         string `json:"id"`
+	ID         string `json:"id"`
 	Categories string `json:"categories"`
 }
 
@@ -101,7 +101,7 @@ func (s *SourcesService) Read(ctx context.Context, req *SourcesReadRequest) (*So
 		SetBody(req).
 		SetResult(result).
 		SetQueryParam("categories", fmt.Sprintf("%v", req.Categories)).
-		SetPathParam("id", fmt.Sprintf("%v", req.Id)).
+		SetPathParam("id", fmt.Sprintf("%v", req.ID)).
 		Get("/sources/{id}/read")
 	if err != nil {
 		return nil, fae.Wrap(err, "failed to make request")
@@ -117,7 +117,7 @@ func (s *SourcesService) Read(ctx context.Context, req *SourcesReadRequest) (*So
 }
 
 type SourcesSearchRequest struct {
-	Id string `json:"id"`
+	ID string `json:"id"`
 	Q  string `json:"q"`
 	T  string `json:"t"`
 }
@@ -135,7 +135,7 @@ func (s *SourcesService) Search(ctx context.Context, req *SourcesSearchRequest) 
 		SetResult(result).
 		SetQueryParam("q", fmt.Sprintf("%v", req.Q)).
 		SetQueryParam("t", fmt.Sprintf("%v", req.T)).
-		SetPathParam("id", fmt.Sprintf("%v", req.Id)).
+		SetPathParam("id", fmt.Sprintf("%v", req.ID)).
 		Get("/sources/{id}/search")
 	if err != nil {
 		return nil, fae.Wrap(err, "failed to make request")
@@ -151,7 +151,7 @@ func (s *SourcesService) Search(ctx context.Context, req *SourcesSearchRequest) 
 }
 
 type SourcesParseRequest struct {
-	Id         string `json:"id"`
+	ID         string `json:"id"`
 	Categories string `json:"categories"`
 }
 
@@ -167,7 +167,7 @@ func (s *SourcesService) Parse(ctx context.Context, req *SourcesParseRequest) (*
 		SetBody(req).
 		SetResult(result).
 		SetQueryParam("categories", fmt.Sprintf("%v", req.Categories)).
-		SetPathParam("id", fmt.Sprintf("%v", req.Id)).
+		SetPathParam("id", fmt.Sprintf("%v", req.ID)).
 		Get("/sources/{id}/parse")
 	if err != nil {
 		return nil, fae.Wrap(err, "failed to make request")

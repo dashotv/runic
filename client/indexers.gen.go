@@ -82,7 +82,7 @@ func (s *IndexersService) Create(ctx context.Context, req *IndexersCreateRequest
 }
 
 type IndexersShowRequest struct {
-	Id string `json:"id"`
+	ID string `json:"id"`
 }
 
 type IndexersShowResponse struct {
@@ -96,7 +96,7 @@ func (s *IndexersService) Show(ctx context.Context, req *IndexersShowRequest) (*
 		SetContext(ctx).
 		SetBody(req).
 		SetResult(result).
-		SetPathParam("id", fmt.Sprintf("%v", req.Id)).
+		SetPathParam("id", fmt.Sprintf("%v", req.ID)).
 		Get("/indexers/{id}")
 	if err != nil {
 		return nil, fae.Wrap(err, "failed to make request")
@@ -112,7 +112,7 @@ func (s *IndexersService) Show(ctx context.Context, req *IndexersShowRequest) (*
 }
 
 type IndexersUpdateRequest struct {
-	Id      string   `json:"id"`
+	ID      string   `json:"id"`
 	Subject *Indexer `json:"subject"`
 }
 
@@ -127,7 +127,7 @@ func (s *IndexersService) Update(ctx context.Context, req *IndexersUpdateRequest
 		SetContext(ctx).
 		SetBody(req).
 		SetResult(result).
-		SetPathParam("id", fmt.Sprintf("%v", req.Id)).
+		SetPathParam("id", fmt.Sprintf("%v", req.ID)).
 		Put("/indexers/{id}")
 	if err != nil {
 		return nil, fae.Wrap(err, "failed to make request")
@@ -143,7 +143,7 @@ func (s *IndexersService) Update(ctx context.Context, req *IndexersUpdateRequest
 }
 
 type IndexersSettingsRequest struct {
-	Id      string   `json:"id"`
+	ID      string   `json:"id"`
 	Setting *Setting `json:"setting"`
 }
 
@@ -158,7 +158,7 @@ func (s *IndexersService) Settings(ctx context.Context, req *IndexersSettingsReq
 		SetContext(ctx).
 		SetBody(req).
 		SetResult(result).
-		SetPathParam("id", fmt.Sprintf("%v", req.Id)).
+		SetPathParam("id", fmt.Sprintf("%v", req.ID)).
 		Patch("/indexers/{id}")
 	if err != nil {
 		return nil, fae.Wrap(err, "failed to make request")
@@ -174,7 +174,7 @@ func (s *IndexersService) Settings(ctx context.Context, req *IndexersSettingsReq
 }
 
 type IndexersDeleteRequest struct {
-	Id string `json:"id"`
+	ID string `json:"id"`
 }
 
 type IndexersDeleteResponse struct {
@@ -188,7 +188,7 @@ func (s *IndexersService) Delete(ctx context.Context, req *IndexersDeleteRequest
 		SetContext(ctx).
 		SetBody(req).
 		SetResult(result).
-		SetPathParam("id", fmt.Sprintf("%v", req.Id)).
+		SetPathParam("id", fmt.Sprintf("%v", req.ID)).
 		Delete("/indexers/{id}")
 	if err != nil {
 		return nil, fae.Wrap(err, "failed to make request")

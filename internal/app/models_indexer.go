@@ -24,7 +24,7 @@ func (c *Connector) IndexerList(page, limit int) ([]*Indexer, int64, error) {
 		return nil, 0, err
 	}
 
-	indexers = append([]*Indexer{{Name: "rift", Url: app.Config.RiftURL, Active: true, Categories: []int{5070}}}, indexers...)
+	indexers = append([]*Indexer{{Name: "rift", URL: app.Config.RiftURL, Active: true, Categories: []int{5070}}}, indexers...)
 	return indexers, count, nil
 }
 

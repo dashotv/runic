@@ -50,6 +50,8 @@ func NewConnector(app *Application) (*Connector, error) {
 		return nil, err
 	}
 
+	grimoire.Indexes[*Indexer](indexer, &Indexer{})
+
 	s, err = app.Config.ConnectionFor("release")
 	if err != nil {
 		return nil, err
@@ -58,6 +60,8 @@ func NewConnector(app *Application) (*Connector, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	grimoire.Indexes[*Release](release, &Release{})
 
 	c := &Connector{
 		Log:     app.Log.Named("db"),
@@ -74,7 +78,7 @@ type Indexer struct { // model
 	//CreatedAt time.Time          `bson:"created_at" json:"created_at"`
 	//UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
 	Name        string    `bson:"name" json:"name"`
-	Url         string    `bson:"url" json:"url"`
+	URL         string    `bson:"url" json:"url"`
 	Active      bool      `bson:"active" json:"active"`
 	Categories  []int     `bson:"categories" json:"categories"`
 	ProcessedAt time.Time `bson:"processed_at" json:"processed_at"`
