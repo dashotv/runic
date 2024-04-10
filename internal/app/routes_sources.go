@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
 
-	"github.com/dashotv/runic/reader"
+	"github.com/dashotv/runic/internal/reader"
 )
 
 type RunicSourceSimple struct {

@@ -9,7 +9,7 @@ import (
 
 	"github.com/dashotv/minion"
 	rift "github.com/dashotv/rift/client"
-	"github.com/dashotv/runic/reader"
+	"github.com/dashotv/runic/internal/reader"
 )
 
 var app *Application

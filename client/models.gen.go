@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/dashotv/grimoire"
-	"github.com/dashotv/runic/newznab"
-	"github.com/dashotv/runic/parser"
+	"github.com/dashotv/runic/internal/newznab"
+	"github.com/dashotv/runic/internal/parser"
 )
 
 type Indexer struct { // model

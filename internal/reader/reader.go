@@ -7,8 +7,8 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/dashotv/runic/jackett"
-	"github.com/dashotv/runic/newznab"
+	"github.com/dashotv/runic/internal/jackett"
+	"github.com/dashotv/runic/internal/newznab"
 )
 
 type Reader struct {

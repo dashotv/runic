@@ -1,8 +1,8 @@
 package reader
 
 import (
-	"github.com/dashotv/runic/jackett"
-	"github.com/dashotv/runic/newznab"
+	"github.com/dashotv/runic/internal/jackett"
+	"github.com/dashotv/runic/internal/newznab"
 )
 
 func dedupCategories(cats []jackett.Category) []jackett.Category {

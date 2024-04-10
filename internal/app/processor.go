@@ -5,9 +5,9 @@ import (
 	"strconv"
 
 	rift "github.com/dashotv/rift/client"
-	"github.com/dashotv/runic/newznab"
-	"github.com/dashotv/runic/parser"
-	"github.com/dashotv/runic/reader"
+	"github.com/dashotv/runic/internal/newznab"
+	"github.com/dashotv/runic/internal/parser"
+	"github.com/dashotv/runic/internal/reader"
 )
 
 func init() {

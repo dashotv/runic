@@ -6,8 +6,8 @@ import (
 	"fmt"
 
 	"github.com/dashotv/fae"
-	"github.com/dashotv/runic/newznab"
-	"github.com/dashotv/runic/reader"
+	"github.com/dashotv/runic/internal/newznab"
+	"github.com/dashotv/runic/internal/reader"
 )
 
 type SourcesService struct {
