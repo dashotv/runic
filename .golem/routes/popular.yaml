@@ -1,0 +1,10 @@
+name: popular
+path: /popular
+routes:
+  - name: index
+    path: /:interval
+    method: GET
+    result: "*PopularResponse"
+    params:
+      - name: interval
+        type: string

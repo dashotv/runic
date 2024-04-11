@@ -84,6 +84,19 @@ type Indexer struct { // model
 	ProcessedAt time.Time `bson:"processed_at" json:"processed_at"`
 }
 
+type Popular struct { // struct
+	Title string `bson:"_id" json:"title"`
+	Year  int    `bson:"year" json:"year"`
+	Type  string `bson:"type" json:"type"`
+	Count int    `bson:"count" json:"count"`
+}
+
+type PopularResponse struct { // struct
+	Tv     []*Popular `bson:"tv" json:"tv"`
+	Anime  []*Popular `bson:"anime" json:"anime"`
+	Movies []*Popular `bson:"movies" json:"movies"`
+}
+
 type Release struct { // model
 	grimoire.Document `bson:",inline"` // includes default model settings
 	//ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`

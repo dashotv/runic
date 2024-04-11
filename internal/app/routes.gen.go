@@ -92,6 +92,9 @@ func (a *Application) Routes() {
 	indexers.PATCH("/:id", a.IndexersSettingsHandler)
 	indexers.DELETE("/:id", a.IndexersDeleteHandler)
 
+	popular := a.Router.Group("/popular")
+	popular.GET("/:interval", a.PopularIndexHandler)
+
 	releases := a.Router.Group("/releases")
 	releases.GET("/", a.ReleasesIndexHandler)
 	releases.POST("/", a.ReleasesCreateHandler)
@@ -115,6 +118,7 @@ func (a *Application) indexHandler(c echo.Context) error {
 		"name": "runic",
 		"routes": H{
 			"indexers": "/indexers",
+			"popular":  "/popular",
 			"releases": "/releases",
 			"sources":  "/sources",
 		},
@@ -165,6 +169,12 @@ func (a *Application) IndexersSettingsHandler(c echo.Context) error {
 func (a *Application) IndexersDeleteHandler(c echo.Context) error {
 	id := c.Param("id")
 	return a.IndexersDelete(c, id)
+}
+
+// Popular (/popular)
+func (a *Application) PopularIndexHandler(c echo.Context) error {
+	interval := c.Param("interval")
+	return a.PopularIndex(c, interval)
 }
 
 // Releases (/releases)

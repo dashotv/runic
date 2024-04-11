@@ -2,8 +2,12 @@ package app
 
 import (
 	"context"
+	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+
+	"github.com/dashotv/fae"
 )
 
 var releaseTypes = []string{"tv", "anime", "movies"}
@@ -57,4 +61,56 @@ func (c *Connector) ReleaseSetting(id, setting string, value bool) error {
 	}
 
 	return c.Release.Update(release)
+}
+
+var popularIntervals = map[string]int{
+	"daily":   1,
+	"weekly":  7,
+	"monthly": 30,
+}
+
+func (c *Connector) ReleasesPopular(interval string) (map[string][]*Popular, error) {
+	limit := 25
+	out := map[string][]*Popular{}
+
+	i, ok := popularIntervals[interval]
+	if !ok {
+		return nil, fae.Errorf("invalid interval: %s", interval)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	date := time.Now().AddDate(0, 0, -i)
+	for _, t := range []string{"tv", "anime", "movies"} {
+		results, err := c.ReleasesPopularType(ctx, t, date, limit)
+		if err != nil {
+			return nil, fae.Wrap(err, "popular releases")
+		}
+		out[t] = results
+	}
+
+	return out, nil
+}
+
+func (c *Connector) ReleasesPopularType(ctx context.Context, t string, date time.Time, limit int) ([]*Popular, error) {
+	p := []bson.M{
+		{"$project": bson.M{"title": 1, "type": 1, "year": 1, "published": "$published_at"}},
+		{"$match": bson.M{"type": t, "published": bson.M{"$gte": date}}},
+		{"$group": bson.M{"_id": "$title", "type": bson.M{"$first": "$type"}, "year": bson.M{"$first": "$year"}, "count": bson.M{"$sum": 1}}},
+		{"$sort": bson.M{"count": -1}},
+		{"$limit": limit},
+	}
+
+	cursor, err := c.Release.Collection.Aggregate(ctx, p)
+	if err != nil {
+		return nil, fae.Wrap(err, "aggregating popular releases")
+	}
+
+	results := make([]*Popular, limit)
+	if err = cursor.All(ctx, &results); err != nil {
+		return nil, fae.Wrap(err, "decoding popular releases")
+	}
+
+	return results, nil
 }

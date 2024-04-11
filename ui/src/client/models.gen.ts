@@ -15,6 +15,19 @@ export interface Indexer {
   processed_at?: string;
 }
 
+export interface Popular {
+  title?: string;
+  year?: number;
+  type?: string;
+  count?: number;
+}
+
+export interface PopularResponse {
+  tv?: Popular[];
+  anime?: Popular[];
+  movies?: Popular[];
+}
+
 export interface Release {
   id?: string;
   created_at?: string;
