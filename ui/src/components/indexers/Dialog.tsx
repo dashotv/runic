@@ -30,7 +30,7 @@ export type IndexerDialogProps = {
 export const IndexerDialog = ({ indexer, handleClose }: IndexerDialogProps) => {
   const { control, handleSubmit, setValue } = useForm<Indexer>({ values: indexer });
   const [open, setOpen] = useState(false);
-  const { isFetched, data } = useRunicSourcesQuery();
+  const { data } = useRunicSourcesQuery();
   const [sources, setSources] = useState<Option[]>([]);
   const [categories, setCategories] = useState<SourceCapsCategories>();
   const [cats, setCats] = useState<number[]>(indexer.categories ?? []);
@@ -82,10 +82,6 @@ export const IndexerDialog = ({ indexer, handleClose }: IndexerDialogProps) => {
       });
     }
   };
-
-  if (!isFetched || !sources || !categories) {
-    return null;
-  }
 
   return (
     <Dialog open={open} onClose={() => close()} fullWidth={true} maxWidth="sm">
