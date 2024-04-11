@@ -43,8 +43,9 @@ const App = ({ mount }: { mount: string }) => {
     },
     {
       label: 'Popular',
-      to: 'popular/*',
-      element: <Popular />,
+      to: 'popular',
+      path: 'popular/*',
+      element: <Popular mount={mount} />,
     },
     {
       label: 'Releases',

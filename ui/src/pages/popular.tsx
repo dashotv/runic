@@ -8,16 +8,16 @@ import { Container, LoadingIndicator } from '@dashotv/components';
 import { usePopularQuery } from 'components/popular';
 import { PopularList } from 'components/popular/list';
 
-const Popular = () => {
+const Popular = ({ mount }: { mount: string }) => {
   return (
     <Routes>
-      <Route path="" element={<PopularMap />} />
-      <Route path=":interval" element={<PopularMap />} />
+      <Route path="" element={<PopularMap mount={mount} />} />
+      <Route path=":interval" element={<PopularMap mount={mount} />} />
     </Routes>
   );
 };
 
-const PopularMap = () => {
+const PopularMap = ({ mount }: { mount: string }) => {
   const { interval } = useParams();
   const { isFetching, data } = usePopularQuery(interval || 'daily');
   return (
@@ -28,14 +28,22 @@ const PopularMap = () => {
             <Button
               component={Link}
               variant={!interval || interval === 'daily' ? 'contained' : 'text'}
-              to="/popular/daily"
+              to={`${mount}/popular/daily`}
             >
               Daily
             </Button>
-            <Button component={Link} variant={interval === 'weekly' ? 'contained' : 'text'} to="/popular/weekly">
+            <Button
+              component={Link}
+              variant={interval === 'weekly' ? 'contained' : 'text'}
+              to={`${mount}/popular/weekly`}
+            >
               Weekly
             </Button>
-            <Button component={Link} variant={interval === 'monthly' ? 'contained' : 'text'} to="/popular/monthly">
+            <Button
+              component={Link}
+              variant={interval === 'monthly' ? 'contained' : 'text'}
+              to={`${mount}/popular/monthly`}
+            >
               Monthly
             </Button>
           </Grid>
