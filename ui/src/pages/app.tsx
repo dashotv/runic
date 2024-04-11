@@ -43,7 +43,7 @@ const App = ({ mount }: { mount: string }) => {
     },
     {
       label: 'Popular',
-      to: 'popular',
+      to: 'popular/*',
       element: <Popular />,
     },
     {
