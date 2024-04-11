@@ -40,8 +40,6 @@ func IdentifyType(categories []int) string {
 		if c >= 5000 && c < 6000 {
 			return "tv"
 		}
-	}
-	for _, c := range categories {
 		if c >= 2000 && c < 3000 {
 			return "movies"
 		}

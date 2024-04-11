@@ -1,8 +1,8 @@
 package app
 
 import (
-	"os"
 	"strconv"
+	"strings"
 
 	rift "github.com/dashotv/rift/client"
 	"github.com/dashotv/runic/internal/newznab"
@@ -28,10 +28,10 @@ func setupReader(app *Application) error {
 	r := &reader.Reader{}
 	app.Reader = r
 
-	if err := r.Add("geek", os.Getenv("NZBGEEK_URL"), os.Getenv("NZBGEEK_KEY"), 0, false); err != nil {
+	if err := r.Add("geek", app.Config.NZBGeekURL, app.Config.NZBGeekKey, 0, false); err != nil {
 		return err
 	}
-	if err := r.AddJackett(os.Getenv("JACKETT_URL"), os.Getenv("JACKETT_KEY")); err != nil {
+	if err := r.AddJackett(app.Config.JackettURL, app.Config.JackettKey); err != nil {
 		return err
 	}
 
@@ -71,6 +71,9 @@ func (p *Processor) Process(source string, list []*newznab.NZB) ([]*Release, err
 
 	for _, nzb := range list {
 		t := reader.IdentifyType(catsToInt(nzb.Category))
+		if t == "" {
+			t = "unknown"
+		}
 		r := &Release{
 			Source:      source,
 			Type:        t,
@@ -95,6 +98,10 @@ func (p *Processor) Process(source string, list []*newznab.NZB) ([]*Release, err
 		r.Downloader = "nzb"
 		if nzb.IsTorrent {
 			r.Downloader = "torrent"
+		}
+
+		if r.Downloader == "torrent" && r.Infohash != "" && strings.Contains(nzb.DownloadURL, app.Config.JackettURL) {
+			r.Download = "magnet:?xt=urn:btih:" + r.Infohash
 		}
 
 		info, err := parser.Parse(nzb.Title, t)

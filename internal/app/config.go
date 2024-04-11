@@ -4,8 +4,9 @@ import (
 	"strings"
 
 	"github.com/caarlos0/env/v10"
-	"github.com/dashotv/fae"
 	"github.com/pkg/errors"
+
+	"github.com/dashotv/fae"
 )
 
 func setupConfig(app *Application) error {
@@ -48,8 +49,12 @@ type Config struct {
 
 	//golem:template:app/config_partial_struct
 
-	RiftURL string   `env:"RIFT_URL"`
-	Words   []string `env:"WORDS"`
+	JackettURL string   `env:"JACKETT_URL"`
+	JackettKey string   `env:"JACKETT_KEY"`
+	NZBGeekURL string   `env:"NZBGEEK_URL"`
+	NZBGeekKey string   `env:"NZBGEEK_KEY"`
+	RiftURL    string   `env:"RIFT_URL"`
+	Words      []string `env:"WORDS"`
 }
 
 func (c *Config) Validate() error {
