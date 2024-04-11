@@ -70,3 +70,23 @@ func (a *Application) IndexersDelete(c echo.Context, id string) error {
 
 	return c.JSON(http.StatusOK, &Response{Error: false, Result: subject})
 }
+
+func (a *Application) IndexersRefresh(c echo.Context, id string) error {
+	if id == "all" {
+		if err := a.Workers.Enqueue(&ParseActive{}); err != nil {
+			return c.JSON(http.StatusInternalServerError, &Response{Error: true, Message: err.Error()})
+		}
+		return c.JSON(http.StatusOK, &Response{Error: false})
+	}
+
+	indexer, err := a.DB.IndexerByName(id)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, &Response{Error: true, Message: err.Error()})
+	}
+
+	if err := a.Workers.Enqueue(&ParseIndexer{ID: indexer.ID.Hex(), Title: indexer.Name}); err != nil {
+		return c.JSON(http.StatusInternalServerError, &Response{Error: true, Message: err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, &Response{Error: false})
+}

@@ -1,4 +1,12 @@
 name: indexers
 path: /indexers
-model: "*Indexer"
 rest: true
+model: "*Indexer"
+routes:
+  - name: refresh
+    path: /refresh
+    method: GET
+    params:
+      - name: id
+        type: string
+        query: true

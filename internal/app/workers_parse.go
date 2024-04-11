@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/dashotv/fae"
 	"github.com/dashotv/minion"
 	rift "github.com/dashotv/rift/client"
 )
@@ -18,7 +19,7 @@ func (j *ParseActive) Work(ctx context.Context, job *minion.Job[*ParseActive]) e
 	// log := app.Log.Named("parse_active")
 	list, err := app.DB.IndexerActive()
 	if err != nil {
-		return err
+		return fae.Wrap(err, "getting active indexers")
 	}
 
 	// log.Debugf("processing %d indexers", len(list))
@@ -40,7 +41,7 @@ func (j *ParseIndexer) Work(ctx context.Context, job *minion.Job[*ParseIndexer])
 	// log := app.Log.Named("parse_indexer")
 	indexer, err := app.DB.IndexerGet(id)
 	if err != nil {
-		return err
+		return fae.Wrap(err, "getting indexer")
 	}
 
 	// log.Debugf("processing indexer: %s", indexer.Name)
@@ -51,27 +52,27 @@ func (j *ParseIndexer) Work(ctx context.Context, job *minion.Job[*ParseIndexer])
 
 	results, err := app.Processor.Parse(indexer.Name, indexer.Categories)
 	if err != nil {
-		return err
+		return fae.Wrap(err, "parsing results")
 	}
 
 	for _, result := range results {
 		// TODO: change this to a unique index?
 		count, err := app.DB.Release.Query().Where("checksum", result.Checksum).Count()
 		if err != nil {
-			return err
+			return fae.Wrap(err, "checking release")
 		}
 		if count > 0 {
 			continue
 		}
 		if err := app.DB.Release.Save(result); err != nil {
-			return err
+			return fae.Wrap(err, "saving release")
 		}
 	}
 
 	indexer.ProcessedAt = time.Now()
 
 	if err := app.DB.Indexer.Save(indexer); err != nil {
-		return err
+		return fae.Wrap(err, "saving indexer")
 	}
 
 	return nil

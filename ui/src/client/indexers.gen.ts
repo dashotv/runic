@@ -142,3 +142,24 @@ export const IndexersDelete = async (params: IndexersDeleteRequest) => {
 
   return response.data as IndexersDeleteResponse;
 };
+
+export interface IndexersRefreshRequest {
+  id: string;
+}
+
+export const IndexersRefresh = async (params: IndexersRefreshRequest) => {
+  const response = await runicClient.get(`/indexers/refresh?id=${params.id}`);
+
+  if (!response.data) {
+    throw new Error('response empty?');
+  }
+
+  if (response.data.error) {
+    if (response.data.message) {
+      throw new Error(response.data.message);
+    }
+    throw new Error('unknown error');
+  }
+
+  return response.data as Response;
+};

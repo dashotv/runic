@@ -202,3 +202,28 @@ func (s *IndexersService) Delete(ctx context.Context, req *IndexersDeleteRequest
 
 	return result, nil
 }
+
+type IndexersRefreshRequest struct {
+	ID string `json:"id"`
+}
+
+func (s *IndexersService) Refresh(ctx context.Context, req *IndexersRefreshRequest) (*Response, error) {
+	result := &Response{}
+	resp, err := s.client.Resty.R().
+		SetContext(ctx).
+		SetBody(req).
+		SetResult(result).
+		SetQueryParam("id", fmt.Sprintf("%v", req.ID)).
+		Get("/indexers/refresh")
+	if err != nil {
+		return nil, fae.Wrap(err, "failed to make request")
+	}
+	if !resp.IsSuccess() {
+		return nil, fae.Errorf("%d: %v", resp.StatusCode(), resp.String())
+	}
+	if result.Error {
+		return nil, fae.New(result.Message)
+	}
+
+	return result, nil
+}

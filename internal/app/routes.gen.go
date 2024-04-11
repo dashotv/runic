@@ -91,6 +91,7 @@ func (a *Application) Routes() {
 	indexers.PUT("/:id", a.IndexersUpdateHandler)
 	indexers.PATCH("/:id", a.IndexersSettingsHandler)
 	indexers.DELETE("/:id", a.IndexersDeleteHandler)
+	indexers.GET("/refresh", a.IndexersRefreshHandler)
 
 	popular := a.Router.Group("/popular")
 	popular.GET("/:interval", a.PopularIndexHandler)
@@ -169,6 +170,10 @@ func (a *Application) IndexersSettingsHandler(c echo.Context) error {
 func (a *Application) IndexersDeleteHandler(c echo.Context) error {
 	id := c.Param("id")
 	return a.IndexersDelete(c, id)
+}
+func (a *Application) IndexersRefreshHandler(c echo.Context) error {
+	id := QueryParamString(c, "id")
+	return a.IndexersRefresh(c, id)
 }
 
 // Popular (/popular)
