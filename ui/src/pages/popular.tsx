@@ -54,13 +54,13 @@ const PopularMap = ({ mount }: { mount: string }) => {
         {isFetching ? <LoadingIndicator /> : null}
         <Grid container spacing={2}>
           <Grid item xs={12} md={4}>
-            {data?.result.tv ? <PopularList type="tv" data={data?.result.tv} /> : null}
+            {data?.result.tv ? <PopularList mount={mount} type="tv" data={data?.result.tv} /> : null}
           </Grid>
           <Grid item xs={12} md={4}>
-            {data?.result.anime ? <PopularList type="anime" data={data?.result.anime} /> : null}
+            {data?.result.anime ? <PopularList mount={mount} type="anime" data={data?.result.anime} /> : null}
           </Grid>
           <Grid item xs={12} md={4}>
-            {data?.result.movies ? <PopularList type="movies" data={data?.result.movies} /> : null}
+            {data?.result.movies ? <PopularList mount={mount} type="movies" data={data?.result.movies} /> : null}
           </Grid>
         </Grid>
       </Container>

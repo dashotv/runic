@@ -8,7 +8,7 @@ import { useQueryString } from 'components/hooks';
 
 import './popular.scss';
 
-export const PopularList = ({ data, type }: { data: Popular[]; type: string }) => {
+export const PopularList = ({ mount, data, type }: { mount: string; data: Popular[]; type: string }) => {
   const url =
     type !== 'anime' ? `http://themoviedb.org/search?query=` : 'https://myanimelist.net/anime.php?cat=anime&q=';
 
@@ -34,7 +34,7 @@ export const PopularList = ({ data, type }: { data: Popular[]; type: string }) =
               textAlign="right"
               sx={{ '& a': { color: '#f0f0f0', textDecoration: 'none' } }}
             >
-              <SearchLink {...{ title, type, count }} />
+              <SearchLink {...{ mount, title, type, count }} />
             </Typography>
           </Stack>
         ))}
@@ -43,16 +43,25 @@ export const PopularList = ({ data, type }: { data: Popular[]; type: string }) =
   );
 };
 
-const SearchLink = ({ title, type, count }: { title?: string; type?: string; count?: number }) => {
+const SearchLink = ({
+  mount,
+  title,
+  type,
+  count,
+}: {
+  mount: string;
+  title?: string;
+  type?: string;
+  count?: number;
+}) => {
   const { queryString } = useQueryString();
   const link =
-    '/releases/search?' +
+    `${mount}/?` +
     queryString({
       text: title,
       type: type,
       resolution: type === 'movies' ? '1080' : '',
       exact: type === 'movies' ? false : true,
-      verified: true,
     });
   return <RouterLink to={title ? link : '#'}>{count}</RouterLink>;
 };
