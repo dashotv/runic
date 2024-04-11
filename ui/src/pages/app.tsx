@@ -5,12 +5,22 @@ import { Container, RoutingTabs, RoutingTabsRoute } from '@dashotv/components';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { IndexersList } from 'components/indexers';
+import Popular from 'pages/popular';
 import Releases from 'pages/releases';
 import Search from 'pages/search';
 
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
+  },
+  components: {
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          textDecoration: 'none',
+        },
+      },
+    },
   },
 });
 
@@ -30,6 +40,11 @@ const App = ({ mount }: { mount: string }) => {
       label: 'Search',
       to: '',
       element: <Search />,
+    },
+    {
+      label: 'Popular',
+      to: 'popular',
+      element: <Popular />,
     },
     {
       label: 'Releases',

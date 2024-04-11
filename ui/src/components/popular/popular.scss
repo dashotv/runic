@@ -1,0 +1,48 @@
+div.popular {
+  margin-right: 7px;
+  margin-left: 7px;
+
+  div.header {
+    font-size: xx-large;
+    font-weight: bolder;
+    margin-left: 3px;
+  }
+
+  div.entry:nth-child(odd) {
+    background-color: #1f1f1f;
+  }
+
+  div.entry {
+    display: inline-flex;
+    flex-flow: row nowrap;
+    max-width: 100%;
+    /* or width:100% if you want the spans to take all available space */
+
+    span.title {
+      flex: 1;
+      white-space: pre;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 350px;
+      font-size: 18px;
+      padding-top: 1px;
+      padding-bottom: 1px;
+      padding-left: 5px;
+    }
+
+    span.number {
+      white-space: nowrap;
+      text-align: right;
+      font-size: 18px;
+      width: 50px;
+      padding-top: 1px;
+      padding-bottom: 1px;
+      padding-right: 5px;
+
+      a {
+        color: #f0f0f0;
+        text-decoration: none;
+      }
+    }
+  }
+}
