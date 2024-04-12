@@ -20,6 +20,7 @@ export default defineConfig({
       filename: 'remote.js',
       exposes: {
         './App': './src/pages/app.tsx',
+        './Search': './src/pages/remoteSearch.tsx',
       },
       shared: {
         ...dependencies,

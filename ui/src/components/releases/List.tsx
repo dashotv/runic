@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Truncate from 'react-truncate-inside';
 
 import { Release } from 'client';
 
-import { IconButton } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
@@ -14,7 +14,15 @@ import { DownloaderIcon } from '.';
 import { ReleaseDialog } from './Dialog';
 import { useReleaseSettingMutation } from './query';
 
-export const ReleaseList = ({ data }: { data: Release[] }) => {
+export const ReleaseList = ({
+  data,
+  actions,
+  selected,
+}: {
+  data: Release[];
+  actions?: (row: Release) => ReactNode;
+  selected?: string;
+}) => {
   const [open, setOpen] = useState(false);
   const [viewing, setViewing] = useState<Release | null>(null);
   const releaseUpdate = useReleaseSettingMutation();
@@ -37,7 +45,7 @@ export const ReleaseList = ({ data }: { data: Release[] }) => {
   return (
     <>
       {data?.map((row: Release) => (
-        <Row key={row.id}>
+        <Row key={row.id} variant={selected == row.download ? 'selected' : undefined}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 0, md: 1 }} alignItems="center">
             <Stack
               direction="row"
@@ -130,6 +138,7 @@ export const ReleaseList = ({ data }: { data: Release[] }) => {
                 <Typography noWrap variant="subtitle2" color="gray" pl="3px" width="100%">
                   {row.published_at && <Chrono fromNow>{row.published_at}</Chrono>}
                 </Typography>
+                <Box>{actions ? actions(row) : null}</Box>
               </Stack>
             </Stack>
           </Stack>

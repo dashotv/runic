@@ -31,7 +31,7 @@ const formDefaults: SearchForm = {
 
 export const encodeSearchParams = params => createSearchParams(params);
 // TODO: useForm and @hookform/devtools, see: https://www.youtube.com/watch?v=sD9fZxMO1us
-export default function Search() {
+const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [form, setForm] = useState<SearchForm>(
     Object.assign(formDefaults, {
@@ -115,4 +115,6 @@ export default function Search() {
       <Container>{data?.Releases && <ReleaseList data={data.Releases} />}</Container>
     </>
   );
-}
+};
+
+export default Search;
