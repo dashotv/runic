@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useSearchParams } from 'react-router-dom';
-import { createSearchParams } from 'react-router-dom';
+import { createSearchParams, useSearchParams } from 'react-router-dom';
 
 import { Box, Button } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
@@ -66,7 +65,7 @@ const Search = () => {
 
   useEffect(() => {
     setSearchParams(encodeSearchParams(form));
-  }, [form]);
+  }, [form, setSearchParams]);
 
   const setFormRift = () => {
     setForm(() => ({ ...formDefaults, source: 'rift', type: 'anime' }));

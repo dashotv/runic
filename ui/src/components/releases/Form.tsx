@@ -42,7 +42,6 @@ export function ReleasesForm({
   reset,
 }: {
   form: SearchForm;
-  defaults?: SearchForm;
   setForm: React.Dispatch<React.SetStateAction<SearchForm>>;
   reset?: () => void;
 }) {

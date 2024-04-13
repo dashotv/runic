@@ -18,13 +18,13 @@ export interface RunicSearchProps {
   rawForm: SearchForm;
 }
 const RemoteSearch = ({ rawForm, selector, selected }: RunicSearchProps) => {
+  const [defaultForm] = useState<SearchForm>(rawForm);
   const [form, setForm] = useState<SearchForm>(() => {
     rawForm.verified = false;
     return rawForm;
   });
-  const [defaultForm] = useState<SearchForm>(rawForm);
 
-  const { data, isFetching } = useSearchQuery(pagesize, (page - 1) * pagesize, rawForm);
+  const { data, isFetching } = useSearchQuery(pagesize, (page - 1) * pagesize, form);
 
   const reset = () => {
     setForm(defaultForm);
