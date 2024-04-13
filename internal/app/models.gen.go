@@ -9,6 +9,7 @@ import (
 	"github.com/dashotv/grimoire"
 	"github.com/dashotv/runic/internal/newznab"
 	"github.com/dashotv/runic/internal/parser"
+	"github.com/kamva/mgm/v3"
 )
 
 func init() {
@@ -37,26 +38,27 @@ type Connector struct {
 	Release *grimoire.Store[*Release]
 }
 
-func NewConnector(app *Application) (*Connector, error) {
-	var s *Connection
-	var err error
-
-	s, err = app.Config.ConnectionFor("indexer")
+func connection[T mgm.Model](name string) (*grimoire.Store[T], error) {
+	s, err := app.Config.ConnectionFor(name)
 	if err != nil {
 		return nil, err
 	}
-	indexer, err := grimoire.New[*Indexer](s.URI, s.Database, s.Collection)
+	c, err := grimoire.New[T](s.URI, s.Database, s.Collection)
+	if err != nil {
+		return nil, err
+	}
+	return c, nil
+}
+
+func NewConnector(app *Application) (*Connector, error) {
+	indexer, err := connection[*Indexer]("indexer")
 	if err != nil {
 		return nil, err
 	}
 
 	grimoire.Indexes[*Indexer](indexer, &Indexer{})
 
-	s, err = app.Config.ConnectionFor("release")
-	if err != nil {
-		return nil, err
-	}
-	release, err := grimoire.New[*Release](s.URI, s.Database, s.Collection)
+	release, err := connection[*Release]("release")
 	if err != nil {
 		return nil, err
 	}

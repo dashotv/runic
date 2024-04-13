@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Indexer } from 'client';
+import { Indexer } from 'client/runic';
 
 import { DialogActions, Typography } from '@mui/material';
 import Button from '@mui/material/Button';

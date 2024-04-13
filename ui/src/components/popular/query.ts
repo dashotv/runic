@@ -1,4 +1,4 @@
-import { PopularIndex } from 'client';
+import { PopularIndex } from 'client/runic';
 
 import { useQuery } from '@tanstack/react-query';
 

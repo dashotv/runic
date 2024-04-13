@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { Indexer } from 'client';
-import { NZB } from 'client/newznab';
+import { Indexer } from 'client/runic';
+import { NZB } from 'client/runic/newznab';
 
 import { DialogActions, Typography } from '@mui/material';
 import Button from '@mui/material/Button';

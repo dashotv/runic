@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Indexer } from 'client';
+import { Indexer } from 'client/runic';
 
 import { MenuItem, Stack, TextField } from '@mui/material';
 

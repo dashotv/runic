@@ -1,6 +1,6 @@
 import { Link as RouterLink } from 'react-router-dom';
 
-import { Popular } from 'client';
+import { Popular } from 'client/runic';
 
 import { Box, Link, Stack, Typography } from '@mui/material';
 

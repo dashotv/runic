@@ -2,7 +2,7 @@ import { ReactNode, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Truncate from 'react-truncate-inside';
 
-import { Release } from 'client';
+import { Release } from 'client/runic';
 
 import { Box, IconButton } from '@mui/material';
 import Stack from '@mui/material/Stack';

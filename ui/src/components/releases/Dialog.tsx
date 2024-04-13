@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { Release } from 'client';
+import { Release } from 'client/runic';
 
 import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';

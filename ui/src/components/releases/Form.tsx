@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Indexer } from 'client';
+import { Indexer } from 'client/runic';
 
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import CrisisAlertIcon from '@mui/icons-material/CrisisAlert';

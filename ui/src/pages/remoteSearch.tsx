@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
-import { createSearchParams, useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
 
-import { Release } from 'client';
+import { Release } from 'client/runic';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import OutboundRoundedIcon from '@mui/icons-material/OutboundRounded';
@@ -13,28 +12,24 @@ import { ReleaseList, ReleasesForm, SearchForm, useSearchQuery } from 'component
 
 const pagesize = 25;
 const page = 1;
-export const encodeSearchParams = params => createSearchParams(params);
 export interface RunicSearchProps {
   selector: (url: string) => void;
   selected?: string;
   rawForm: SearchForm;
 }
 const RemoteSearch = ({ rawForm, selector, selected }: RunicSearchProps) => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const [form, setForm] = useState<SearchForm>(() => {
     rawForm.verified = false;
     return rawForm;
   });
   const [defaultForm] = useState<SearchForm>(rawForm);
 
-  const { data, isFetching } = useSearchQuery(pagesize, (page - 1) * pagesize, searchParams.toString());
+  const { data, isFetching } = useSearchQuery(pagesize, (page - 1) * pagesize, rawForm);
 
   const reset = () => {
     setForm(defaultForm);
   };
-  useEffect(() => {
-    setSearchParams(encodeSearchParams(form));
-  }, [form]);
+
   const handleSelect = (row: Release) => {
     if (!row.download) {
       return;

@@ -1,6 +1,6 @@
 import Truncate from 'react-truncate-inside';
 
-import { Release } from 'client';
+import { Release } from 'client/runic';
 
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';

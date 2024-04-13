@@ -1,4 +1,4 @@
-import * as runic from 'client';
+import * as runic from 'client/runic';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 

@@ -115,9 +115,9 @@ func (a *Application) Routes() {
 }
 
 func (a *Application) indexHandler(c echo.Context) error {
-	return c.JSON(http.StatusOK, H{
+	return c.JSON(http.StatusOK, router.H{
 		"name": "runic",
-		"routes": H{
+		"routes": router.H{
 			"indexers": "/indexers",
 			"popular":  "/popular",
 			"releases": "/releases",
@@ -131,13 +131,13 @@ func (a *Application) healthHandler(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, H{"name": "runic", "health": health})
+	return c.JSON(http.StatusOK, router.H{"name": "runic", "health": health})
 }
 
 // Indexers (/indexers)
 func (a *Application) IndexersIndexHandler(c echo.Context) error {
-	page := QueryParamIntDefault(c, "page", "1")
-	limit := QueryParamIntDefault(c, "limit", "25")
+	page := router.QueryParamIntDefault(c, "page", "1")
+	limit := router.QueryParamIntDefault(c, "limit", "25")
 	return a.IndexersIndex(c, page, limit)
 }
 func (a *Application) IndexersCreateHandler(c echo.Context) error {
@@ -172,7 +172,7 @@ func (a *Application) IndexersDeleteHandler(c echo.Context) error {
 	return a.IndexersDelete(c, id)
 }
 func (a *Application) IndexersRefreshHandler(c echo.Context) error {
-	id := QueryParamString(c, "id")
+	id := router.QueryParamString(c, "id")
 	return a.IndexersRefresh(c, id)
 }
 
@@ -184,8 +184,8 @@ func (a *Application) PopularIndexHandler(c echo.Context) error {
 
 // Releases (/releases)
 func (a *Application) ReleasesIndexHandler(c echo.Context) error {
-	page := QueryParamIntDefault(c, "page", "1")
-	limit := QueryParamIntDefault(c, "limit", "25")
+	page := router.QueryParamIntDefault(c, "page", "1")
+	limit := router.QueryParamIntDefault(c, "limit", "25")
 	return a.ReleasesIndex(c, page, limit)
 }
 func (a *Application) ReleasesCreateHandler(c echo.Context) error {
@@ -220,20 +220,20 @@ func (a *Application) ReleasesDeleteHandler(c echo.Context) error {
 	return a.ReleasesDelete(c, id)
 }
 func (a *Application) ReleasesSearchHandler(c echo.Context) error {
-	page := QueryParamIntDefault(c, "page", "1")
-	limit := QueryParamIntDefault(c, "limit", "25")
-	source := QueryParamString(c, "source")
-	kind := QueryParamString(c, "kind")
-	resolution := QueryParamString(c, "resolution")
-	group := QueryParamString(c, "group")
-	website := QueryParamString(c, "website")
+	page := router.QueryParamIntDefault(c, "page", "1")
+	limit := router.QueryParamIntDefault(c, "limit", "25")
+	source := router.QueryParamString(c, "source")
+	kind := router.QueryParamString(c, "kind")
+	resolution := router.QueryParamString(c, "resolution")
+	group := router.QueryParamString(c, "group")
+	website := router.QueryParamString(c, "website")
 	return a.ReleasesSearch(c, page, limit, source, kind, resolution, group, website)
 }
 
 // Sources (/sources)
 func (a *Application) SourcesIndexHandler(c echo.Context) error {
-	page := QueryParamInt(c, "page")
-	limit := QueryParamInt(c, "limit")
+	page := router.QueryParamInt(c, "page")
+	limit := router.QueryParamInt(c, "limit")
 	return a.SourcesIndex(c, page, limit)
 }
 func (a *Application) SourcesShowHandler(c echo.Context) error {
@@ -242,17 +242,17 @@ func (a *Application) SourcesShowHandler(c echo.Context) error {
 }
 func (a *Application) SourcesReadHandler(c echo.Context) error {
 	id := c.Param("id")
-	categories := QueryParamString(c, "categories")
+	categories := router.QueryParamString(c, "categories")
 	return a.SourcesRead(c, id, categories)
 }
 func (a *Application) SourcesSearchHandler(c echo.Context) error {
 	id := c.Param("id")
-	q := QueryParamString(c, "q")
-	t := QueryParamString(c, "t")
+	q := router.QueryParamString(c, "q")
+	t := router.QueryParamString(c, "t")
 	return a.SourcesSearch(c, id, q, t)
 }
 func (a *Application) SourcesParseHandler(c echo.Context) error {
 	id := c.Param("id")
-	categories := QueryParamString(c, "categories")
+	categories := router.QueryParamString(c, "categories")
 	return a.SourcesParse(c, id, categories)
 }

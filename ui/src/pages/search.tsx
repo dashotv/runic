@@ -33,6 +33,7 @@ export const encodeSearchParams = params => createSearchParams(params);
 // TODO: useForm and @hookform/devtools, see: https://www.youtube.com/watch?v=sD9fZxMO1us
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [page, setPage] = useState(1);
   const [form, setForm] = useState<SearchForm>(
     Object.assign(formDefaults, {
       text: searchParams.get('text') || '',
@@ -44,9 +45,7 @@ const Search = () => {
       bluray: searchParams.get('bluray') === 'true',
     }),
   );
-  const [page, setPage] = useState(1);
-  // const [qs, setQs] = useState(queryString(form));
-  const { isFetching, data } = useSearchQuery(pagesize, (page - 1) * pagesize, searchParams.toString());
+  const { isFetching, data } = useSearchQuery(pagesize, (page - 1) * pagesize, form);
 
   const handleChange = useCallback((_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);

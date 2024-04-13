@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Indexer } from 'client';
+import { Indexer } from 'client/runic';
 import {
   Source,
   SourceCapsCategories,
   SourceCapsCategoriesCategory,
   SourceCapsCategoriesCategorySubcat,
-} from 'client/reader';
+} from 'client/runic/reader';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';

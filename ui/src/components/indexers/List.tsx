@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Indexer } from 'client';
+import { Indexer } from 'client/runic';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ClassIcon from '@mui/icons-material/Class';
