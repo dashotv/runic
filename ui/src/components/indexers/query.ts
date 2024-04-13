@@ -138,3 +138,9 @@ export const useIndexerSettingMutation = () => {
     },
   });
 };
+
+export const useIndexerRefreshMutation = () => {
+  return useMutation({
+    mutationFn: (id: string) => runic.IndexersRefresh({ id }),
+  });
+};

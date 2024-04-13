@@ -1,5 +1,4 @@
-import { Route, Routes, useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link, Route, Routes, useParams } from 'react-router-dom';
 
 import { Button, Grid } from '@mui/material';
 
@@ -20,6 +19,7 @@ const Popular = ({ mount }: { mount: string }) => {
 const PopularMap = ({ mount }: { mount: string }) => {
   const { interval } = useParams();
   const { isFetching, data } = usePopularQuery(interval || 'daily');
+
   return (
     <>
       <Container>

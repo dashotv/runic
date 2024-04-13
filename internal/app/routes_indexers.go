@@ -77,6 +77,11 @@ func (a *Application) IndexersRefresh(c echo.Context, id string) error {
 			return c.JSON(http.StatusInternalServerError, &Response{Error: true, Message: err.Error()})
 		}
 		return c.JSON(http.StatusOK, &Response{Error: false})
+	} else if id == "rift" {
+		if err := a.Workers.Enqueue(&ParseRift{}); err != nil {
+			return c.JSON(http.StatusInternalServerError, &Response{Error: true, Message: err.Error()})
+		}
+		return c.JSON(http.StatusOK, &Response{Error: false})
 	}
 
 	indexer, err := a.DB.IndexerByName(id)

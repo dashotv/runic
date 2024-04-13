@@ -7,6 +7,7 @@ import ClassIcon from '@mui/icons-material/Class';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import PlayLessonIcon from '@mui/icons-material/PlayLesson';
 import QueueIcon from '@mui/icons-material/Queue';
+import SyncIcon from '@mui/icons-material/Sync';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
@@ -21,6 +22,7 @@ import {
   useIndexerCreateMutation,
   useIndexerDeleteMutation,
   useIndexerMutation,
+  useIndexerRefreshMutation,
   useIndexerSettingMutation,
   useIndexersAllQuery,
 } from '.';
@@ -36,6 +38,7 @@ export const IndexersList = () => {
   const setting = useIndexerSettingMutation();
   const create = useIndexerCreateMutation();
   const destroy = useIndexerDeleteMutation();
+  const refresh = useIndexerRefreshMutation();
 
   const handleClose = (data?: Indexer) => {
     setSelected(undefined);
@@ -77,6 +80,9 @@ export const IndexersList = () => {
     if (!id) return;
     destroy.mutate(id);
   };
+  const handleRefresh = (id: string) => {
+    refresh.mutate(id);
+  };
 
   return (
     <>
@@ -89,6 +95,9 @@ export const IndexersList = () => {
               </Typography>
               <IconButton aria-label="refresh" color="primary" onClick={() => newIndexer()}>
                 <QueueIcon />
+              </IconButton>
+              <IconButton aria-label="refresh" color="primary" title="refresh all" onClick={() => handleRefresh('all')}>
+                <SyncIcon />
               </IconButton>
             </Stack>
           </Grid>
@@ -127,6 +136,14 @@ export const IndexersList = () => {
                   </IconButton>
                   <IconButton size="small" onClick={() => parse(row)} title="active">
                     <PlayLessonIcon color="primary" fontSize="small" />
+                  </IconButton>
+                  <IconButton
+                    aria-label="refresh"
+                    color="primary"
+                    title="refresh"
+                    onClick={() => row.name && handleRefresh(row.name)}
+                  >
+                    <SyncIcon />
                   </IconButton>
                   <IconButton size="small" onClick={() => deleteIndexer(row.id)} title="active">
                     <DeleteForeverIcon color="error" fontSize="small" />
