@@ -37,15 +37,15 @@ const queryClient = new QueryClient({
 const App = ({ mount }: { mount: string }) => {
   const tabsMap: RoutingTabsRoute[] = [
     {
-      label: 'Search',
-      to: '',
-      element: <Search />,
-    },
-    {
       label: 'Popular',
       to: 'popular',
       path: 'popular/*',
       element: <Popular mount={mount} />,
+    },
+    {
+      label: 'Search',
+      to: '',
+      element: <Search />,
     },
     {
       label: 'Releases',
