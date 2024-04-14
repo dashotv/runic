@@ -8,7 +8,7 @@ require (
 	github.com/dashotv/golem v0.14.20
 	github.com/dashotv/grimoire v0.5.4
 	github.com/dashotv/mercury v0.3.2
-	github.com/dashotv/minion v0.4.11
+	github.com/dashotv/minion v0.4.12
 	github.com/dashotv/rift v0.3.2
 	github.com/dotenv-org/godotenvvault v0.6.0
 	github.com/go-resty/resty/v2 v2.12.0
