@@ -1,25 +1,24 @@
 name: releases
 path: /releases
-model: "*Release"
 rest: true
+model: "*Release"
 routes:
   - name: search
     path: /search
-    result: "[]*Release"
     method: GET
     params:
       - name: page
         type: int
+        default: "1"
         query: true
-        default: 1
       - name: limit
         type: int
+        default: "25"
         query: true
-        default: 25
       - name: source
         type: string
         query: true
-      - name: kind # type is reserved word
+      - name: kind
         type: string
         query: true
       - name: resolution
@@ -31,3 +30,8 @@ routes:
       - name: website
         type: string
         query: true
+    result: "[]*Release"
+  - name: movies
+    path: /popular_movies
+    result: "[]*PopularMovie"
+    method: GET

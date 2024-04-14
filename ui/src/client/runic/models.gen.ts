@@ -22,6 +22,17 @@ export interface Popular {
   count?: number;
 }
 
+export interface PopularMovie {
+  id?: PopularMovieId;
+  count?: number;
+  verified?: number;
+}
+
+export interface PopularMovieId {
+  title?: string;
+  year?: number;
+}
+
 export interface PopularResponse {
   tv?: Popular[];
   anime?: Popular[];

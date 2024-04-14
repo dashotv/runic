@@ -28,6 +28,17 @@ type Popular struct { // struct
 	Count int    `bson:"count" json:"count"`
 }
 
+type PopularMovie struct { // struct
+	ID       *PopularMovieId `bson:"_id" json:"id"`
+	Count    int             `bson:"count" json:"count"`
+	Verified int             `bson:"verified" json:"verified"`
+}
+
+type PopularMovieId struct { // struct
+	Title string `bson:"title" json:"title"`
+	Year  int    `bson:"year" json:"year"`
+}
+
 type PopularResponse struct { // struct
 	Tv     []*Popular `bson:"tv" json:"tv"`
 	Anime  []*Popular `bson:"anime" json:"anime"`

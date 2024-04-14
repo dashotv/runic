@@ -1,0 +1,10 @@
+name: popular_movie
+type: struct
+fields:
+  - name: id
+    type: "*PopularMovieId"
+    bson: _id
+  - name: count
+    type: int
+  - name: verified
+    type: int

@@ -114,3 +114,32 @@ func (c *Connector) ReleasesPopularType(ctx context.Context, t string, date time
 
 	return results, nil
 }
+
+func (c *Connector) ReleasesPopularMovies() ([]*PopularMovie, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	defer TickTock("ReleasesPopularMovies")
+
+	date := time.Now().AddDate(0, 0, -30)
+	limit := 250
+	t := "movies"
+	p := []bson.M{
+		{"$match": bson.M{"type": t, "published_at": bson.M{"$gte": date}, "resolution": "1080"}},
+		{"$project": bson.M{"title": 1, "type": 1, "year": 1, "published": "$published_at", "verified": 1}},
+		{"$group": bson.M{"_id": bson.M{"title": "$title", "year": "$year"}, "count": bson.M{"$sum": 1}, "verified": bson.M{"$sum": bson.M{"$cond": bson.M{"if": "$verified", "then": 1, "else": 0}}}}},
+		{"$sort": bson.M{"count": -1}},
+		{"$limit": limit},
+	}
+
+	cursor, err := c.Release.Collection.Aggregate(ctx, p)
+	if err != nil {
+		return nil, fae.Wrap(err, "aggregating popular releases")
+	}
+
+	results := make([]*PopularMovie, limit)
+	if err = cursor.All(ctx, &results); err != nil {
+		return nil, fae.Wrap(err, "decoding popular releases")
+	}
+
+	return results, nil
+}

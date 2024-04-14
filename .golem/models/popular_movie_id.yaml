@@ -1,0 +1,7 @@
+name: popular_movie_id
+type: struct
+fields:
+  - name: title
+    type: string
+  - name: year
+    type: int

@@ -104,6 +104,7 @@ func (a *Application) Routes() {
 	releases.PATCH("/:id", a.ReleasesSettingsHandler)
 	releases.DELETE("/:id", a.ReleasesDeleteHandler)
 	releases.GET("/search", a.ReleasesSearchHandler)
+	releases.GET("/popular_movies", a.ReleasesMoviesHandler)
 
 	sources := a.Router.Group("/sources")
 	sources.GET("/", a.SourcesIndexHandler)
@@ -228,6 +229,9 @@ func (a *Application) ReleasesSearchHandler(c echo.Context) error {
 	group := router.QueryParamString(c, "group")
 	website := router.QueryParamString(c, "website")
 	return a.ReleasesSearch(c, page, limit, source, kind, resolution, group, website)
+}
+func (a *Application) ReleasesMoviesHandler(c echo.Context) error {
+	return a.ReleasesMovies(c)
 }
 
 // Sources (/sources)
