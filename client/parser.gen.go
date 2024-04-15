@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/dashotv/fae"
+	"github.com/dashotv/runic/internal/parser"
 )
 
 type ParserService struct {
@@ -19,20 +20,25 @@ func NewParserService(client *Client) *ParserService {
 	}
 }
 
-type ParserTitleRequest struct {
+type ParserParseRequest struct {
 	Title string `json:"title"`
 	Type  string `json:"type"`
 }
 
-func (s *ParserService) Title(ctx context.Context, req *ParserTitleRequest) (*Response, error) {
-	result := &Response{}
+type ParserParseResponse struct {
+	*Response
+	Result *parser.TorrentInfo `json:"result"`
+}
+
+func (s *ParserService) Parse(ctx context.Context, req *ParserParseRequest) (*ParserParseResponse, error) {
+	result := &ParserParseResponse{Response: &Response{}}
 	resp, err := s.client.Resty.R().
 		SetContext(ctx).
 		SetBody(req).
 		SetResult(result).
 		SetQueryParam("title", fmt.Sprintf("%v", req.Title)).
 		SetQueryParam("type", fmt.Sprintf("%v", req.Type)).
-		Get("/parser/title")
+		Get("/parser/parse")
 	if err != nil {
 		return nil, fae.Wrap(err, "failed to make request")
 	}
@@ -46,20 +52,25 @@ func (s *ParserService) Title(ctx context.Context, req *ParserTitleRequest) (*Re
 	return result, nil
 }
 
-type ParserParseRequest struct {
+type ParserTitleRequest struct {
 	Title string `json:"title"`
 	Type  string `json:"type"`
 }
 
-func (s *ParserService) Parse(ctx context.Context, req *ParserParseRequest) (*Response, error) {
-	result := &Response{}
+type ParserTitleResponse struct {
+	*Response
+	Result *parser.TorrentInfo `json:"result"`
+}
+
+func (s *ParserService) Title(ctx context.Context, req *ParserTitleRequest) (*ParserTitleResponse, error) {
+	result := &ParserTitleResponse{Response: &Response{}}
 	resp, err := s.client.Resty.R().
 		SetContext(ctx).
 		SetBody(req).
 		SetResult(result).
 		SetQueryParam("title", fmt.Sprintf("%v", req.Title)).
 		SetQueryParam("type", fmt.Sprintf("%v", req.Type)).
-		Get("/parser/parse")
+		Get("/parser/title")
 	if err != nil {
 		return nil, fae.Wrap(err, "failed to make request")
 	}

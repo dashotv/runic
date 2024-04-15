@@ -94,8 +94,8 @@ func (a *Application) Routes() {
 	indexers.GET("/refresh", a.IndexersRefreshHandler)
 
 	parser := a.Router.Group("/parser")
-	parser.GET("/title", a.ParserTitleHandler)
 	parser.GET("/parse", a.ParserParseHandler)
+	parser.GET("/title", a.ParserTitleHandler)
 
 	popular := a.Router.Group("/popular")
 	popular.GET("/:interval", a.PopularIndexHandler)
@@ -183,15 +183,15 @@ func (a *Application) IndexersRefreshHandler(c echo.Context) error {
 }
 
 // Parser (/parser)
-func (a *Application) ParserTitleHandler(c echo.Context) error {
-	title := router.QueryParamString(c, "title")
-	type_ := router.QueryParamString(c, "type")
-	return a.ParserTitle(c, title, type_)
-}
 func (a *Application) ParserParseHandler(c echo.Context) error {
 	title := router.QueryParamString(c, "title")
 	type_ := router.QueryParamString(c, "type")
 	return a.ParserParse(c, title, type_)
+}
+func (a *Application) ParserTitleHandler(c echo.Context) error {
+	title := router.QueryParamString(c, "title")
+	type_ := router.QueryParamString(c, "type")
+	return a.ParserTitle(c, title, type_)
 }
 
 // Popular (/popular)
