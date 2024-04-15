@@ -1,0 +1,25 @@
+name: parser
+path: /parser
+routes:
+  - name: parse
+    path: /parse
+    method: GET
+    result: "*parser.TorrentInfo"
+    params:
+      - name: title
+        type: string
+        query: true
+      - name: type
+        type: string
+        query: true
+  - name: title
+    path: /title
+    method: GET
+    result: "*parser.TorrentInfo"
+    params:
+      - name: title
+        type: string
+        query: true
+      - name: type
+        type: string
+        query: true

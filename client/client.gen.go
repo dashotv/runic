@@ -17,6 +17,7 @@ type Client struct {
 
 	// Services corresponding to the different endpoints (groups/routes)
 	Indexers *IndexersService
+	Parser   *ParserService
 	Popular  *PopularService
 	Releases *ReleasesService
 	Sources  *SourcesService
@@ -35,6 +36,7 @@ func New(remoteHost string) *Client {
 		Resty:      resty.New().SetBaseURL(remoteHost),
 	}
 	c.Indexers = NewIndexersService(c)
+	c.Parser = NewParserService(c)
 	c.Popular = NewPopularService(c)
 	c.Releases = NewReleasesService(c)
 	c.Sources = NewSourcesService(c)

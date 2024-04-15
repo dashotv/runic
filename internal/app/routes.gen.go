@@ -93,6 +93,10 @@ func (a *Application) Routes() {
 	indexers.DELETE("/:id", a.IndexersDeleteHandler)
 	indexers.GET("/refresh", a.IndexersRefreshHandler)
 
+	parser := a.Router.Group("/parser")
+	parser.GET("/title", a.ParserTitleHandler)
+	parser.GET("/parse", a.ParserParseHandler)
+
 	popular := a.Router.Group("/popular")
 	popular.GET("/:interval", a.PopularIndexHandler)
 
@@ -120,6 +124,7 @@ func (a *Application) indexHandler(c echo.Context) error {
 		"name": "runic",
 		"routes": router.H{
 			"indexers": "/indexers",
+			"parser":   "/parser",
 			"popular":  "/popular",
 			"releases": "/releases",
 			"sources":  "/sources",
@@ -175,6 +180,18 @@ func (a *Application) IndexersDeleteHandler(c echo.Context) error {
 func (a *Application) IndexersRefreshHandler(c echo.Context) error {
 	id := router.QueryParamString(c, "id")
 	return a.IndexersRefresh(c, id)
+}
+
+// Parser (/parser)
+func (a *Application) ParserTitleHandler(c echo.Context) error {
+	title := router.QueryParamString(c, "title")
+	type_ := router.QueryParamString(c, "type")
+	return a.ParserTitle(c, title, type_)
+}
+func (a *Application) ParserParseHandler(c echo.Context) error {
+	title := router.QueryParamString(c, "title")
+	type_ := router.QueryParamString(c, "type")
+	return a.ParserParse(c, title, type_)
 }
 
 // Popular (/popular)

@@ -123,3 +123,16 @@ func Parse(title, catType string) (*TorrentInfo, error) {
 	}
 	return info, nil
 }
+
+func ParseTitle(title, catType string) (*TorrentInfo, error) {
+	info := &TorrentInfo{}
+	i, params := parseTitle(title, catType)
+	if i >= 0 {
+		info.Title = CleanTitle(params["title"])
+		info.setSeason(params["season"])
+		info.setEpisode(params["episode"])
+		info.setYear(params["year"])
+		// info.Volume = params["volume"]
+	}
+	return info, nil
+}
