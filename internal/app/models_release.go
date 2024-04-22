@@ -98,7 +98,7 @@ func (c *Connector) ReleasesPopularType(ctx context.Context, t string, date time
 		{"$project": bson.M{"title": 1, "type": 1, "year": 1, "published": "$published_at"}},
 		{"$match": bson.M{"title": bson.M{"$nin": bson.A{"", nil}}, "type": t, "published": bson.M{"$gte": date}}},
 		{"$group": bson.M{"_id": "$title", "type": bson.M{"$first": "$type"}, "year": bson.M{"$first": "$year"}, "count": bson.M{"$sum": 1}}},
-		{"$sort": bson.M{"count": -1}},
+		{"$sort": bson.M{"count": -1, "_id": 1}},
 		{"$limit": limit},
 	}
 
