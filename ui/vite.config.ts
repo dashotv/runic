@@ -38,6 +38,7 @@ export default defineConfig({
     outDir: '../static',
   },
   server: {
+    port: 3002,
     proxy: {
       '/api/runic': {
         target: 'http://localhost:59002',
