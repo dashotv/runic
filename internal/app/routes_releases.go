@@ -111,12 +111,3 @@ func (a *Application) ReleasesDelete(c echo.Context, id string) error {
 	return c.JSON(http.StatusNotImplemented, &Response{Error: true, Message: "not implmented"})
 	// return c.JSON(http.StatusOK, &Response{Error: false})
 }
-
-func (a *Application) ReleasesMovies(c echo.Context) error {
-	list, err := a.DB.ReleasesPopularMovies()
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, &Response{Error: true, Message: err.Error()})
-	}
-
-	return c.JSON(http.StatusOK, &Response{Error: false, Result: list})
-}

@@ -98,6 +98,7 @@ func (a *Application) Routes() {
 	parser.GET("/title", a.ParserTitleHandler)
 
 	popular := a.Router.Group("/popular")
+	popular.GET("/movies", a.PopularMoviesHandler)
 	popular.GET("/:interval", a.PopularIndexHandler)
 
 	releases := a.Router.Group("/releases")
@@ -108,7 +109,6 @@ func (a *Application) Routes() {
 	releases.PATCH("/:id", a.ReleasesSettingsHandler)
 	releases.DELETE("/:id", a.ReleasesDeleteHandler)
 	releases.GET("/search", a.ReleasesSearchHandler)
-	releases.GET("/popular_movies", a.ReleasesMoviesHandler)
 
 	sources := a.Router.Group("/sources")
 	sources.GET("/", a.SourcesIndexHandler)
@@ -195,6 +195,9 @@ func (a *Application) ParserTitleHandler(c echo.Context) error {
 }
 
 // Popular (/popular)
+func (a *Application) PopularMoviesHandler(c echo.Context) error {
+	return a.PopularMovies(c)
+}
 func (a *Application) PopularIndexHandler(c echo.Context) error {
 	interval := c.Param("interval")
 	return a.PopularIndex(c, interval)
@@ -246,9 +249,6 @@ func (a *Application) ReleasesSearchHandler(c echo.Context) error {
 	group := router.QueryParamString(c, "group")
 	website := router.QueryParamString(c, "website")
 	return a.ReleasesSearch(c, page, limit, source, kind, resolution, group, website)
-}
-func (a *Application) ReleasesMoviesHandler(c echo.Context) error {
-	return a.ReleasesMovies(c)
 }
 
 // Sources (/sources)

@@ -121,7 +121,7 @@ func (c *Connector) ReleasesPopularMovies() ([]*PopularMovie, error) {
 	defer TickTock("ReleasesPopularMovies")
 
 	date := time.Now().AddDate(0, 0, -30)
-	limit := 250
+	limit := 25
 	t := "movies"
 	p := []bson.M{
 		{"$match": bson.M{"type": t, "published_at": bson.M{"$gte": date}, "resolution": "1080"}},

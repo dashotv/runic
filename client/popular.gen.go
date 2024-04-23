@@ -19,6 +19,30 @@ func NewPopularService(client *Client) *PopularService {
 	}
 }
 
+type PopularMoviesResponse struct {
+	*Response
+	Result []*PopularMovie `json:"result"`
+}
+
+func (s *PopularService) Movies(ctx context.Context) (*PopularMoviesResponse, error) {
+	result := &PopularMoviesResponse{Response: &Response{}}
+	resp, err := s.client.Resty.R().
+		SetContext(ctx).
+		SetResult(result).
+		Get("/popular/movies")
+	if err != nil {
+		return nil, fae.Wrap(err, "failed to make request")
+	}
+	if !resp.IsSuccess() {
+		return nil, fae.Errorf("%d: %v", resp.StatusCode(), resp.String())
+	}
+	if result.Error {
+		return nil, fae.New(result.Message)
+	}
+
+	return result, nil
+}
+
 type PopularIndexRequest struct {
 	Interval string `json:"interval"`
 }

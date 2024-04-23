@@ -31,7 +31,3 @@ routes:
         type: string
         query: true
     result: "[]*Release"
-  - name: movies
-    path: /popular_movies
-    result: "[]*PopularMovie"
-    method: GET

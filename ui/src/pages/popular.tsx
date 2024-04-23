@@ -4,8 +4,7 @@ import { Button, Grid } from '@mui/material';
 
 import { Container, LoadingIndicator } from '@dashotv/components';
 
-import { usePopularQuery } from 'components/popular';
-import { PopularList } from 'components/popular/list';
+import { PopularList, usePopularQuery } from 'components/popular';
 
 const Popular = ({ mount }: { mount: string }) => {
   return (

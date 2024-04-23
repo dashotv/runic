@@ -1,10 +1,14 @@
 name: popular
 path: /popular
 routes:
+  - name: movies
+    path: /movies
+    method: GET
+    result: "[]*PopularMovie"
   - name: index
     path: /:interval
     method: GET
-    result: "*PopularResponse"
     params:
       - name: interval
         type: string
+    result: "*PopularResponse"
