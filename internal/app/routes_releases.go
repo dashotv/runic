@@ -63,14 +63,12 @@ func (a *Application) ReleasesCreate(c echo.Context, subject *Release) error {
 
 // GET /releases/:id
 func (a *Application) ReleasesShow(c echo.Context, id string) error {
-	// subject, err := a.DB.Releases.Get(id)
-	// if err != nil {
-	//     return c.JSON(http.StatusNotFound, &Response{Error: true, Message: "not found"})
-	// }
+	subject, err := a.DB.Release.Get(id, &Release{})
+	if err != nil {
+		return c.JSON(http.StatusNotFound, &Response{Error: true, Message: "not found"})
+	}
 
-	// TODO: implement the route
-	return c.JSON(http.StatusNotImplemented, &Response{Error: true, Message: "not implmented"})
-	// return c.JSON(http.StatusOK, &Response{Error: false})
+	return c.JSON(http.StatusOK, &Response{Error: false, Result: subject})
 }
 
 // PUT /releases/:id
