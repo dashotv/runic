@@ -51,6 +51,7 @@ func connection[T mgm.Model](name string) (*grimoire.Store[T], error) {
 }
 
 func NewConnector(app *Application) (*Connector, error) {
+
 	indexer, err := connection[*Indexer]("indexer")
 	if err != nil {
 		return nil, err
@@ -72,6 +73,16 @@ func NewConnector(app *Application) (*Connector, error) {
 	}
 
 	return c, nil
+}
+
+type Batch struct { // struct
+	Type   string   `bson:"type" json:"type"`
+	Titles []string `bson:"titles" json:"titles"`
+}
+
+type BatchResult struct { // struct
+	Title string              `bson:"title" json:"title"`
+	Info  *parser.TorrentInfo `bson:"info" json:"info"`
 }
 
 type Indexer struct { // model

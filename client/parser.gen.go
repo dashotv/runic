@@ -83,3 +83,32 @@ func (s *ParserService) Title(ctx context.Context, req *ParserTitleRequest) (*Pa
 
 	return result, nil
 }
+
+type ParserBatchRequest struct {
+	Batch *Batch `json:"batch"`
+}
+
+type ParserBatchResponse struct {
+	*Response
+	Result []*BatchResult `json:"result"`
+}
+
+func (s *ParserService) Batch(ctx context.Context, req *ParserBatchRequest) (*ParserBatchResponse, error) {
+	result := &ParserBatchResponse{Response: &Response{}}
+	resp, err := s.client.Resty.R().
+		SetContext(ctx).
+		SetBody(req).
+		SetResult(result).
+		Post("/parser/batch")
+	if err != nil {
+		return nil, fae.Wrap(err, "failed to make request")
+	}
+	if !resp.IsSuccess() {
+		return nil, fae.Errorf("%d: %v", resp.StatusCode(), resp.String())
+	}
+	if result.Error {
+		return nil, fae.New(result.Message)
+	}
+
+	return result, nil
+}

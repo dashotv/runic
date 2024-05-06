@@ -96,6 +96,7 @@ func (a *Application) Routes() {
 	parser := a.Router.Group("/parser")
 	parser.GET("/parse", a.ParserParseHandler)
 	parser.GET("/title", a.ParserTitleHandler)
+	parser.POST("/batch", a.ParserBatchHandler)
 
 	popular := a.Router.Group("/popular")
 	popular.GET("/movies", a.PopularMoviesHandler)
@@ -192,6 +193,13 @@ func (a *Application) ParserTitleHandler(c echo.Context) error {
 	title := router.QueryParamString(c, "title")
 	type_ := router.QueryParamString(c, "type")
 	return a.ParserTitle(c, title, type_)
+}
+func (a *Application) ParserBatchHandler(c echo.Context) error {
+	batch := &Batch{}
+	if err := c.Bind(batch); err != nil {
+		return err
+	}
+	return a.ParserBatch(c, batch)
 }
 
 // Popular (/popular)

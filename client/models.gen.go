@@ -9,6 +9,16 @@ import (
 	"github.com/dashotv/runic/internal/parser"
 )
 
+type Batch struct { // struct
+	Type   string   `bson:"type" json:"type"`
+	Titles []string `bson:"titles" json:"titles"`
+}
+
+type BatchResult struct { // struct
+	Title string              `bson:"title" json:"title"`
+	Info  *parser.TorrentInfo `bson:"info" json:"info"`
+}
+
 type Indexer struct { // model
 	grimoire.Document `bson:",inline"` // includes default model settings
 	//ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`

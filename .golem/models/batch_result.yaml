@@ -1,0 +1,7 @@
+name: batch_result
+type: struct
+fields:
+    - name: title
+      type: string
+    - name: info
+      type: '*parser.TorrentInfo'

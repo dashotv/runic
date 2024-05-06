@@ -4,7 +4,6 @@ routes:
   - name: parse
     path: /parse
     method: GET
-    result: "*parser.TorrentInfo"
     params:
       - name: title
         type: string
@@ -12,10 +11,10 @@ routes:
       - name: type
         type: string
         query: true
+    result: "*parser.TorrentInfo"
   - name: title
     path: /title
     method: GET
-    result: "*parser.TorrentInfo"
     params:
       - name: title
         type: string
@@ -23,3 +22,12 @@ routes:
       - name: type
         type: string
         query: true
+    result: "*parser.TorrentInfo"
+  - name: batch
+    path: /batch
+    method: POST
+    result: "[]*BatchResult"
+    params:
+      - name: batch
+        type: "*Batch"
+        bind: true
