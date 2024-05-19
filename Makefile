@@ -35,7 +35,7 @@ dotenv:
 	npx @dotenvx/dotenvx encrypt
 
 ui: clean
-	cd ui && yarn build
+	cd ui && npm run build
 
 deps:
 	go install golang.org/x/tools/cmd/goimports@latest
