@@ -162,7 +162,7 @@ func processRift(resp *rift.VideoIndexResponse) error {
 			Type:        "anime",
 			Downloader:  "metube",
 			Download:    "metube://" + video.Download,
-			View:        video.Source,
+			View:        video.View,
 			PublishedAt: time.Now(),
 		}
 
