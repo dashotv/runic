@@ -38,16 +38,17 @@ export default defineConfig({
   },
   server: {
     port: 3002,
+    host: true,
     proxy: {
       '/api/runic': {
-        target: 'http://localhost:59002',
+        target: 'http://host.docker.internal:59002',
         changeOrigin: true,
         secure: false,
         ws: true,
         rewrite: path => path.replace(/^\/api\/runic/, ''),
       },
       '/api/scry': {
-        target: 'http://localhost:59003',
+        target: 'http://host.docker.internal:59003',
         changeOrigin: true,
         secure: false,
         ws: true,
