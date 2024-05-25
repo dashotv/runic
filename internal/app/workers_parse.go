@@ -137,7 +137,7 @@ func processRift(resp *rift.VideoIndexResponse) error {
 		// app.Log.Debugf("processRift: %s %02dx%02d", video.Title, video.Season, video.Episode)
 		// TODO: change this to a unique index?
 		// Skip if it exists
-		count, err := app.DB.Release.Query().Where("checksum", video.DisplayId).Count()
+		count, err := app.DB.Release.Query().Where("checksum", video.DisplayID).Count()
 		if err != nil {
 			return err
 		}
@@ -155,13 +155,14 @@ func processRift(resp *rift.VideoIndexResponse) error {
 			Title:       video.Title,
 			Season:      season,
 			Episode:     video.Episode,
-			Checksum:    video.DisplayId,
+			Checksum:    video.DisplayID,
 			Size:        video.Size,
 			Resolution:  fmt.Sprintf("%d", video.Resolution),
 			Source:      "rift",
 			Type:        "anime",
 			Downloader:  "metube",
 			Download:    "metube://" + video.Download,
+			Website:     video.Source,
 			View:        video.View,
 			PublishedAt: time.Now(),
 		}
