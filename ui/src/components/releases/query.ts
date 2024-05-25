@@ -59,7 +59,7 @@ export const getSearch = async (limit: number, start: number, search: SearchForm
     season: search.season ? Number(search.season) : -1,
     episode: search.episode ? Number(search.episode) : -1,
     group: search.group ? search.group : '',
-    website: '',
+    website: search.website ? search.website : '',
     type: search.type ? search.type : '',
     source: search.source ? search.source : '',
     resolution: search.resolution ? Number(search.resolution) : -1,
