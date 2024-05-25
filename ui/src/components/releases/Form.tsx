@@ -184,7 +184,7 @@ export function ReleasesEmbeddedForm({
       } else if (part.match(/^\d{4}$/)) {
         form.year = part;
       } else {
-        plain.push(part);
+        if (part !== '' && part !== ' ') plain.push(part);
       }
     }
     form.text = plain.join(' ');
@@ -201,15 +201,7 @@ export function ReleasesEmbeddedForm({
       <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit(submit)}>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
           <Text name="text" label="search" control={control} />
-          {/* <Text name="year" control={control} />
-          <Text name="season" control={control} />
-          <Text name="episode" control={control} />
-          <Text name="group" control={control} />
-          <Text name="website" control={control} />
-          <Select name="resolution" label="Rez" control={control} options={Resolutions} />
-          <Select name="source" control={control} options={indexers || []} />
-          <Select name="type" control={control} options={ReleaseTypes} /> */}
-          <Stack sx={{ pt: 1, pl: 2 }} direction="row" spacing={1}>
+          <Stack sx={{ pt: 1, pl: 2 }} direction="row" spacing={0}>
             <IconCheckbox
               name="exact"
               sx={{ mr: 0 }}
@@ -238,11 +230,8 @@ export function ReleasesEmbeddedForm({
               checkedIcon={<SportsBarIcon />}
               control={control}
             />
-            <Button variant="contained" type="submit">
-              Go
-            </Button>
+            <Button type="submit">Go</Button>
             <Button
-              variant="contained"
               onClick={() => {
                 reset && reset();
               }}

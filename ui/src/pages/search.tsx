@@ -2,10 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { createSearchParams, useSearchParams } from 'react-router-dom';
 
-import { Box, Button } from '@mui/material';
-import Pagination from '@mui/material/Pagination';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
+import { Box, Button, Pagination, Paper, Stack } from '@mui/material';
 
 import { Container, LoadingIndicator } from '@dashotv/components';
 
