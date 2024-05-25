@@ -1,4 +1,5 @@
 import * as runic from 'client/runic';
+import { Indexer } from 'client/runic';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -27,6 +28,15 @@ export const getRunicParse = async (id: string, cats: number[]) => {
 export const getIndexersAll = async (page: number = 1, limit: number = 50) => {
   const response = await runic.IndexersIndex({ page, limit });
   return response;
+};
+export const getIndexersOptions = async (page: number = 1, limit: number = 50) => {
+  const response = await runic.IndexersIndex({ page, limit });
+  const options = response.result
+    .filter((indexer: Indexer) => indexer.name)
+    .map((indexer: Indexer) => {
+      return { label: indexer.name!, value: indexer.name! };
+    });
+  return [{ label: 'All', value: '' }, ...options];
 };
 
 export const getIndexer = async (id: string) => {
@@ -82,6 +92,14 @@ export const useIndexersAllQuery = () =>
   useQuery({
     queryKey: ['indexers', 'all'],
     queryFn: () => getIndexersAll(),
+    placeholderData: previousData => previousData,
+    retry: false,
+  });
+
+export const useIndexersOptionsQuery = () =>
+  useQuery({
+    queryKey: ['indexers', 'options'],
+    queryFn: () => getIndexersOptions(),
     placeholderData: previousData => previousData,
     retry: false,
   });
