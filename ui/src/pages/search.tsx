@@ -9,6 +9,7 @@ import Stack from '@mui/material/Stack';
 
 import { Container, LoadingIndicator } from '@dashotv/components';
 
+import { useIndexersOptionsQuery } from 'components/indexers';
 import { ReleaseList, ReleasesForm, SearchForm, useSearchQuery } from 'components/releases';
 
 const pagesize = 25;
@@ -45,6 +46,7 @@ const Search = () => {
     }),
   );
   const { isFetching, data } = useSearchQuery(pagesize, (page - 1) * pagesize, form);
+  const { data: indexers } = useIndexersOptionsQuery();
   const encodeSearchParams = params => createSearchParams(params);
 
   const handleChange = useCallback((_event: React.ChangeEvent<unknown>, value: number) => {
@@ -81,10 +83,13 @@ const Search = () => {
       </Helmet>
 
       <Container>
+        {isFetching && <LoadingIndicator />}
         <Paper sx={{ p: 1, mb: 2, width: '100%' }}>
-          {isFetching && <LoadingIndicator />}
-          <ReleasesForm form={form} setForm={setForm} reset={reset} />
+          <ReleasesForm form={form} setForm={setForm} reset={reset} indexers={indexers} />
         </Paper>
+        {/* <Paper sx={{ p: 1, mb: 2, width: '100%' }}>
+          <ReleasesEmbeddedForm form={form} setForm={setForm} reset={reset} indexers={indexers} />
+        </Paper> */}
       </Container>
 
       <Container>
