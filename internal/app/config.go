@@ -31,6 +31,9 @@ type Config struct {
 	// Models (Database)
 	Connections ConnectionSet `env:"CONNECTIONS"`
 
+	// Cache
+	RedisAddress string `env:"REDIS_ADDRESS"`
+
 	// Router Auth
 	Auth           bool   `env:"AUTH" envDefault:"false"`
 	ClerkSecretKey string `env:"CLERK_SECRET_KEY"`

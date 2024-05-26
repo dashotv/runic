@@ -73,6 +73,13 @@ func setupWorkers(app *Application) error {
 		return fae.Wrap(err, "registering worker: parse_rift_all (ParseRiftAll)")
 	}
 
+	if err := minion.Register[*ReleasesPopular](m, &ReleasesPopular{}); err != nil {
+		return fae.Wrap(err, "registering worker: releases_popular (ReleasesPopular)")
+	}
+	if _, err := m.Schedule("0 */5 * * * *", &ReleasesPopular{}); err != nil {
+		return fae.Wrap(err, "scheduling worker: releases_popular (ReleasesPopular)")
+	}
+
 	if err := minion.Register[*UpdateIndexes](m, &UpdateIndexes{}); err != nil {
 		return fae.Wrap(err, "registering worker: update_indexes (UpdateIndexes)")
 	}

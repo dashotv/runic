@@ -44,6 +44,9 @@ type Application struct {
 	// Workers
 	Workers *minion.Minion
 
+	//Cache
+	Cache *Cache
+
 	//golem:template:app/app_partial_definitions
 
 }
@@ -73,6 +76,8 @@ func Start() error {
 			return err
 		}
 	}
+
+	ctx = ContextSet(ctx, "app", app)
 
 	for _, f := range starters {
 		if err := f(ctx, app); err != nil {

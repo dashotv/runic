@@ -1,7 +1,9 @@
 package app
 
 import (
+	"cmp"
 	"context"
+	"slices"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -78,7 +80,7 @@ func (c *Connector) ReleasesPopular(interval string) (map[string][]*Popular, err
 		return nil, fae.Errorf("invalid interval: %s", interval)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	date := time.Now().AddDate(0, 0, -i)
@@ -98,7 +100,7 @@ func (c *Connector) ReleasesPopularType(ctx context.Context, t string, date time
 		{"$match": bson.M{"title": bson.M{"$nin": bson.A{"", nil}}, "type": t, "published_at": bson.M{"$gte": date}}},
 		{"$project": bson.M{"title": 1, "type": 1, "year": 1}},
 		{"$group": bson.M{"_id": "$title", "title": bson.M{"$first": "$title"}, "type": bson.M{"$first": "$type"}, "year": bson.M{"$first": "$year"}, "count": bson.M{"$sum": 1}}},
-		{"$sort": bson.M{"count": -1, "title": 1}},
+		{"$sort": bson.M{"count": -1}},
 		{"$limit": limit},
 	}
 
@@ -111,6 +113,15 @@ func (c *Connector) ReleasesPopularType(ctx context.Context, t string, date time
 	if err = cursor.All(ctx, &results); err != nil {
 		return nil, fae.Wrap(err, "decoding popular releases")
 	}
+
+	// HACK: sort by count and title in aggregate sometimes fucks up and sorts by title only
+	slices.SortFunc(results, func(a, b *Popular) int {
+		if n := cmp.Compare(b.Count, a.Count); n != 0 {
+			return n
+		}
+		// If counts are equal, order by title
+		return cmp.Compare(a.Title, b.Title)
+	})
 
 	return results, nil
 }
