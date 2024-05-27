@@ -11,6 +11,7 @@ import (
 
 	"github.com/dashotv/fae"
 	"github.com/dashotv/mercury"
+	rift "github.com/dashotv/rift/client"
 )
 
 func init() {
@@ -47,10 +48,11 @@ func checkEvents(app *Application) error {
 }
 
 type Events struct {
-	App      *Application
-	Merc     *mercury.Mercury
-	Log      *zap.SugaredLogger
-	Releases chan *Release
+	App       *Application
+	Merc      *mercury.Mercury
+	Log       *zap.SugaredLogger
+	Releases  chan *Release
+	RiftVideo chan *rift.Video
 }
 
 func NewEvents(app *Application) (*Events, error) {
@@ -60,13 +62,18 @@ func NewEvents(app *Application) (*Events, error) {
 	}
 
 	e := &Events{
-		App:      app,
-		Merc:     m,
-		Log:      app.Log.Named("events"),
-		Releases: make(chan *Release),
+		App:       app,
+		Merc:      m,
+		Log:       app.Log.Named("events"),
+		Releases:  make(chan *Release),
+		RiftVideo: make(chan *rift.Video),
 	}
 
 	if err := e.Merc.Sender("runic.releases", e.Releases); err != nil {
+		return nil, err
+	}
+
+	if err := e.Merc.Receiver("rift.video", e.RiftVideo); err != nil {
 		return nil, err
 	}
 	return e, nil
@@ -74,7 +81,15 @@ func NewEvents(app *Application) (*Events, error) {
 
 func (e *Events) Start() error {
 	e.Log.Debugf("starting events...")
-	// no receivers
+	go func() {
+		// wire up receivers
+		for {
+			select {
+			case m := <-e.RiftVideo:
+				onRiftVideo(e.App, m)
+			}
+		}
+	}()
 	return nil
 }
 

@@ -135,41 +135,49 @@ func getRiftAll(ctx context.Context) error {
 func processRift(resp *rift.VideoIndexResponse) error {
 	for _, video := range resp.Result {
 		// app.Log.Debugf("processRift: %s %02dx%02d", video.Title, video.Season, video.Episode)
-		// TODO: change this to a unique index?
-		// Skip if it exists
-		count, err := app.DB.Release.Query().Where("checksum", video.DisplayID).Count()
-		if err != nil {
+		if err := processRiftVideo(video); err != nil {
 			return err
 		}
-		if count > 0 {
-			continue
-		}
+	}
 
-		// log.Debugf("video: %s", video.Title)
-		season := 1
-		if video.Season != 0 {
-			season = video.Season
-		}
+	return nil
+}
 
-		result := &Release{
-			Title:       video.Title,
-			Season:      season,
-			Episode:     video.Episode,
-			Checksum:    video.DisplayID,
-			Size:        video.Size,
-			Resolution:  fmt.Sprintf("%d", video.Resolution),
-			Source:      "rift",
-			Type:        "anime",
-			Downloader:  "metube",
-			Download:    "metube://" + video.Download,
-			Website:     video.Source,
-			View:        video.View,
-			PublishedAt: time.Now(),
-		}
+func processRiftVideo(video *rift.Video) error {
+	// TODO: change this to a unique index?
+	// Skip if it exists
+	count, err := app.DB.Release.Query().Where("checksum", video.DisplayID).Count()
+	if err != nil {
+		return err
+	}
+	if count > 0 {
+		return nil
+	}
 
-		if err := app.DB.Release.Save(result); err != nil {
-			return err
-		}
+	// log.Debugf("video: %s", video.Title)
+	season := 1
+	if video.Season != 0 {
+		season = video.Season
+	}
+
+	result := &Release{
+		Title:       video.Title,
+		Season:      season,
+		Episode:     video.Episode,
+		Checksum:    video.DisplayID,
+		Size:        video.Size,
+		Resolution:  fmt.Sprintf("%d", video.Resolution),
+		Source:      "rift",
+		Type:        "anime",
+		Downloader:  "metube",
+		Download:    "metube://" + video.Download,
+		Website:     video.Source,
+		View:        video.View,
+		PublishedAt: time.Now(),
+	}
+
+	if err := app.DB.Release.Save(result); err != nil {
+		return err
 	}
 
 	return nil

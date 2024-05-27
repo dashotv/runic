@@ -1,0 +1,4 @@
+name: rift_video
+channel: rift.video
+receiver: true
+existing_payload: rift.Video

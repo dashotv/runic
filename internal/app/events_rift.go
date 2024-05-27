@@ -1,0 +1,13 @@
+package app
+
+import (
+	"github.com/dashotv/fae"
+	rift "github.com/dashotv/rift/client"
+)
+
+func onRiftVideo(_ *Application, msg *rift.Video) error {
+	if err := processRiftVideo(msg); err != nil {
+		return fae.Wrap(err, "processing rift video")
+	}
+	return nil
+}
