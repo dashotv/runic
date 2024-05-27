@@ -5,7 +5,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/dashotv/runic/internal/parser"
+	"github.com/dashotv/runic/parser"
 )
 
 // GET /parser/parse

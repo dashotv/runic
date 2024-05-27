@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/dashotv/fae"
-	"github.com/dashotv/runic/internal/parser"
+	"github.com/dashotv/runic/parser"
 )
 
 type ParserService struct {

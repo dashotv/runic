@@ -8,7 +8,7 @@ import (
 
 	"github.com/dashotv/grimoire"
 	"github.com/dashotv/runic/internal/newznab"
-	"github.com/dashotv/runic/internal/parser"
+	"github.com/dashotv/runic/parser"
 	"github.com/kamva/mgm/v3"
 )
 
