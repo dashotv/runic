@@ -24,7 +24,7 @@ type Indexer struct { // model
 	//ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
 	//CreatedAt time.Time          `bson:"created_at" json:"created_at"`
 	//UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
-	Name        string    `bson:"name" json:"name"`
+	Name        string    `bson:"name" json:"name" grimoire:"index"`
 	URL         string    `bson:"url" json:"url"`
 	Active      bool      `bson:"active" json:"active"`
 	Categories  []int     `bson:"categories" json:"categories"`
@@ -60,8 +60,8 @@ type Release struct { // model
 	//ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
 	//CreatedAt time.Time          `bson:"created_at" json:"created_at"`
 	//UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
-	Type        string              `bson:"type" json:"type"`
-	Source      string              `bson:"source" json:"source"`
+	Type        string              `bson:"type" json:"type" grimoire:"index"`
+	Source      string              `bson:"source" json:"source" grimoire:"index"`
 	Title       string              `bson:"title" json:"title"`
 	Year        int                 `bson:"year" json:"year"`
 	Description string              `bson:"description" json:"description"`

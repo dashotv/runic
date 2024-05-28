@@ -7,8 +7,10 @@ imports:
 fields:
   - name: type
     type: string
+    index: true
   - name: source
     type: string
+    index: true
   - name: title
     type: string
   - name: year

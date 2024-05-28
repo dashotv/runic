@@ -3,6 +3,7 @@ type: model
 fields:
   - name: name
     type: string
+    index: true
   - name: url
     type: string
   - name: active
