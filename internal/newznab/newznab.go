@@ -281,6 +281,8 @@ func (c *Client) process(vals url.Values, path string) ([]*NZB, error) {
 			case "infohash":
 				nzb.InfoHash = attr.Value
 				nzb.IsTorrent = true
+			case "magneturl":
+				nzb.DownloadURL = attr.Value
 			case "genre":
 				nzb.Genre = attr.Value
 			case "tvdbid":
