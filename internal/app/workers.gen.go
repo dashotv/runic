@@ -51,18 +51,20 @@ func setupWorkers(app *Application) error {
 	// an example of the subscription function and the basic setup instructions
 	// are included at the end of this file.
 
-	if err := minion.Register[*ParseActive](m, &ParseActive{}); err != nil {
+	m.Queue("scraper", 1, 1, 3)
+
+	if err := minion.RegisterWithQueue[*ParseActive](m, &ParseActive{}, "parser"); err != nil {
 		return fae.Wrap(err, "registering worker: parse_active (ParseActive)")
 	}
 	if _, err := m.Schedule("0 */15 * * * *", &ParseActive{}); err != nil {
 		return fae.Wrap(err, "scheduling worker: parse_active (ParseActive)")
 	}
 
-	if err := minion.Register[*ParseIndexer](m, &ParseIndexer{}); err != nil {
+	if err := minion.RegisterWithQueue[*ParseIndexer](m, &ParseIndexer{}, "parser"); err != nil {
 		return fae.Wrap(err, "registering worker: parse_indexer (ParseIndexer)")
 	}
 
-	if err := minion.Register[*ParseRift](m, &ParseRift{}); err != nil {
+	if err := minion.RegisterWithQueue[*ParseRift](m, &ParseRift{}, "parser"); err != nil {
 		return fae.Wrap(err, "registering worker: parse_rift (ParseRift)")
 	}
 	if _, err := m.Schedule("0 */15 * * * *", &ParseRift{}); err != nil {

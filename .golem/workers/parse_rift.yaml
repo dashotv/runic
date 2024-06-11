@@ -1,2 +1,3 @@
 name: parse_rift
+queue: parser
 schedule: "0 */15 * * * *"
