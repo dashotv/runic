@@ -1,4 +1,3 @@
-name: scraper
+name: parser
 concurrency: 2
 buffer: 10
-interval: 1

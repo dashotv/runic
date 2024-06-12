@@ -51,7 +51,7 @@ func setupWorkers(app *Application) error {
 	// an example of the subscription function and the basic setup instructions
 	// are included at the end of this file.
 
-	m.Queue("scraper", 2, 10, 1)
+	m.Queue("parser", 2, 10, 0)
 
 	if err := minion.RegisterWithQueue[*ParseActive](m, &ParseActive{}, "parser"); err != nil {
 		return fae.Wrap(err, "registering worker: parse_active (ParseActive)")
