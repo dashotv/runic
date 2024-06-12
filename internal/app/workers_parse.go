@@ -16,15 +16,21 @@ type ParseActive struct {
 
 func (j *ParseActive) Kind() string { return "parse_active" }
 func (j *ParseActive) Work(ctx context.Context, job *minion.Job[*ParseActive]) error {
-	// log := app.Log.Named("parse_active")
-	list, err := app.DB.IndexerActive()
+	a := ContextApp(ctx)
+	log := a.Log.Named("parse_active")
+	if !a.Config.Production {
+		log.Debugf("skipping: not production")
+	}
+
+	// log := a.Log.Named("parse_active")
+	list, err := a.DB.IndexerActive()
 	if err != nil {
 		return fae.Wrap(err, "getting active indexers")
 	}
 
 	// log.Debugf("processing %d indexers", len(list))
 	for _, indexer := range list {
-		app.Workers.Enqueue(&ParseIndexer{ID: indexer.ID.Hex(), Title: indexer.Name})
+		a.Workers.Enqueue(&ParseIndexer{ID: indexer.ID.Hex(), Title: indexer.Name})
 	}
 	return nil
 }
