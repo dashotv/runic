@@ -1,4 +1,4 @@
 name: scraper
-concurrency: 1
-buffer: 1
-interval: 3
+concurrency: 2
+buffer: 10
+interval: 1
