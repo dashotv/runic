@@ -1,3 +1,3 @@
 name: parser
-concurrency: 2
+concurrency: 3
 buffer: 10
