@@ -7,6 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 
+	"github.com/dashotv/golem/plugins/cache"
 	"github.com/dashotv/minion"
 	rift "github.com/dashotv/rift/client"
 	"github.com/dashotv/runic/internal/reader"
@@ -45,7 +46,7 @@ type Application struct {
 	Workers *minion.Minion
 
 	//Cache
-	Cache *Cache
+	Cache *cache.Cache
 
 	//golem:template:app/app_partial_definitions
 

@@ -62,19 +62,19 @@ type Release struct { // model
 	//UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
 	Type        string              `bson:"type" json:"type" grimoire:"index"`
 	Source      string              `bson:"source" json:"source" grimoire:"index"`
-	Title       string              `bson:"title" json:"title"`
+	Title       string              `bson:"title" json:"title" grimoire:"index"`
 	Year        int                 `bson:"year" json:"year"`
 	Description string              `bson:"description" json:"description"`
 	Size        int64               `bson:"size" json:"size"`
 	View        string              `bson:"view" json:"view"`
 	Download    string              `bson:"download" json:"download"`
-	Infohash    string              `bson:"infohash" json:"infohash"`
-	Season      int                 `bson:"season" json:"season"`
-	Episode     int                 `bson:"episode" json:"episode"`
+	Infohash    string              `bson:"infohash" json:"infohash" grimoire:"index"`
+	Season      int                 `bson:"season" json:"season" grimoire:"index"`
+	Episode     int                 `bson:"episode" json:"episode" grimoire:"index"`
 	Volume      int                 `bson:"volume" json:"volume"`
-	Group       string              `bson:"group" json:"group"`
-	Website     string              `bson:"website" json:"website"`
-	Verified    bool                `bson:"verified" json:"verified"`
+	Group       string              `bson:"group" json:"group" grimoire:"index"`
+	Website     string              `bson:"website" json:"website" grimoire:"index"`
+	Verified    bool                `bson:"verified" json:"verified" grimoire:"index"`
 	Widescreen  bool                `bson:"widescreen" json:"widescreen"`
 	Unrated     bool                `bson:"unrated" json:"unrated"`
 	Uncensored  bool                `bson:"uncensored" json:"uncensored"`
@@ -85,7 +85,7 @@ type Release struct { // model
 	Quality     string              `bson:"quality" json:"quality"`
 	Raw         *newznab.NZB        `bson:"raw" json:"raw"`
 	Info        *parser.TorrentInfo `bson:"info" json:"info"`
-	Downloader  string              `bson:"downloader" json:"downloader"`
-	Checksum    string              `bson:"checksum" json:"checksum"`
-	PublishedAt time.Time           `bson:"published_at" json:"published_at"`
+	Downloader  string              `bson:"downloader" json:"downloader" grimoire:"index"`
+	Checksum    string              `bson:"checksum" json:"checksum" grimoire:"index"`
+	PublishedAt time.Time           `bson:"published_at" json:"published_at" grimoire:"index"`
 }

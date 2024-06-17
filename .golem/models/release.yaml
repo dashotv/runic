@@ -13,6 +13,7 @@ fields:
     index: true
   - name: title
     type: string
+    index: true
   - name: year
     type: int
   - name: description
@@ -25,18 +26,24 @@ fields:
     type: string
   - name: infohash
     type: string
+    index: true
   - name: season
     type: int
+    index: true
   - name: episode
     type: int
+    index: true
   - name: volume
     type: int
   - name: group
     type: string
+    index: true
   - name: website
     type: string
+    index: true
   - name: verified
     type: bool
+    index: true
   - name: widescreen
     type: bool
   - name: unrated
@@ -59,7 +66,10 @@ fields:
     type: "*parser.TorrentInfo"
   - name: downloader
     type: string # torrent | nzb | metube
+    index: true
   - name: checksum
     type: string
+    index: true
   - name: published_at
     type: time.Time
+    index: true
