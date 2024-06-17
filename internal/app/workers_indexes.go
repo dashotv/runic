@@ -10,7 +10,6 @@ import (
 	"github.com/dashotv/minion"
 )
 
-var batchSize = 1000
 var scryRateLimit = 150 // per second
 
 type Count struct {
@@ -40,25 +39,26 @@ func (j *UpdateIndexes) Work(ctx context.Context, job *minion.Job[*UpdateIndexes
 	rl := ratelimit.New(scryRateLimit) // per second
 
 	count := &Count{}
+
 	total, err := app.DB.Release.Query().Limit(-1).Count()
 	if err != nil {
 		app.Workers.Log.Errorf("getting series count: %s", err)
 		return err
 	}
-	for i := 0; i < int(total); i += batchSize {
-		series, err := app.DB.Release.Query().Desc("created_at").Limit(batchSize).Skip(i).Run()
-		if err != nil {
-			app.Workers.Log.Errorf("getting series: %s", err)
-			return err
-		}
-		for _, s := range series {
+	err = app.DB.Release.Query().Desc("published_at").Batch(1000, func(releases []*Release) error {
+		for _, r := range releases {
 			rl.Take()
-			if err := app.DB.Release.Update(s); err != nil {
-				app.Workers.Log.Errorf("updating series: %s", err)
+			if err := app.DB.Release.Update(r); err != nil {
+				app.Workers.Log.Errorf("updating release (%s): %s", r.ID.Hex(), err)
 			}
 			count.Inc()
 		}
-		log.Debugf("series: %d/%d", count.i, total)
+		log.Debugf("index release: %d/%d", count.i, total)
+		return nil
+	})
+	if err != nil {
+		app.Workers.Log.Errorf("batch releases: %s", err)
+		return err
 	}
 
 	return nil
