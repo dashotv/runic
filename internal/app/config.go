@@ -5,6 +5,7 @@ import (
 
 	"github.com/caarlos0/env/v10"
 	"github.com/pkg/errors"
+	"github.com/samber/lo"
 
 	"github.com/dashotv/fae"
 )
@@ -54,12 +55,15 @@ type Config struct {
 
 	//golem:template:app/config_partial_struct
 
-	JackettURL string   `env:"JACKETT_URL"`
-	JackettKey string   `env:"JACKETT_KEY"`
-	NZBGeekURL string   `env:"NZBGEEK_URL"`
-	NZBGeekKey string   `env:"NZBGEEK_KEY"`
-	RiftURL    string   `env:"RIFT_URL"`
-	Words      []string `env:"WORDS"`
+	JackettURL      string   `env:"JACKETT_URL"`
+	JackettKey      string   `env:"JACKETT_KEY"`
+	NZBGeekURL      string   `env:"NZBGEEK_URL"`
+	NZBGeekKey      string   `env:"NZBGEEK_KEY"`
+	RiftURL         string   `env:"RIFT_URL"`
+	Words           []string `env:"WORDS"`
+	GroupsPreferred []string `env:"GROUPS_PREFERRED" envSeparator:","`
+	GroupsVerified  []string `env:"GROUPS_VERIFIED" envSeparator:","`
+	cachedGroups    []string
 }
 
 func (c *Config) Validate() error {
@@ -99,6 +103,15 @@ func (c *Config) validateLogger() error {
 	default:
 		return errors.New("invalid logger (must be 'dev' or 'release')")
 	}
+}
+
+func (c *Config) IsVerifiedGroup(group string) bool {
+	if len(c.cachedGroups) == 0 {
+		c.cachedGroups = append(c.cachedGroups, c.GroupsPreferred...)
+		c.cachedGroups = append(c.cachedGroups, c.GroupsVerified...)
+		c.cachedGroups = lo.Uniq(c.cachedGroups)
+	}
+	return lo.Contains(c.cachedGroups, group)
 }
 
 //golem:template:app/config_partial_connection

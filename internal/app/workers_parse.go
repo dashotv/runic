@@ -180,6 +180,7 @@ func processRiftVideo(video *rift.Video) error {
 		Website:     video.Source,
 		View:        video.View,
 		PublishedAt: time.Now(),
+		Verified:    true,
 	}
 
 	if err := app.DB.Release.Save(result); err != nil {

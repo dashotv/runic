@@ -19,6 +19,7 @@ func init() {
 func setupProcessor(a *Application) error {
 	app.Processor = &Processor{
 		db:     a.DB,
+		cfg:    a.Config,
 		reader: a.Reader,
 	}
 	return nil
@@ -54,6 +55,7 @@ func catsToInt(cats []string) []int {
 
 type Processor struct {
 	db     *Connector
+	cfg    *Config
 	reader *reader.Reader
 }
 
@@ -124,6 +126,10 @@ func (p *Processor) Process(source string, list []*newznab.NZB) ([]*Release, err
 		r.Uncensored = info.Uncensored
 		r.ThreeD = info.ThreeD
 		r.Bluray = info.Bluray
+
+		if p.cfg.IsVerifiedGroup(info.Group) || p.cfg.IsVerifiedGroup(info.Website) {
+			r.Verified = true
+		}
 
 		releases = append(releases, r)
 	}
