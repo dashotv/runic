@@ -57,14 +57,15 @@ func NewConnector(app *Application) (*Connector, error) {
 		return nil, err
 	}
 
-	grimoire.Indexes[*Indexer](indexer, &Indexer{})
+	grimoire.CreateIndexesFromTags[*Indexer](indexer, &Indexer{})
 
 	release, err := connection[*Release]("release")
 	if err != nil {
 		return nil, err
 	}
 
-	grimoire.Indexes[*Release](release, &Release{})
+	grimoire.CreateIndexes[*Release](release, &Release{}, "created_at;updated_at")
+	grimoire.CreateIndexesFromTags[*Release](release, &Release{})
 
 	c := &Connector{
 		Log:     app.Log.Named("db"),
