@@ -129,7 +129,7 @@ func (c *Connector) ReleasesPopularType(ctx context.Context, t string, date time
 func (c *Connector) ReleasesPopularMovies() ([]*PopularMovie, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	defer TickTock("ReleasesPopularMovies")
+	defer TickTock("ReleasesPopularMovies")()
 
 	date := time.Now().AddDate(0, 0, -30)
 	limit := 25
