@@ -23,10 +23,14 @@ func (a *Application) PopularIndex(c echo.Context, interval string) error {
 }
 
 func (a *Application) PopularMovies(c echo.Context) error {
-	list, err := a.DB.ReleasesPopularMovies()
+	result := []*PopularMovie{}
+	ok, err := a.Cache.Get("releases_popular_movies", &result)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, &Response{Error: true, Message: err.Error()})
+		return err
+	}
+	if !ok {
+		return fae.New("no popular releases found for movies")
 	}
 
-	return c.JSON(http.StatusOK, &Response{Error: false, Result: list})
+	return c.JSON(http.StatusOK, &Response{Error: false, Result: result})
 }

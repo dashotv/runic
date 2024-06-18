@@ -1,6 +1,6 @@
 import { Link as RouterLink } from 'react-router-dom';
 
-import { Popular } from 'client/runic';
+import { Popular, PopularMovie } from 'client/runic';
 
 import { Box, Link, Stack, Typography } from '@mui/material';
 
@@ -18,7 +18,7 @@ export const PopularList = ({ mount, data, type }: { mount: string; data: Popula
         <Typography variant="h4" borderBottom="1px solid white">
           {type}
         </Typography>
-        {data?.map(({ title, count, year = 0 }, index) => (
+        {data?.map(({ title, count, verified, year = 0 }, index) => (
           <Stack key={index} direction="row" spacing={0} alignItems="center" justifyContent="space-between">
             <Typography variant="body1" color="primary" noWrap>
               <Link href={`${url}${title}${year > 0 ? `+y:${year}` : ''}`} target="_window">
@@ -34,7 +34,7 @@ export const PopularList = ({ mount, data, type }: { mount: string; data: Popula
               textAlign="right"
               sx={{ '& a': { color: '#f0f0f0', textDecoration: 'none' } }}
             >
-              <SearchLink {...{ mount, title, type, count }} />
+              <SearchLink {...{ mount, title, type, count, verified }} />
             </Typography>
           </Stack>
         ))}
@@ -43,16 +43,28 @@ export const PopularList = ({ mount, data, type }: { mount: string; data: Popula
   );
 };
 
+export const PopularMoviesList = ({ mount, data }: { mount: string; data: PopularMovie[] }) => {
+  const popular: Popular[] = data
+    .map(({ id, count, verified }) => {
+      if (!id) return;
+      return { title: id.title, year: id.year, type: 'movies', count, verified };
+    })
+    .filter(x => x !== undefined) as Popular[];
+  return <PopularList mount={mount} data={popular} type="movies" />;
+};
+
 const SearchLink = ({
   mount,
   title,
   type,
   count,
+  verified,
 }: {
   mount: string;
   title?: string;
   type?: string;
   count?: number;
+  verified?: number;
 }) => {
   const { queryString } = useQueryString();
   const link =
@@ -63,5 +75,9 @@ const SearchLink = ({
       resolution: type === 'movies' ? '1080' : '',
       exact: type === 'movies' ? false : true,
     });
-  return <RouterLink to={title ? link : '#'}>{count}</RouterLink>;
+  return (
+    <RouterLink to={title ? link : '#'}>
+      {verified !== undefined && verified > 0 ? `${verified} (${count})` : count}
+    </RouterLink>
+  );
 };

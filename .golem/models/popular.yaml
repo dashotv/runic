@@ -10,3 +10,5 @@ fields:
     type: string
   - name: count
     type: int
+  - name: verified
+    type: int

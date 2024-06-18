@@ -32,10 +32,11 @@ type Indexer struct { // model
 }
 
 type Popular struct { // struct
-	Title string `bson:"_id" json:"title"`
-	Year  int    `bson:"year" json:"year"`
-	Type  string `bson:"type" json:"type"`
-	Count int    `bson:"count" json:"count"`
+	Title    string `bson:"_id" json:"title"`
+	Year     int    `bson:"year" json:"year"`
+	Type     string `bson:"type" json:"type"`
+	Count    int    `bson:"count" json:"count"`
+	Verified int    `bson:"verified" json:"verified"`
 }
 
 type PopularMovie struct { // struct

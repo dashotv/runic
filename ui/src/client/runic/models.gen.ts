@@ -26,6 +26,7 @@ export interface Popular {
   year?: number;
   type?: string;
   count?: number;
+  verified?: number;
 }
 export interface PopularMovie {
   id?: PopularMovieId;

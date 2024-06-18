@@ -32,6 +32,15 @@ func (j *ReleasesPopular) Work(ctx context.Context, job *minion.Job[*ReleasesPop
 		})
 	}
 
+	wg.Go(func() {
+		resp, err := a.DB.ReleasesPopularMovies()
+		if err != nil {
+			logger.Errorf("failed to get popular movies: %v", err)
+		}
+
+		a.Cache.Set("releases_popular_movies", resp)
+	})
+
 	wg.Wait()
 
 	return nil

@@ -138,7 +138,7 @@ func (c *Connector) ReleasesPopularMovies() ([]*PopularMovie, error) {
 		{"$match": bson.M{"type": t, "published_at": bson.M{"$gte": date}, "resolution": "1080"}},
 		{"$project": bson.M{"title": 1, "type": 1, "year": 1, "published": "$published_at", "verified": 1}},
 		{"$group": bson.M{"_id": bson.M{"title": "$title", "year": "$year"}, "count": bson.M{"$sum": 1}, "verified": bson.M{"$sum": bson.M{"$cond": bson.M{"if": "$verified", "then": 1, "else": 0}}}}},
-		{"$sort": bson.M{"count": -1}},
+		{"$sort": bson.M{"verified": -1, "count": -1}},
 		{"$limit": limit},
 	}
 
