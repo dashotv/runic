@@ -13,45 +13,51 @@ func isUncensored(title string) bool {
 func isBluray(title string) bool {
 	return bluray.MatchString(title)
 }
-func getResolution(title string) string {
+func getResolution(title string) (string, string) {
 	results := resolutions.FindStringSubmatch(title)
 	if len(results) == 0 {
-		return ""
+		return title, ""
 	}
-	return results[1]
+	title = strings.Replace(title, results[0], "", 1)
+	return title, results[1]
 }
-func getEncodings(title string) []string {
+func getEncodings(title string) (string, []string) {
 	results := encodings.FindAllString(title, -1)
-	return lo.Map(results, func(s string, i int) string {
+	matches := lo.Map(results, func(s string, i int) string {
 		return strings.ToLower(s)
 	})
-}
-func getQuality(title string) string {
-	results := qualities.FindAllString(title, -1)
-	if len(results) == 0 {
-		return ""
+	for _, match := range results {
+		title = strings.Replace(title, match, "", 1)
 	}
-	return strings.ToLower(results[0])
+	return title, matches
+}
+func getQualities(title string) (string, string) {
+	results := qualities.FindAllString(title, -1)
+	matches := lo.Map(results, func(s string, i int) string {
+		return strings.ToLower(s)
+	})
+	for _, match := range results {
+		title = strings.Replace(title, match, "", 1)
+	}
+	return title, strings.Join(matches, ", ")
 }
 func getGroup(title string) (string, string) {
 	results := group.FindStringSubmatch(title)
 	if len(results) < 2 {
-		return "", ""
+		return title, ""
 	}
 	title = strings.Replace(title, results[0], "", 1)
-	title = strings.TrimSpace(title)
 	return title, strings.ToLower(results[1])
 }
 func getWebsite(title string) (string, string) {
 	results := regexList(website, title)
 	if len(results) < 1 {
-		return "", ""
+		return title, ""
 	}
 	// if getResolution(results[0]) != "" {
 	// 	return "", ""
 	// }
 	title = strings.Replace(title, results[0], "", 1)
-	title = strings.TrimSpace(title)
 	return title, strings.ToLower(results[0])
 }
 
@@ -108,12 +114,20 @@ func regexParams(r *regexp.Regexp, title string) map[string]string {
 }
 
 func Parse(title, catType string) (*TorrentInfo, error) {
+	title = strings.ToLower(title)
 	title, group := getGroup(title)
 	title, website := getWebsite(title)
+	title, qualities := getQualities(title)
+	title, encodings := getEncodings(title)
+	title, res := getResolution(title)
+
+	title = strings.TrimLeft(title, " _-")
+	title = strings.TrimRight(title, " _-")
+	title = strings.TrimSpace(title)
 	info := &TorrentInfo{
-		Resolution: getResolution(title),
-		Quality:    getQuality(title),
-		Encodings:  getEncodings(title),
+		Resolution: res,
+		Quality:    qualities,
+		Encodings:  encodings,
 		Bluray:     isBluray(title),
 		Uncensored: isUncensored(title),
 		Group:      group,

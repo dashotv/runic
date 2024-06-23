@@ -7,7 +7,7 @@ import (
 
 func init() {
 	encodings = regexp.MustCompile(`(?i)\b(` + strings.Join(_encodings, "|") + `)\b`)
-	resolutions = regexp.MustCompile(`(?i)\b(` + strings.Join(_resolutions, "|") + `)[p]*\b`)
+	resolutions = regexp.MustCompile(`(?i)[\[]*\b(` + strings.Join(_resolutions, "|") + `)[p]*\b[\]]*`)
 	qualities = regexp.MustCompile(`(?i)\b(` + strings.Join(_qualities, "|") + `)\b`)
 	bluray = regexp.MustCompile(`(?i)\b(` + strings.Join(_bluray, "|") + `)\b`)
 	uncensored = regexp.MustCompile(`(?i)\b(unc(en)*(sored)*)\b`)
@@ -15,7 +15,7 @@ func init() {
 	website = regexp.MustCompile(`(?i)` + _website + `$`)
 }
 
-var sp = `[\s_.]`
+var sp = `[\s\-_.]`
 var episode = `(?:(e(p)*(isode)*` + sp + `+)*(?P<episode>\d{1,3})\b)` // |(?P<episode>\d{4}.\d{2}.\d{2}))
 var episodeDate = `((?:(e(p)*(isode)*` + sp + `+)*(?P<episode>\d{1,3})\b)|(?P<episode>\d{4}.\d{2}.\d{2}))`
 var se = `s(eason)*` + sp + `*(?P<season>\d+)` + sp + `*e(pisode)*` + sp + `*(?P<episode>\d{1,3})\b`
@@ -69,6 +69,8 @@ var _encodings = []string{
 	"aac2.0",
 	"h.265",
 	"h.264",
+	"sbs",
+	"3d",
 }
 var resolutions *regexp.Regexp
 var _resolutions = []string{
@@ -95,8 +97,12 @@ var _qualities = []string{
 	"ts",
 	"uhd",
 	"web-dl",
+	"web dl",
+	"webdl",
 	"web",
 	"webrip",
+	"web-rip",
+	"web rip",
 }
 var bluray *regexp.Regexp
 var _bluray = []string{

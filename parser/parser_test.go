@@ -35,27 +35,30 @@ func init() {
 
 func TestEncodings(t *testing.T) {
 	testdata := []struct {
-		subject string
-		want    []string
+		subject   string
+		encodings []string
+		title     string
 	}{
-		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", []string{"x264", "aac"}},
-		{"Hercules (2014) 1080p BrRip H264 - YIFY", []string{"h264"}},
-		{"Dawn.of.the.Planet.of.the.Apes.2014.HDRip.XViD-EVO", []string{"xvid"}},
-		{"The Big Bang Theory S08E06 HDTV XviD-LOL [eztv]", []string{"xvid"}},
-		{"22 Jump Street (2014) 720p BrRip x264 - YIFY", []string{"x264"}},
-		{"Hercules.2014.EXTENDED.1080p.WEB-DL.DD5.1.H264-RARBG", []string{"dd5.1", "h264"}},
-		{"Hercules.2014.Extended.Cut.HDRip.XViD-juggs[ETRG]", []string{"xvid"}},
-		{"Hercules (2014) WEBDL DVDRip XviD-MAX", []string{"xvid"}},
-		{"WWE Hell in a Cell 2014 PPV WEB-DL x264-WD -={SPARROW}=-", []string{"x264"}},
-		{"UFC.179.PPV.HDTV.x264-Ebi[rartv]", []string{"x264"}},
-		{"Marvels Agents of S H I E L D S02E05 HDTV x264-KILLERS [eztv]", []string{"x264"}},
-		{"X-Men.Days.of.Future.Past.2014.1080p.WEB-DL.DD5.1.H264-RARBG", []string{"dd5.1", "h264"}},
-		{"Guardians Of The Galaxy 2014 R6 720p HDCAM x264-JYK", []string{"x264"}},
-		{"Marvel's.Agents.of.S.H.I.E.L.D.S02E01.Shadows.1080p.WEB-DL.DD5.1", []string{"dd5.1"}},
+		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", []string{"sbs", "x264", "aac"}, "The.Jungle.Book.2016.3D.1080p.BRRip...-ETRG"},
+		{"Hercules (2014) 1080p BrRip H264 - YIFY", []string{"h264"}, "Hercules (2014) 1080p BrRip  - YIFY"},
+		{"Dawn.of.the.Planet.of.the.Apes.2014.HDRip.XViD-EVO", []string{"xvid"}, "Dawn.of.the.Planet.of.the.Apes.2014.HDRip.-EVO"},
+		{"The Big Bang Theory S08E06 HDTV XviD-LOL [eztv]", []string{"xvid"}, "The Big Bang Theory S08E06 HDTV -LOL [eztv]"},
+		{"22 Jump Street (2014) 720p BrRip x264 - YIFY", []string{"x264"}, "22 Jump Street (2014) 720p BrRip  - YIFY"},
+		{"Hercules.2014.EXTENDED.1080p.WEB-DL.DD5.1.H264-RARBG", []string{"dd5.1", "h264"}, "Hercules.2014.EXTENDED.1080p.WEB-DL..-RARBG"},
+		{"Hercules.2014.Extended.Cut.HDRip.XViD-juggs[ETRG]", []string{"xvid"}, "Hercules.2014.Extended.Cut.HDRip.-juggs[ETRG]"},
+		{"Hercules (2014) WEBDL DVDRip XviD-MAX", []string{"xvid"}, "Hercules (2014) WEBDL DVDRip -MAX"},
+		{"WWE Hell in a Cell 2014 PPV WEB-DL x264-WD -={SPARROW}=-", []string{"x264"}, "WWE Hell in a Cell 2014 PPV WEB-DL -WD -={SPARROW}=-"},
+		{"UFC.179.PPV.HDTV.x264-Ebi[rartv]", []string{"x264"}, "UFC.179.PPV.HDTV.-Ebi[rartv]"},
+		{"Marvels Agents of S H I E L D S02E05 HDTV x264-KILLERS [eztv]", []string{"x264"}, "Marvels Agents of S H I E L D S02E05 HDTV -KILLERS [eztv]"},
+		{"X-Men.Days.of.Future.Past.2014.1080p.WEB-DL.DD5.1.H264-RARBG", []string{"dd5.1", "h264"}, "X-Men.Days.of.Future.Past.2014.1080p.WEB-DL..-RARBG"},
+		{"Guardians Of The Galaxy 2014 R6 720p HDCAM x264-JYK", []string{"x264"}, "Guardians Of The Galaxy 2014 R6 720p HDCAM -JYK"},
+		{"Marvel's.Agents.of.S.H.I.E.L.D.S02E01.Shadows.1080p.WEB-DL.DD5.1", []string{"dd5.1"}, "Marvel's.Agents.of.S.H.I.E.L.D.S02E01.Shadows.1080p.WEB-DL."},
 	}
 	for _, tt := range testdata {
 		t.Run(tt.subject, func(t *testing.T) {
-			assert.Equal(t, tt.want, getEncodings(tt.subject))
+			title, encodings := getEncodings(tt.subject)
+			assert.Equal(t, tt.encodings, encodings)
+			assert.Equal(t, tt.title, title)
 		})
 	}
 }
@@ -63,27 +66,27 @@ func TestEncodings(t *testing.T) {
 func TestResolutions(t *testing.T) {
 	testdata := []struct {
 		subject string
-		want    string
+		res     string
+		title   string
 	}{
-		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", "1080"},
-		{"Hercules (2014) [1080p] BrRip H264 - YIFY", "1080"},
-		{"Dawn.of.the.Planet.of.the.Apes.2014.HDRip.XViD-EVO", ""},
-		{"The Big Bang Theory S08E06 HDTV XviD-LOL [eztv]", ""},
-		{"22 Jump Street (2014) 720p BrRip x264 - YIFY", "720"},
-		{"Hercules.2014.EXTENDED.1080p.WEB-DL.DD5.1.H264-RARBG", "1080"},
-		{"Hercules.2014.Extended.Cut.HDRip.XViD-juggs[ETRG]", ""},
-		{"Hercules (2014) WEBDL DVDRip XviD-MAX", ""},
-		{"WWE Hell in a Cell 2014 PPV WEB-DL x264-WD -={SPARROW}=-", ""},
-		{"UFC.179.PPV.HDTV.x264-Ebi[rartv]", ""},
-		{"Marvels Agents of S H I E L D S02E05 HDTV x264-KILLERS [eztv]", ""},
-		{"X-Men.Days.of.Future.Past.2014.1080p.WEB-DL.DD5.1.H264-RARBG", "1080"},
-		{"Guardians Of The Galaxy 2014 R6 720p HDCAM x264-JYK", "720"},
-		{"Marvel's.Agents.of.S.H.I.E.L.D.S02E01.Shadows.1080p.WEB-DL.DD5.1", "1080"},
-		{"[Erai-raws] Shangri-La Frontier - Kusogee Hunter, Kamige ni Idoman to Su - 20 [720p][Multiple Subtitle] [ENG][POR-BR][SPA-LA][SPA][ARA][FRE][GER][ITA][RUS]", "720"},
+		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", "1080", "The.Jungle.Book.2016.3D..BRRip.SBS.x264.AAC-ETRG"},
+		{"Hercules (2014) [1080p] BrRip H264 - YIFY", "1080", "Hercules (2014)  BrRip H264 - YIFY"},
+		{"Dawn.of.the.Planet.of.the.Apes.2014.HDRip.XViD-EVO", "", "Dawn.of.the.Planet.of.the.Apes.2014.HDRip.XViD-EVO"},
+		{"The Big Bang Theory S08E06 HDTV XviD-LOL [eztv]", "", "The Big Bang Theory S08E06 HDTV XviD-LOL [eztv]"},
+		{"22 Jump Street (2014) 720p BrRip x264 - YIFY", "720", "22 Jump Street (2014)  BrRip x264 - YIFY"},
+		{"Hercules.2014.EXTENDED.1080p.WEB-DL.DD5.1.H264-RARBG", "1080", "Hercules.2014.EXTENDED..WEB-DL.DD5.1.H264-RARBG"},
+		{"Hercules.2014.Extended.Cut.HDRip.XViD-juggs[ETRG]", "", "Hercules.2014.Extended.Cut.HDRip.XViD-juggs[ETRG]"},
+		{"Hercules (2014) WEBDL DVDRip XviD-MAX", "", "Hercules (2014) WEBDL DVDRip XviD-MAX"},
+		{"X-Men.Days.of.Future.Past.2014.1080p.WEB-DL.DD5.1.H264-RARBG", "1080", "X-Men.Days.of.Future.Past.2014..WEB-DL.DD5.1.H264-RARBG"},
+		{"Guardians Of The Galaxy 2014 R6 720p HDCAM x264-JYK", "720", "Guardians Of The Galaxy 2014 R6  HDCAM x264-JYK"},
+		{"Marvel's.Agents.of.S.H.I.E.L.D.S02E01.Shadows.1080p.WEB-DL.DD5.1", "1080", "Marvel's.Agents.of.S.H.I.E.L.D.S02E01.Shadows..WEB-DL.DD5.1"},
+		{"[Erai-raws] Shangri-La Frontier - Kusogee Hunter, Kamige ni Idoman to Su - 20 [720p][Multiple Subtitle] [ENG][POR-BR][SPA-LA][SPA][ARA][FRE][GER][ITA][RUS]", "720", "[Erai-raws] Shangri-La Frontier - Kusogee Hunter, Kamige ni Idoman to Su - 20 [Multiple Subtitle] [ENG][POR-BR][SPA-LA][SPA][ARA][FRE][GER][ITA][RUS]"},
 	}
 	for _, tt := range testdata {
 		t.Run(tt.subject, func(t *testing.T) {
-			assert.Equal(t, tt.want, getResolution(tt.subject))
+			title, res := getResolution(tt.subject)
+			assert.Equal(t, tt.res, res)
+			assert.Equal(t, tt.title, title)
 		})
 	}
 }
@@ -91,26 +94,29 @@ func TestResolutions(t *testing.T) {
 func TestQualities(t *testing.T) {
 	testdata := []struct {
 		subject string
-		want    string
+		quality string
+		title   string
 	}{
-		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", "brrip"},
-		{"Hercules (2014) 1080p BrRip H264 - YIFY", "brrip"},
-		{"Dawn.of.the.Planet.of.the.Apes.2014.HDRip.XViD-EVO", "hdrip"},
-		{"The Big Bang Theory S08E06 HDTV XviD-LOL [eztv]", "hdtv"},
-		{"22 Jump Street (2014) 720p BrRip x264 - YIFY", "brrip"},
-		{"Hercules.2014.EXTENDED.1080p.WEB-DL.DD5.1.H264-RARBG", "web-dl"},
-		{"Hercules.2014.Extended.Cut.HDRip.XViD-juggs[ETRG]", "hdrip"},
-		{"Hercules (2014) WEBDL DVDRip XviD-MAX", "dvdrip"},
-		{"WWE Hell in a Cell 2014 PPV WEB-DL x264-WD -={SPARROW}=-", "web-dl"},
-		{"UFC.179.PPV.HDTV.x264-Ebi[rartv]", "hdtv"},
-		{"Marvels Agents of S H I E L D S02E05 HDTV x264-KILLERS [eztv]", "hdtv"},
-		{"X-Men.Days.of.Future.Past.2014.1080p.WEB-DL.DD5.1.H264-RARBG", "web-dl"},
-		{"Guardians Of The Galaxy 2014 R6 720p HDCAM x264-JYK", ""},
-		{"Marvel's.Agents.of.S.H.I.E.L.D.S02E01.Shadows.1080p.WEB-DL.DD5.1", "web-dl"},
+		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", "brrip", "The.Jungle.Book.2016.3D.1080p..SBS.x264.AAC-ETRG"},
+		{"Hercules (2014) 1080p BrRip H264 - YIFY", "brrip", "Hercules (2014) 1080p  H264 - YIFY"},
+		{"Dawn.of.the.Planet.of.the.Apes.2014.HDRip.XViD-EVO", "hdrip", "Dawn.of.the.Planet.of.the.Apes.2014..XViD-EVO"},
+		{"The Big Bang Theory S08E06 HDTV XviD-LOL [eztv]", "hdtv", "The Big Bang Theory S08E06  XviD-LOL [eztv]"},
+		{"22 Jump Street (2014) 720p BrRip x264 - YIFY", "brrip", "22 Jump Street (2014) 720p  x264 - YIFY"},
+		{"Hercules.2014.EXTENDED.1080p.WEB-DL.DD5.1.H264-RARBG", "web-dl", "Hercules.2014.EXTENDED.1080p..DD5.1.H264-RARBG"},
+		{"Hercules.2014.Extended.Cut.HDRip.XViD-juggs[ETRG]", "hdrip", "Hercules.2014.Extended.Cut..XViD-juggs[ETRG]"},
+		{"Hercules (2014) WEBDL DVDRip XviD-MAX", "webdl, dvdrip", "Hercules (2014)   XviD-MAX"},
+		{"WWE Hell in a Cell 2014 PPV WEB-DL x264-WD -={SPARROW}=-", "web-dl", "WWE Hell in a Cell 2014 PPV  x264-WD -={SPARROW}=-"},
+		{"UFC.179.PPV.HDTV.x264-Ebi[rartv]", "hdtv", "UFC.179.PPV..x264-Ebi[rartv]"},
+		{"Marvels Agents of S H I E L D S02E05 HDTV x264-KILLERS [eztv]", "hdtv", "Marvels Agents of S H I E L D S02E05  x264-KILLERS [eztv]"},
+		{"X-Men.Days.of.Future.Past.2014.1080p.WEB-DL.DD5.1.H264-RARBG", "web-dl", "X-Men.Days.of.Future.Past.2014.1080p..DD5.1.H264-RARBG"},
+		{"Guardians Of The Galaxy 2014 R6 720p HDCAM x264-JYK", "", "Guardians Of The Galaxy 2014 R6 720p HDCAM x264-JYK"},
+		{"Marvel's.Agents.of.S.H.I.E.L.D.S02E01.Shadows.1080p.WEB-DL.DD5.1", "web-dl", "Marvel's.Agents.of.S.H.I.E.L.D.S02E01.Shadows.1080p..DD5.1"},
 	}
 	for _, tt := range testdata {
 		t.Run(tt.subject, func(t *testing.T) {
-			assert.Equal(t, tt.want, getQuality(tt.subject))
+			title, quality := getQualities(tt.subject)
+			assert.Equal(t, tt.quality, quality)
+			assert.Equal(t, tt.title, title)
 		})
 	}
 }

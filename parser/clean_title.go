@@ -80,7 +80,7 @@ var words = []string{
 func init() {
 	replacements = []*Replacement{
 		{Regex: regexp.MustCompile(`\'(\w{1,2})\b`), Sub: "$1"},
-		{Regex: regexp.MustCompile(`[\W\.]+`), Sub: " "},
+		{Regex: regexp.MustCompile(`[\W\.\_]+`), Sub: " "},
 	}
 
 	for _, w := range words {
