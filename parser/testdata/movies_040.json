@@ -8,6 +8,8 @@
   "resolution": "1080",
   "quality": "brrip",
   "encodings": [
+    "3d",
+    "sbs",
     "x264",
     "aac"
   ],

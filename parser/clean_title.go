@@ -73,8 +73,19 @@ var words = []string{
 	"ddp5.*1",
 	"dual.*audio",
 	"multi.*audio",
-	"multi.*sub",
+	"multi.*sub[s]*",
 	"blu.*ray",
+	"audios",
+	"eng",
+	"english",
+	"jpn",
+	"jap",
+	"japanese",
+	"rus",
+	"russian",
+	"spa",
+	"spanish",
+	"hindi",
 }
 
 func init() {

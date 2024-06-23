@@ -8,6 +8,7 @@
   "resolution": "1080",
   "quality": "web-dl",
   "encodings": [
+    "cr",
     "aac2",
     "h 264"
   ],

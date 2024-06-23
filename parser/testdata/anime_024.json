@@ -1,5 +1,5 @@
 {
-  "title": "the witch and the demon sword act i dual audio multi subs cr varyg",
+  "title": "the witch and the demon sword act i varyg",
   "season": 2,
   "episode": 5,
   "year": 0,
@@ -7,7 +7,9 @@
   "website": "",
   "resolution": "1080",
   "quality": "",
-  "encodings": [],
+  "encodings": [
+    "cr"
+  ],
   "unrated": false,
   "uncensored": false,
   "3d": false,

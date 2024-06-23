@@ -181,15 +181,15 @@ func TestWebsite(t *testing.T) {
 		website string
 		title   string
 	}{
-		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", "etrg", ""},
-		{"Hercules (2014) 1080p BrRip H264 - YIFY", "yify", ""},
-		{"[AniSuki] Ayakashi Triangle Volume 5 (BD) (x265 HEVC OPUS) (Uncensored)", "", ""},
-		{"[AE] Tokyo Ghoul - [Batch] [UNCEN] [720p]", "", ""},
+		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", "etrg", "The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-"},
+		{"Hercules (2014) 1080p BrRip H264 - YIFY", "yify", "Hercules (2014) 1080p BrRip H264 - "},
+		{"[AniSuki] Ayakashi Triangle Volume 5 (BD) (x265 HEVC OPUS) (Uncensored)", "", "[AniSuki] Ayakashi Triangle Volume 5 (BD) (x265 HEVC OPUS) (Uncensored)"},
+		{"[AE] Tokyo Ghoul - [Batch] [UNCEN] [720p]", "", "[AE] Tokyo Ghoul - [Batch] [UNCEN] [720p]"},
 		// TODO: fix this
-		{"thomas.and.friends.s19e09_s20e14.convert.hdtv.x264-w4f[eztv].mkv", "", ""},
-		{"Doctor.Who.2005.8x11.Dark.Water.720p.HDTV.x264-FoV[rartv]", "", ""},
-		{"The Simpsons S26E05 HDTV x264 PROPER-LOL [eztv]", "", ""},
-		{"The Flash 2014 S01E01 HDTV x264-LOL[ettv]", "", ""},
+		{"thomas.and.friends.s19e09_s20e14.convert.hdtv.x264-w4f[eztv].mkv", "", "thomas.and.friends.s19e09_s20e14.convert.hdtv.x264-w4f[eztv].mkv"},
+		{"Doctor.Who.2005.8x11.Dark.Water.720p.HDTV.x264-FoV[rartv]", "", "Doctor.Who.2005.8x11.Dark.Water.720p.HDTV.x264-FoV[rartv]"},
+		{"The Simpsons S26E05 HDTV x264 PROPER-LOL [eztv]", "", "The Simpsons S26E05 HDTV x264 PROPER-LOL [eztv]"},
+		{"The Flash 2014 S01E01 HDTV x264-LOL[ettv]", "", "The Flash 2014 S01E01 HDTV x264-LOL[ettv]"},
 	}
 	for _, tt := range testdata {
 		t.Run(tt.subject, func(t *testing.T) {

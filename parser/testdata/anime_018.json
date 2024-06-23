@@ -1,14 +1,15 @@
 {
-  "title": "kotonoha no niwa the garden of words bdrip 1920x1080 hevc dtshd multi audio multi sub",
+  "title": "kotonoha no niwa the garden of words multi",
   "season": 0,
   "episode": 0,
   "year": 0,
   "group": "beatrice-raws",
   "website": "rev",
-  "resolution": "",
+  "resolution": "1080",
   "quality": "bdrip",
   "encodings": [
-    "hevc"
+    "hevc",
+    "dtshd"
   ],
   "unrated": false,
   "uncensored": false,

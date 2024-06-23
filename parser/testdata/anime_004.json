@@ -1,5 +1,5 @@
 {
-  "title": "guskou budori no denki 1994 vhs avc flac 1f9c3aee",
+  "title": "guskou budori no denki 1994 1f9c3aee",
   "season": 0,
   "episode": 0,
   "year": 0,
@@ -8,7 +8,9 @@
   "resolution": "",
   "quality": "",
   "encodings": [
-    "avc"
+    "vhs",
+    "avc",
+    "flac"
   ],
   "unrated": false,
   "uncensored": false,

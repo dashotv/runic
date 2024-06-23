@@ -115,6 +115,8 @@ func regexParams(r *regexp.Regexp, title string) map[string]string {
 
 func Parse(title, catType string) (*TorrentInfo, error) {
 	title = strings.ToLower(title)
+	bluray := isBluray(title)
+	uncensored := isUncensored(title)
 	title, group := getGroup(title)
 	title, website := getWebsite(title)
 	title, qualities := getQualities(title)
@@ -128,8 +130,8 @@ func Parse(title, catType string) (*TorrentInfo, error) {
 		Resolution: res,
 		Quality:    qualities,
 		Encodings:  encodings,
-		Bluray:     isBluray(title),
-		Uncensored: isUncensored(title),
+		Bluray:     bluray,
+		Uncensored: uncensored,
 		Group:      group,
 		Website:    website,
 	}

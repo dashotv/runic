@@ -7,7 +7,7 @@ import (
 
 func init() {
 	encodings = regexp.MustCompile(`(?i)\b(` + strings.Join(_encodings, "|") + `)\b`)
-	resolutions = regexp.MustCompile(`(?i)[\[]*\b(` + strings.Join(_resolutions, "|") + `)[p]*\b[\]]*`)
+	resolutions = regexp.MustCompile(`(?i)[\[]*\b(?:\d{3,4}x)*(` + strings.Join(_resolutions, "|") + `)[p\]]*`)
 	qualities = regexp.MustCompile(`(?i)\b(` + strings.Join(_qualities, "|") + `)\b`)
 	bluray = regexp.MustCompile(`(?i)\b(` + strings.Join(_bluray, "|") + `)\b`)
 	uncensored = regexp.MustCompile(`(?i)\b(unc(en)*(sored)*)\b`)
@@ -57,6 +57,7 @@ var _encodings = []string{
 	"ddp5.1",
 	"ddp5",
 	"dts",
+	"dtshd",
 	"h264",
 	"h265",
 	"hdr",
@@ -71,6 +72,9 @@ var _encodings = []string{
 	"h.264",
 	"sbs",
 	"3d",
+	"vhs",
+	"flac",
+	"cr",
 }
 var resolutions *regexp.Regexp
 var _resolutions = []string{

@@ -7,7 +7,9 @@
   "website": "",
   "resolution": "1080",
   "quality": "web-dl",
-  "encodings": [],
+  "encodings": [
+    "cr"
+  ],
   "unrated": false,
   "uncensored": false,
   "3d": false,
