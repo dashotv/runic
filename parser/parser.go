@@ -33,22 +33,26 @@ func getQuality(title string) string {
 	}
 	return strings.ToLower(results[0])
 }
-func getGroup(title string) string {
+func getGroup(title string) (string, string) {
 	results := group.FindStringSubmatch(title)
 	if len(results) < 2 {
-		return ""
+		return "", ""
 	}
-	return strings.ToLower(results[1])
+	title = strings.Replace(title, results[0], "", 1)
+	title = strings.TrimSpace(title)
+	return title, strings.ToLower(results[1])
 }
-func getWebsite(title string) string {
+func getWebsite(title string) (string, string) {
 	results := regexList(website, title)
 	if len(results) < 1 {
-		return ""
+		return "", ""
 	}
-	if getResolution(results[0]) != "" {
-		return ""
-	}
-	return strings.ToLower(results[0])
+	// if getResolution(results[0]) != "" {
+	// 	return "", ""
+	// }
+	title = strings.Replace(title, results[0], "", 1)
+	title = strings.TrimSpace(title)
+	return title, strings.ToLower(results[0])
 }
 
 func parseTitle(title string, catType string) (int, map[string]string) {
@@ -94,6 +98,7 @@ func regexParams(r *regexp.Regexp, title string) map[string]string {
 		return nil
 	}
 	params := make(map[string]string)
+	params["raw"] = results[0]
 	for i, name := range r.SubexpNames() {
 		if i != 0 && name != "" {
 			params[name] = results[i]
@@ -103,15 +108,16 @@ func regexParams(r *regexp.Regexp, title string) map[string]string {
 }
 
 func Parse(title, catType string) (*TorrentInfo, error) {
+	title, group := getGroup(title)
+	title, website := getWebsite(title)
 	info := &TorrentInfo{
-		// Title:      ,
 		Resolution: getResolution(title),
 		Quality:    getQuality(title),
 		Encodings:  getEncodings(title),
 		Bluray:     isBluray(title),
 		Uncensored: isUncensored(title),
-		Group:      getGroup(title),
-		Website:    getWebsite(title),
+		Group:      group,
+		Website:    website,
 	}
 	i, params := parseTitle(title, catType)
 	if i >= 0 {

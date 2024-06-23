@@ -12,7 +12,7 @@ import (
 )
 
 var err error
-var updateGolden = false
+var updateGolden bool
 var titlesAnime []string
 var titlesMovies []string
 var titlesTv []string
@@ -152,16 +152,19 @@ func TestBluray(t *testing.T) {
 func TestGroup(t *testing.T) {
 	testdata := []struct {
 		subject string
-		want    string
+		group   string
+		title   string
 	}{
-		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", ""},
-		{"Hercules (2014) 1080p BrRip H264 - YIFY", ""},
-		{"[AniSuki] Ayakashi Triangle Volume 5 (BD) (x265 HEVC OPUS) (Uncensored)", "anisuki"},
-		{"[AE] Tokyo Ghoul - [Batch] [UNCEN] [720p]", "ae"},
+		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", "", ""},
+		{"Hercules (2014) 1080p BrRip H264 - YIFY", "", ""},
+		{"[AniSuki] Ayakashi Triangle Volume 5 (BD) (x265 HEVC OPUS) (Uncensored)", "anisuki", "Ayakashi Triangle Volume 5 (BD) (x265 HEVC OPUS) (Uncensored)"},
+		{"[AE] Tokyo Ghoul - [Batch] [UNCEN] [720p]", "ae", "Tokyo Ghoul - [Batch] [UNCEN] [720p]"},
 	}
 	for _, tt := range testdata {
 		t.Run(tt.subject, func(t *testing.T) {
-			assert.Equal(t, tt.want, getGroup(tt.subject))
+			title, group := getGroup(tt.subject)
+			assert.Equal(t, tt.group, group)
+			assert.Equal(t, tt.title, title)
 		})
 	}
 }
@@ -169,21 +172,24 @@ func TestGroup(t *testing.T) {
 func TestWebsite(t *testing.T) {
 	testdata := []struct {
 		subject string
-		want    string
+		website string
+		title   string
 	}{
-		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", "etrg"},
-		{"Hercules (2014) 1080p BrRip H264 - YIFY", "yify"},
-		{"[AniSuki] Ayakashi Triangle Volume 5 (BD) (x265 HEVC OPUS) (Uncensored)", ""},
-		{"[AE] Tokyo Ghoul - [Batch] [UNCEN] [720p]", ""},
+		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", "etrg", ""},
+		{"Hercules (2014) 1080p BrRip H264 - YIFY", "yify", ""},
+		{"[AniSuki] Ayakashi Triangle Volume 5 (BD) (x265 HEVC OPUS) (Uncensored)", "", ""},
+		{"[AE] Tokyo Ghoul - [Batch] [UNCEN] [720p]", "", ""},
 		// TODO: fix this
-		{"thomas.and.friends.s19e09_s20e14.convert.hdtv.x264-w4f[eztv].mkv", ""},
-		{"Doctor.Who.2005.8x11.Dark.Water.720p.HDTV.x264-FoV[rartv]", ""},
-		{"The Simpsons S26E05 HDTV x264 PROPER-LOL [eztv]", ""},
-		{"The Flash 2014 S01E01 HDTV x264-LOL[ettv]", ""},
+		{"thomas.and.friends.s19e09_s20e14.convert.hdtv.x264-w4f[eztv].mkv", "", ""},
+		{"Doctor.Who.2005.8x11.Dark.Water.720p.HDTV.x264-FoV[rartv]", "", ""},
+		{"The Simpsons S26E05 HDTV x264 PROPER-LOL [eztv]", "", ""},
+		{"The Flash 2014 S01E01 HDTV x264-LOL[ettv]", "", ""},
 	}
 	for _, tt := range testdata {
 		t.Run(tt.subject, func(t *testing.T) {
-			assert.Equal(t, tt.want, getWebsite(tt.subject))
+			title, website := getWebsite(tt.subject)
+			assert.Equal(t, tt.website, website)
+			assert.Equal(t, tt.title, title)
 		})
 	}
 }
@@ -241,6 +247,7 @@ func saveGolden(cat string, i int, info *TorrentInfo) error {
 	if !updateGolden {
 		return nil
 	}
+	fmt.Printf("SAVING GOLDEN %s %d\n", cat, i)
 	f, err := os.Create(fmt.Sprintf("testdata/%s_%03d.json", cat, i))
 	if err != nil {
 		return err

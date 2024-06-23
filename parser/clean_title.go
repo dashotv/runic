@@ -2,7 +2,10 @@ package parser
 
 import (
 	"regexp"
+	"strings"
 )
+
+var cleanEpisodeRegex = regexp.MustCompile(`[\W\.]+`)
 
 var replacements []*Replacement
 var words = []string{
@@ -103,9 +106,9 @@ func CleanTitle(title string) string {
 	for _, r := range replacements {
 		title = r.Regex.ReplaceAllString(title, r.Sub)
 	}
-	return title
+	return strings.ToLower(title)
 }
 
 func CleanEpisode(episode string) string {
-	return regexp.MustCompile(`[\W\.]+`).ReplaceAllString(episode, "")
+	return cleanEpisodeRegex.ReplaceAllString(episode, "")
 }

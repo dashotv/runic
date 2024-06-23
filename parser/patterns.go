@@ -130,6 +130,9 @@ var regexesTV = []*regexp.Regexp{
 	regexp.MustCompile(`(?i)^` + title + `` + sp + `+` + sx),
 	regexp.MustCompile(`(?i)^` + title + `` + sp + `+` + year + sp + `+` + episodeDate),
 	regexp.MustCompile(`(?i)^` + title + `` + sp + `+` + episodeDate),
+	regexp.MustCompile(`(?i)^` + se + sp + `+-` + sp + `+` + titleGreedy),
+	regexp.MustCompile(`(?i)^` + se + sp + `*` + titleGreedy),
+	regexp.MustCompile(`(?i)^` + se),
 }
 
 var regexesAnime = []*regexp.Regexp{
@@ -148,6 +151,9 @@ var regexesAnime = []*regexp.Regexp{
 	regexp.MustCompile(`(?i)^` + title + `` + sp + `+` + volume + ``),
 	regexp.MustCompile(`(?i)^` + title + `` + sp + `+` + se + ``),
 	regexp.MustCompile(`(?i)^` + title + `` + sp + `+` + episode + ``),
+	regexp.MustCompile(`(?i)^` + se + sp + `+-` + sp + `+` + titleGreedy),
+	regexp.MustCompile(`(?i)^` + se + sp + `*` + titleGreedy),
+	regexp.MustCompile(`(?i)^` + se),
 	regexp.MustCompile(`(?i)^` + _group + `` + sp + `*` + titleGreedy + ``),
 	regexp.MustCompile(`(?i)^` + titleGreedy + ``),
 }
