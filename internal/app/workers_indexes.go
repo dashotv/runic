@@ -7,10 +7,11 @@ import (
 
 	"go.uber.org/ratelimit"
 
+	"github.com/dashotv/fae"
 	"github.com/dashotv/minion"
 )
 
-var scryRateLimit = 150 // per second
+var scryRateLimit = 100 // per second
 
 type Count struct {
 	sync.Mutex
@@ -29,7 +30,7 @@ type UpdateIndexes struct {
 
 func (j *UpdateIndexes) Kind() string { return "UpdateIndexes" }
 func (j *UpdateIndexes) Timeout(job *minion.Job[*UpdateIndexes]) time.Duration {
-	return 60 * time.Minute
+	return 4 * 60 * time.Minute // TODO: this increases as the number of releases increase, not sure timeout is the right way to handle this
 }
 func (j *UpdateIndexes) Work(ctx context.Context, job *minion.Job[*UpdateIndexes]) error {
 	log := app.Log.Named("update_indexes")
@@ -45,7 +46,14 @@ func (j *UpdateIndexes) Work(ctx context.Context, job *minion.Job[*UpdateIndexes
 		app.Workers.Log.Errorf("getting series count: %s", err)
 		return err
 	}
-	err = app.DB.Release.Query().Desc("published_at").Batch(1000, func(releases []*Release) error {
+	err = app.DB.Release.Query().Desc("published_at").Batch(100, func(releases []*Release) error {
+		select {
+		case <-ctx.Done():
+			return fae.Errorf("cancelled")
+		default:
+			// proceed
+		}
+
 		for _, r := range releases {
 			rl.Take()
 			if err := app.DB.Release.Update(r); err != nil {
