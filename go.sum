@@ -24,10 +24,14 @@ github.com/dashotv/golem v0.14.27 h1:NoCH3wm77z7wDXj7oZDTNxfFM+J3eCEI4RN5ZDGkbrk
 github.com/dashotv/golem v0.14.27/go.mod h1:nQICFzLDGx3W/13vZVp0O42suG04CFu6jSYVhqgBkpw=
 github.com/dashotv/grimoire v0.5.7 h1:CaWNHPUovM7Mh3lCFG/+PH2AUVmSI+tLZ8tjUDeFDJw=
 github.com/dashotv/grimoire v0.5.7/go.mod h1:oeSS1+bBA0ip8ULTaqX6tAnkxqNDg7NF7+mwwiByM3M=
+github.com/dashotv/grimoire v0.5.8 h1:8heKY3J9otbm5ZOZ0oGPR9vwulpo4wFEd1OzULRjEdU=
+github.com/dashotv/grimoire v0.5.8/go.mod h1:oeSS1+bBA0ip8ULTaqX6tAnkxqNDg7NF7+mwwiByM3M=
 github.com/dashotv/mercury v0.3.2 h1:88bvWsp5l823wTR1XbIB+LBiAFeCRZfe+JyIKf4nV/0=
 github.com/dashotv/mercury v0.3.2/go.mod h1:OZ140gozVBT0iyOwKIJSoSd3yyPgjgq2fI4baqtFBGs=
 github.com/dashotv/minion v0.4.12 h1:ROxSEyMItIMM8faNsagnQnxdTDK1Itd6cNuBIa01N7g=
 github.com/dashotv/minion v0.4.12/go.mod h1:T+cFjfuIlT6dF6HTrpgFLqrQnLppqFy2FeKEJLiQgAo=
+github.com/dashotv/minion v0.4.13 h1:ozRkhLNs842wsug15IkAPTU0emdxE/QTtj8z2Cjb5fs=
+github.com/dashotv/minion v0.4.13/go.mod h1:LfDs7CHpNdiLrKuXKxAOPwS8r0nSPsThILkh07wb7Dk=
 github.com/dashotv/rift v0.3.4 h1:KZHKKC1ZluhoRvlVvs2ArzOMwwIw1zvnT/VEKGy+pPM=
 github.com/dashotv/rift v0.3.4/go.mod h1:JZmt1BcdrNBbn0rWOp6jHxadmI9t5eimlCr54NBSack=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
