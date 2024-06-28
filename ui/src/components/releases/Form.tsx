@@ -40,7 +40,7 @@ export function ReleasesForm({
 }: {
   form: SearchForm;
   indexers?: Option[];
-  setForm: React.Dispatch<React.SetStateAction<SearchForm>>;
+  setForm: (data: SearchForm) => void;
   reset?: () => void;
 }) {
   const { handleSubmit, control } = useForm({ values: form });

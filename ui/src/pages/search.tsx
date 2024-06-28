@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { createSearchParams, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
-import { Box, Button, Pagination, Paper, Stack } from '@mui/material';
+import { Button, Pagination, Paper, Stack } from '@mui/material';
 
 import { Container, LoadingIndicator } from '@dashotv/components';
 
@@ -28,6 +28,7 @@ const formDefaults: SearchForm = {
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [defaults] = useState<SearchForm>(formDefaults);
   const [page, setPage] = useState(1);
   const [form, setForm] = useState<SearchForm>(
     Object.assign(formDefaults, {
@@ -44,14 +45,15 @@ const Search = () => {
   );
   const { isFetching, data } = useSearchQuery(pagesize, (page - 1) * pagesize, form);
   const { data: indexers } = useIndexersOptionsQuery();
-  const encodeSearchParams = params => createSearchParams(params);
+  // const encodeSearchParams = params => createSearchParams(params);
 
   const handleChange = useCallback((_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   }, []);
 
   const reset = () => {
-    setForm(formDefaults);
+    setForm(defaults);
+    setSearchParams({});
     setPage(1);
   };
 
@@ -63,12 +65,16 @@ const Search = () => {
   //   setQs(queryString(form));
   // }, [form, queryString]);
 
-  useEffect(() => {
-    setSearchParams(encodeSearchParams(form));
-  }, [form, setSearchParams]);
+  // useEffect(() => {
+  //   setSearchParams(encodeSearchParams(form));
+  // }, [form, setSearchParams]);
 
-  const setFormRift = () => {
-    setForm(() => ({ ...formDefaults, source: 'rift', type: 'anime' }));
+  const setFormWrapper = (data: SearchForm) => {
+    setForm(data);
+    setPage(1);
+  };
+  const setFormParams = (params: Partial<SearchForm>) => {
+    setForm(() => ({ ...defaults, ...params }));
     setPage(1);
   };
 
@@ -82,7 +88,7 @@ const Search = () => {
       <Container>
         {isFetching && <LoadingIndicator />}
         <Paper sx={{ p: 1, mb: 2, width: '100%' }}>
-          <ReleasesForm form={form} setForm={setForm} reset={reset} indexers={indexers} />
+          <ReleasesForm form={form} setForm={setFormWrapper} reset={reset} indexers={indexers} />
         </Paper>
         {/* <Paper sx={{ p: 1, mb: 2, width: '100%' }}>
           <ReleasesEmbeddedForm form={form} setForm={setForm} reset={reset} indexers={indexers} />
@@ -97,12 +103,39 @@ const Search = () => {
             alignItems="center"
             sx={{ width: '100%', justifyContent: 'space-between' }}
           >
-            <Box>
-              <Button variant="contained" onClick={setFormRift}>
+            <Stack direction="row" spacing={1}>
+              <Button onClick={() => setFormParams({ source: 'rift', type: 'anime' })} size="small" variant="contained">
                 Rift
               </Button>
-            </Box>
-            {/* <ReleasesPresets {...{ setForm, setPage, formDefaults }} /> */}
+              <Button
+                onClick={() => setFormParams({ type: 'movies', resolution: '1080', verified: true })}
+                size="small"
+                variant="contained"
+              >
+                Movies
+              </Button>
+              <Button
+                onClick={() => setFormParams({ verified: true, type: 'anime', uncensored: true })}
+                size="small"
+                variant="contained"
+              >
+                UN
+              </Button>
+              <Button
+                onClick={() => setFormParams({ verified: true, type: 'anime', bluray: true })}
+                size="small"
+                variant="contained"
+              >
+                BD
+              </Button>
+              <Button
+                onClick={() => setFormParams({ type: 'anime', resolution: '2160' })}
+                size="small"
+                variant="contained"
+              >
+                4K
+              </Button>
+            </Stack>
             <Pagination
               boundaryCount={0}
               page={page}
