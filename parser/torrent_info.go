@@ -20,6 +20,7 @@ type TorrentInfo struct {
 	Uncensored bool     `json:"uncensored"`
 	ThreeD     bool     `json:"3d"`
 	Bluray     bool     `json:"bluray"`
+	Checksum   string   `json:"checksum"` // md5 sum
 }
 
 func (t *TorrentInfo) String() string {

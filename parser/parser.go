@@ -60,6 +60,14 @@ func getWebsite(title string) (string, string) {
 	title = strings.Replace(title, results[0], "", 1)
 	return title, strings.ToLower(results[0])
 }
+func getChecksum(title string) (string, string) {
+	results := checksum.FindStringSubmatch(title)
+	if len(results) < 1 {
+		return title, ""
+	}
+	title = strings.Replace(title, results[0], "", 1)
+	return title, strings.ToLower(results[1])
+}
 
 func parseTitle(title string, catType string) (int, map[string]string) {
 	list := regexes
@@ -122,6 +130,7 @@ func Parse(title, catType string) (*TorrentInfo, error) {
 	title, qualities := getQualities(title)
 	title, encodings := getEncodings(title)
 	title, res := getResolution(title)
+	title, checksum := getChecksum(title)
 
 	title = strings.TrimLeft(title, " _-")
 	title = strings.TrimRight(title, " _-")
@@ -134,6 +143,7 @@ func Parse(title, catType string) (*TorrentInfo, error) {
 		Uncensored: uncensored,
 		Group:      group,
 		Website:    website,
+		Checksum:   checksum,
 	}
 	i, params := parseTitle(title, catType)
 	if i >= 0 {

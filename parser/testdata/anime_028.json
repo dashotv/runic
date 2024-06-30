@@ -1,16 +1,16 @@
 {
-  "title": "game of thrones",
-  "season": 4,
-  "episode": 3,
+  "title": "dragon ball super",
+  "season": 1,
+  "episode": 1,
   "year": 0,
   "group": "",
   "website": "",
-  "resolution": "",
-  "quality": "",
+  "resolution": "1080",
+  "quality": "bluray",
   "encodings": [],
   "unrated": false,
   "uncensored": false,
   "3d": false,
-  "bluray": false,
+  "bluray": true,
   "checksum": ""
 }

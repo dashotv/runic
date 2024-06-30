@@ -39,7 +39,7 @@ func TestEncodings(t *testing.T) {
 		encodings []string
 		title     string
 	}{
-		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", []string{"sbs", "x264", "aac"}, "The.Jungle.Book.2016.3D.1080p.BRRip...-ETRG"},
+		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", []string{"3d", "sbs", "x264", "aac"}, "The.Jungle.Book.2016..1080p.BRRip...-ETRG"},
 		{"Hercules (2014) 1080p BrRip H264 - YIFY", []string{"h264"}, "Hercules (2014) 1080p BrRip  - YIFY"},
 		{"Dawn.of.the.Planet.of.the.Apes.2014.HDRip.XViD-EVO", []string{"xvid"}, "Dawn.of.the.Planet.of.the.Apes.2014.HDRip.-EVO"},
 		{"The Big Bang Theory S08E06 HDTV XviD-LOL [eztv]", []string{"xvid"}, "The Big Bang Theory S08E06 HDTV -LOL [eztv]"},
@@ -161,10 +161,10 @@ func TestGroup(t *testing.T) {
 		group   string
 		title   string
 	}{
-		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", "", ""},
-		{"Hercules (2014) 1080p BrRip H264 - YIFY", "", ""},
-		{"[AniSuki] Ayakashi Triangle Volume 5 (BD) (x265 HEVC OPUS) (Uncensored)", "anisuki", "Ayakashi Triangle Volume 5 (BD) (x265 HEVC OPUS) (Uncensored)"},
-		{"[AE] Tokyo Ghoul - [Batch] [UNCEN] [720p]", "ae", "Tokyo Ghoul - [Batch] [UNCEN] [720p]"},
+		{"The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG", "", "The.Jungle.Book.2016.3D.1080p.BRRip.SBS.x264.AAC-ETRG"},
+		{"Hercules (2014) 1080p BrRip H264 - YIFY", "", "Hercules (2014) 1080p BrRip H264 - YIFY"},
+		{"[AniSuki] Ayakashi Triangle Volume 5 (BD) (x265 HEVC OPUS) (Uncensored)", "anisuki", " Ayakashi Triangle Volume 5 (BD) (x265 HEVC OPUS) (Uncensored)"},
+		{"[AE] Tokyo Ghoul - [Batch] [UNCEN] [720p]", "ae", " Tokyo Ghoul - [Batch] [UNCEN] [720p]"},
 	}
 	for _, tt := range testdata {
 		t.Run(tt.subject, func(t *testing.T) {

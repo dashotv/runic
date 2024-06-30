@@ -13,6 +13,7 @@ func init() {
 	uncensored = regexp.MustCompile(`(?i)\b(unc(en)*(sored)*)\b`)
 	group = regexp.MustCompile(`(?i)^` + _group)
 	website = regexp.MustCompile(`(?i)` + _website + `$`)
+	checksum = regexp.MustCompile(`(?i)\[([0-9a-f]{8})\]`)
 }
 
 var sp = `[\s\-_.]`
@@ -38,6 +39,7 @@ var _group = `[\[\(]\s*(?P<group>[^\]\)]+?)\s*[\)\]]`
 var website *regexp.Regexp
 var _website = sp + `*[_-]+` + sp + `*(?P<website>[\w_-]+?)`
 var uncensored *regexp.Regexp
+var checksum *regexp.Regexp
 var encodings *regexp.Regexp
 var _encodings = []string{
 	"10bit",
