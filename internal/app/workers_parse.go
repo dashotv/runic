@@ -18,8 +18,10 @@ func (j *ParseActive) Kind() string { return "parse_active" }
 func (j *ParseActive) Work(ctx context.Context, job *minion.Job[*ParseActive]) error {
 	a := ContextApp(ctx)
 	log := a.Log.Named("parse_active")
+
 	if !a.Config.Production {
 		log.Debugf("skipping: not production")
+		return nil
 	}
 
 	// log := a.Log.Named("parse_active")
