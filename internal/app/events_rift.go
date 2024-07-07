@@ -5,7 +5,10 @@ import (
 	rift "github.com/dashotv/rift/client"
 )
 
-func onRiftVideo(_ *Application, msg *rift.Video) error {
+func onRiftVideo(a *Application, msg *rift.Video) error {
+	if !a.Config.Production {
+		return nil
+	}
 	if err := processRiftVideo(msg); err != nil {
 		return fae.Wrap(err, "processing rift video")
 	}
