@@ -107,7 +107,7 @@ export const IndexersList = () => {
       <Container>
         {isFetching && <LoadingIndicator />}
 
-        <Paper elevation={0} sx={{ width: '100%' }}>
+        <Paper elevation={0} sx={{ m: 0, width: '100%' }}>
           {data?.result?.map((row: Indexer) => (
             <Row key={row.id}>
               <Stack direction={{ xs: 'column', md: 'row' }} spacing={1} alignItems="center">
@@ -141,9 +141,10 @@ export const IndexersList = () => {
                     aria-label="refresh"
                     color="primary"
                     title="refresh"
+                    size="small"
                     onClick={() => row.name && handleRefresh(row.name)}
                   >
-                    <SyncIcon />
+                    <SyncIcon fontSize="small" />
                   </IconButton>
                   <IconButton size="small" onClick={() => deleteIndexer(row.id)} title="active">
                     <DeleteForeverIcon color="error" fontSize="small" />

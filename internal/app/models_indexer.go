@@ -29,7 +29,7 @@ func (c *Connector) IndexerByName(name string) (*Indexer, error) {
 }
 
 func (c *Connector) IndexerList(page, limit int) ([]*Indexer, int64, error) {
-	q := c.Indexer.Query().Limit(limit).Skip((page - 1) * limit).Asc("name")
+	q := c.Indexer.Query().Limit(limit).Skip((page - 1) * limit).Desc("active").Asc("name")
 
 	count, err := q.Count()
 	if err != nil {
