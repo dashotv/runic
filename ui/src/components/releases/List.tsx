@@ -68,6 +68,7 @@ export const ReleaseList = ({
                 component="div"
                 fontWeight="bolder"
                 noWrap
+                minWidth="200px"
                 color="primary"
                 sx={{ pr: 1, '& a': { color: 'primary.main' } }}
                 title={row.raw?.title}
