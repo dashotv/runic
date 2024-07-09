@@ -53,6 +53,13 @@ func setupWorkers(app *Application) error {
 
 	m.Queue("parser", 3, 10, 0)
 
+	if err := minion.Register[*IndexerCounts](m, &IndexerCounts{}); err != nil {
+		return fae.Wrap(err, "registering worker: indexer_counts (IndexerCounts)")
+	}
+	if _, err := m.Schedule("0 5-50/15 * * * *", &IndexerCounts{}); err != nil {
+		return fae.Wrap(err, "scheduling worker: indexer_counts (IndexerCounts)")
+	}
+
 	if err := minion.RegisterWithQueue[*ParseActive](m, &ParseActive{}, "parser"); err != nil {
 		return fae.Wrap(err, "registering worker: parse_active (ParseActive)")
 	}

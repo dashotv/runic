@@ -20,6 +20,7 @@ export interface Indexer {
   active?: boolean;
   categories?: number[];
   processed_at?: string;
+  count?: number;
 }
 export interface Popular {
   title?: string;

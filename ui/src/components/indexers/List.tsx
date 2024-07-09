@@ -130,11 +130,12 @@ export const IndexersList = () => {
                   <Categories categories={row.categories} />
                 </Stack>
                 <Stack direction="row" spacing={0} alignItems="center" width="100%" justifyContent="end">
+                  {row.count !== undefined && row.count > 0 && <Typography variant="body2">{row.count}</Typography>}
                   {row.processed_at && <Published date={row.processed_at} />}
-                  <IconButton size="small" onClick={() => read(row)} title="active">
+                  <IconButton size="small" onClick={() => read(row)} title="Read">
                     <ClassIcon color="primary" fontSize="small" />
                   </IconButton>
-                  <IconButton size="small" onClick={() => parse(row)} title="active">
+                  <IconButton size="small" onClick={() => parse(row)} title="Parse">
                     <PlayLessonIcon color="primary" fontSize="small" />
                   </IconButton>
                   <IconButton

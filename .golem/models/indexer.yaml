@@ -12,3 +12,5 @@ fields:
     type: "[]int"
   - name: processed_at
     type: time.Time
+  - name: count
+    type: int64

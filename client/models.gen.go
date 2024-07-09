@@ -29,6 +29,7 @@ type Indexer struct { // model
 	Active      bool      `bson:"active" json:"active"`
 	Categories  []int     `bson:"categories" json:"categories"`
 	ProcessedAt time.Time `bson:"processed_at" json:"processed_at"`
+	Count       int64     `bson:"count" json:"count"`
 }
 
 type Popular struct { // struct

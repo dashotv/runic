@@ -1,0 +1,2 @@
+name: indexer_counts
+schedule: "0 5-50/15 * * * *"
