@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
 
-import { Button, Pagination, Paper, Stack } from '@mui/material';
+import { Button, Pagination, Paper, Stack, Typography } from '@mui/material';
 
 import { Container, LoadingIndicator } from '@dashotv/components';
 
@@ -136,12 +136,18 @@ const Search = () => {
                 4K
               </Button>
             </Stack>
-            <Pagination
-              boundaryCount={0}
-              page={page}
-              count={Math.ceil((data?.Total || 0) / pagesize)}
-              onChange={handleChange}
-            />
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="subtitle2" color="textSecondary">
+                {data?.Total}
+              </Typography>
+              <Pagination
+                boundaryCount={0}
+                size="small"
+                page={page}
+                count={Math.ceil((data?.Total || 0) / pagesize)}
+                onChange={handleChange}
+              />
+            </Stack>
           </Stack>
         </Paper>
       </Container>
