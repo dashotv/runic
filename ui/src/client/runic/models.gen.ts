@@ -77,3 +77,35 @@ export interface Release {
   checksum?: string;
   published_at?: string;
 }
+export interface Torrent {
+  id?: string;
+  created_at?: string;
+  updated_at?: string;
+
+  type?: string;
+  source?: string;
+  raw?: string;
+  title?: string;
+  description?: string;
+  size?: string;
+  view?: string;
+  download?: string;
+  infohash?: string;
+  name?: string;
+  season?: number;
+  episode?: number;
+  volume?: number;
+  year?: number;
+  checksum?: string;
+  group?: string;
+  author?: string;
+  verified?: boolean;
+  widescreen?: boolean;
+  uncensored?: boolean;
+  bluray?: boolean;
+  nzb?: boolean;
+  resolution?: string;
+  encoding?: string;
+  quality?: string;
+  published_at?: string;
+}

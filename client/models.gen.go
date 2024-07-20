@@ -91,3 +91,36 @@ type Release struct { // model
 	Checksum    string              `bson:"checksum" json:"checksum" grimoire:"index"`
 	PublishedAt time.Time           `bson:"published_at" json:"published_at" grimoire:"index"`
 }
+
+type Torrent struct { // model
+	grimoire.Document `bson:",inline"` // includes default model settings
+	//ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	//CreatedAt time.Time          `bson:"created_at" json:"created_at"`
+	//UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
+	Type        string    `bson:"type" json:"type"`
+	Source      string    `bson:"source" json:"source"`
+	Raw         string    `bson:"raw" json:"raw"`
+	Title       string    `bson:"title" json:"title"`
+	Description string    `bson:"description" json:"description"`
+	Size        string    `bson:"size" json:"size"`
+	View        string    `bson:"view" json:"view"`
+	Download    string    `bson:"download" json:"download"`
+	Infohash    string    `bson:"infohash" json:"infohash"`
+	Name        string    `bson:"name" json:"name"`
+	Season      int       `bson:"season" json:"season"`
+	Episode     int       `bson:"episode" json:"episode"`
+	Volume      int       `bson:"volume" json:"volume"`
+	Year        int       `bson:"year" json:"year"`
+	Checksum    string    `bson:"checksum" json:"checksum"`
+	Group       string    `bson:"group" json:"group"`
+	Author      string    `bson:"author" json:"author"`
+	Verified    bool      `bson:"verified" json:"verified"`
+	Widescreen  bool      `bson:"widescreen" json:"widescreen"`
+	Uncensored  bool      `bson:"uncensored" json:"uncensored"`
+	Bluray      bool      `bson:"bluray" json:"bluray"`
+	Nzb         bool      `bson:"nzb" json:"nzb"`
+	Resolution  string    `bson:"resolution" json:"resolution"`
+	Encoding    string    `bson:"encoding" json:"encoding"`
+	Quality     string    `bson:"quality" json:"quality"`
+	PublishedAt time.Time `bson:"published_at" json:"published_at"`
+}

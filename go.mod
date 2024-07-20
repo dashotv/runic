@@ -4,11 +4,11 @@ go 1.22.1
 
 require (
 	github.com/caarlos0/env/v10 v10.0.0
-	github.com/dashotv/fae v0.1.9
+	github.com/dashotv/fae v0.1.10
 	github.com/dashotv/golem v0.14.30
-	github.com/dashotv/grimoire v0.5.8
+	github.com/dashotv/grimoire v0.5.10
 	github.com/dashotv/mercury v0.4.0
-	github.com/dashotv/minion v0.4.13
+	github.com/dashotv/minion v0.4.16
 	github.com/dashotv/rift v0.3.4
 	github.com/dotenv-org/godotenvvault v0.6.0
 	github.com/go-resty/resty/v2 v2.13.1
@@ -25,7 +25,7 @@ require (
 	github.com/spf13/cobra v1.8.1
 	github.com/streamingfast/logging v0.0.0-20230608130331-f22c91403091
 	github.com/stretchr/testify v1.9.0
-	go.mongodb.org/mongo-driver v1.15.1
+	go.mongodb.org/mongo-driver v1.16.0
 	go.uber.org/ratelimit v0.3.1
 	go.uber.org/zap v1.27.0
 	golang.org/x/net v0.26.0

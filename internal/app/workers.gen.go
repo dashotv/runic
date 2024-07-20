@@ -60,6 +60,10 @@ func setupWorkers(app *Application) error {
 		return fae.Wrap(err, "scheduling worker: indexer_counts (IndexerCounts)")
 	}
 
+	if err := minion.Register[*MigrateTorrents](m, &MigrateTorrents{}); err != nil {
+		return fae.Wrap(err, "registering worker: migrate_torrents (MigrateTorrents)")
+	}
+
 	if err := minion.RegisterWithQueue[*ParseActive](m, &ParseActive{}, "parser"); err != nil {
 		return fae.Wrap(err, "registering worker: parse_active (ParseActive)")
 	}
