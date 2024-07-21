@@ -7,6 +7,8 @@ import (
 
 	"go.uber.org/ratelimit"
 
+	"github.com/sourcegraph/conc"
+
 	"github.com/dashotv/fae"
 	"github.com/dashotv/minion"
 )
@@ -33,41 +35,55 @@ func (j *UpdateIndexes) Timeout(job *minion.Job[*UpdateIndexes]) time.Duration {
 	return 24 * 60 * time.Minute // TODO: this increases as the number of releases increase, not sure timeout is the right way to handle this
 }
 func (j *UpdateIndexes) Work(ctx context.Context, job *minion.Job[*UpdateIndexes]) error {
+	a := ContextApp(ctx)
+	if a == nil {
+		return fae.New("app not found")
+	}
+
 	log := app.Log.Named("update_indexes")
+	log.Debug("updating indices")
 	// ctx, cancel := context.WithCancel(ctx)
 	// defer cancel()
 
 	rl := ratelimit.New(scryRateLimit) // per second
+	ch := make(chan *Release, 100)
+	wg := conc.NewWaitGroup()
 
-	count := &Count{}
+	wg.Go(func() {
+		defer close(ch)
 
-	total, err := app.DB.Release.Query().Limit(-1).Count()
-	if err != nil {
-		app.Workers.Log.Errorf("getting releases count: %s", err)
-		return fae.Wrap(err, "getting releases count")
-	}
-	err = app.DB.Release.Query().Desc("published_at").Batch(100, func(releases []*Release) error {
-		select {
-		case <-ctx.Done():
-			return fae.Errorf("cancelled")
-		default:
-			// proceed
+		err := app.DB.Release.Query().Each(100, func(r *Release) error {
+			// log.Debugw("push", "id", r.ID.Hex())
+			ch <- r
+			return nil
+		})
+		if err != nil {
+			app.Workers.Log.Errorf("batch releases: %s", err)
 		}
-
-		for _, r := range releases {
-			rl.Take()
-			if err := app.DB.Release.Update(r); err != nil {
-				app.Workers.Log.Errorf("updating release (%s): %s", r.ID.Hex(), err)
-			}
-			count.Inc()
-		}
-		log.Debugf("index release: %d/%d", count.i, total)
-		return nil
 	})
-	if err != nil {
-		app.Workers.Log.Errorf("batch releases: %s", err)
-		return fae.Wrap(err, "batch releases")
-	}
+
+	wg.Go(func() {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case r, ok := <-ch:
+				if !ok {
+					return
+				}
+
+				log.Debugw("handle", "id", r.ID.Hex())
+				rl.Take()
+				if err := app.DB.Release.Update(r); err != nil {
+					app.Workers.Log.Errorf("updating release (%s): %s", r.ID.Hex(), err)
+				}
+			}
+		}
+	})
+
+	wg.Wait()
+
+	log.Debug("update complete")
 
 	return nil
 }
