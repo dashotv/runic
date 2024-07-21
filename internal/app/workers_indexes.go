@@ -72,7 +72,7 @@ func (j *UpdateIndexes) Work(ctx context.Context, job *minion.Job[*UpdateIndexes
 					return
 				}
 
-				log.Debugw("handle", "id", r.ID.Hex())
+				// log.Debugw("handle", "id", r.ID.Hex())
 				rl.Take()
 				if err := app.DB.Release.Update(r); err != nil {
 					app.Workers.Log.Errorf("updating release (%s): %s", r.ID.Hex(), err)
