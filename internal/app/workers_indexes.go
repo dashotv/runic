@@ -30,7 +30,7 @@ type UpdateIndexes struct {
 
 func (j *UpdateIndexes) Kind() string { return "UpdateIndexes" }
 func (j *UpdateIndexes) Timeout(job *minion.Job[*UpdateIndexes]) time.Duration {
-	return 4 * 60 * time.Minute // TODO: this increases as the number of releases increase, not sure timeout is the right way to handle this
+	return 24 * 60 * time.Minute // TODO: this increases as the number of releases increase, not sure timeout is the right way to handle this
 }
 func (j *UpdateIndexes) Work(ctx context.Context, job *minion.Job[*UpdateIndexes]) error {
 	log := app.Log.Named("update_indexes")
