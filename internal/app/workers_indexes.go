@@ -43,8 +43,8 @@ func (j *UpdateIndexes) Work(ctx context.Context, job *minion.Job[*UpdateIndexes
 
 	total, err := app.DB.Release.Query().Limit(-1).Count()
 	if err != nil {
-		app.Workers.Log.Errorf("getting series count: %s", err)
-		return err
+		app.Workers.Log.Errorf("getting releases count: %s", err)
+		return fae.Wrap(err, "getting releases count")
 	}
 	err = app.DB.Release.Query().Desc("published_at").Batch(100, func(releases []*Release) error {
 		select {
@@ -66,7 +66,7 @@ func (j *UpdateIndexes) Work(ctx context.Context, job *minion.Job[*UpdateIndexes
 	})
 	if err != nil {
 		app.Workers.Log.Errorf("batch releases: %s", err)
-		return err
+		return fae.Wrap(err, "batch releases")
 	}
 
 	return nil
