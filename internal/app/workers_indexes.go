@@ -52,7 +52,7 @@ func (j *UpdateIndexes) Work(ctx context.Context, job *minion.Job[*UpdateIndexes
 	wg.Go(func() {
 		defer close(ch)
 
-		err := app.DB.Release.Query().Each(100, func(r *Release) error {
+		err := app.DB.Release.Query().Desc("published_at").Each(100, func(r *Release) error {
 			// log.Debugw("push", "id", r.ID.Hex())
 			ch <- r
 			return nil
