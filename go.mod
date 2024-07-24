@@ -6,7 +6,7 @@ require (
 	github.com/caarlos0/env/v10 v10.0.0
 	github.com/dashotv/fae v0.1.10
 	github.com/dashotv/golem v0.14.30
-	github.com/dashotv/grimoire v0.5.10
+	github.com/dashotv/grimoire v0.5.13
 	github.com/dashotv/mercury v0.4.0
 	github.com/dashotv/minion v0.4.16
 	github.com/dashotv/rift v0.3.4
