@@ -93,6 +93,10 @@ func setupWorkers(app *Application) error {
 		return fae.Wrap(err, "scheduling worker: releases_popular (ReleasesPopular)")
 	}
 
+	if err := minion.Register[*ResetIndexes](m, &ResetIndexes{}); err != nil {
+		return fae.Wrap(err, "registering worker: reset_indexes (ResetIndexes)")
+	}
+
 	if err := minion.Register[*UpdateIndexes](m, &UpdateIndexes{}); err != nil {
 		return fae.Wrap(err, "registering worker: update_indexes (UpdateIndexes)")
 	}

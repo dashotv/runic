@@ -11,6 +11,7 @@ import (
 	"github.com/dashotv/minion"
 	rift "github.com/dashotv/rift/client"
 	"github.com/dashotv/runic/internal/reader"
+	scry "github.com/dashotv/scry/client"
 )
 
 var app *Application
@@ -50,6 +51,7 @@ type Application struct {
 
 	//golem:template:app/app_partial_definitions
 
+	Scry *scry.Client
 }
 
 func Setup() error {

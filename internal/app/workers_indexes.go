@@ -11,6 +11,7 @@ import (
 
 	"github.com/dashotv/fae"
 	"github.com/dashotv/minion"
+	scry "github.com/dashotv/scry/client"
 )
 
 var scryRateLimit = 100 // per second
@@ -84,6 +85,30 @@ func (j *UpdateIndexes) Work(ctx context.Context, job *minion.Job[*UpdateIndexes
 	wg.Wait()
 
 	log.Debug("update complete")
+
+	return nil
+}
+
+type ResetIndexes struct {
+	minion.WorkerDefaults[*ResetIndexes]
+}
+
+func (j *ResetIndexes) Kind() string { return "reset_indexes" }
+func (j *ResetIndexes) Work(ctx context.Context, job *minion.Job[*ResetIndexes]) error {
+	a := ContextApp(ctx)
+	index := "runic_dev*"
+	if a.Config.Production {
+		index = "runic_prod*"
+	}
+
+	_, err := a.Scry.Es.Delete(ctx, &scry.EsDeleteRequest{Index: index})
+	if err != nil {
+		return fae.Wrap(err, "failed to delete media index")
+	}
+
+	if err := a.Workers.Enqueue(&UpdateIndexes{}); err != nil {
+		return fae.Wrap(err, "failed to enqueue update indexes job")
+	}
 
 	return nil
 }

@@ -55,6 +55,7 @@ type Config struct {
 
 	//golem:template:app/config_partial_struct
 
+	ScryURL         string   `env:"SCRY_URL"`
 	JackettURL      string   `env:"JACKETT_URL"`
 	JackettKey      string   `env:"JACKETT_KEY"`
 	NZBGeekURL      string   `env:"NZBGEEK_URL"`
