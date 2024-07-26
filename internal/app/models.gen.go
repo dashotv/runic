@@ -66,6 +66,7 @@ func NewConnector(app *Application) (*Connector, error) {
 	}
 
 	grimoire.CreateIndexes[*Release](release, &Release{}, "created_at;updated_at")
+
 	grimoire.CreateIndexesFromTags[*Release](release, &Release{})
 
 	torrent, err := connection[*Torrent]("torrent")
