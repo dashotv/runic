@@ -42,6 +42,13 @@ export const ReleaseList = ({
       },
     );
   };
+  if (!data || !data.length) {
+    return (
+      <>
+        <Typography color="gray">no releases</Typography>
+      </>
+    );
+  }
   return (
     <>
       {data?.map((row: Release) => (
