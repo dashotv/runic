@@ -13,7 +13,7 @@ import { ReleaseList, ReleasesEmbeddedForm, SearchForm, useSearchQuery } from 'c
 
 const pagesize = 25;
 export interface RunicSearchProps {
-  selector: (url: string) => void;
+  selector: (url: string, tags: string) => void;
   selected?: string;
   rawForm: SearchForm;
 }
@@ -21,7 +21,6 @@ const RemoteSearch = ({ rawForm, selector, selected }: RunicSearchProps) => {
   const [defaultForm] = useState<SearchForm>(rawForm);
   const [page, setPage] = useState(1);
   const [form, setForm] = useState<SearchForm>(() => {
-    rawForm.verified = false;
     return rawForm;
   });
 
@@ -36,7 +35,19 @@ const RemoteSearch = ({ rawForm, selector, selected }: RunicSearchProps) => {
     if (!row.download) {
       return;
     }
-    selector(row.download);
+
+    const tags: string[] = [];
+    if (row.group) {
+      tags.push(row.group);
+    }
+    if (row.website) {
+      tags.push(row.website);
+    }
+    if (row.resolution) {
+      tags.push(row.resolution);
+    }
+
+    selector(row.download, tags.join(' '));
   };
   const handleChange = useCallback((_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
