@@ -84,6 +84,8 @@ var _resolutions = []string{
 	"2160",
 	"480",
 	"720",
+	"4k",
+	"2k",
 }
 var qualities *regexp.Regexp
 var _qualities = []string{

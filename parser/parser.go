@@ -19,6 +19,11 @@ func getResolution(title string) (string, string) {
 		return title, ""
 	}
 	title = strings.Replace(title, results[0], "", 1)
+	if results[1] == "4k" || results[1] == "4K" {
+		return title, "2160"
+	} else if results[1] == "2k" || results[1] == "2K" {
+		return title, "1080"
+	}
 	return title, results[1]
 }
 func getEncodings(title string) (string, []string) {

@@ -81,6 +81,7 @@ func TestResolutions(t *testing.T) {
 		{"Guardians Of The Galaxy 2014 R6 720p HDCAM x264-JYK", "720", "Guardians Of The Galaxy 2014 R6  HDCAM x264-JYK"},
 		{"Marvel's.Agents.of.S.H.I.E.L.D.S02E01.Shadows.1080p.WEB-DL.DD5.1", "1080", "Marvel's.Agents.of.S.H.I.E.L.D.S02E01.Shadows..WEB-DL.DD5.1"},
 		{"[Erai-raws] Shangri-La Frontier - Kusogee Hunter, Kamige ni Idoman to Su - 20 [720p][Multiple Subtitle] [ENG][POR-BR][SPA-LA][SPA][ARA][FRE][GER][ITA][RUS]", "720", "[Erai-raws] Shangri-La Frontier - Kusogee Hunter, Kamige ni Idoman to Su - 20 [Multiple Subtitle] [ENG][POR-BR][SPA-LA][SPA][ARA][FRE][GER][ITA][RUS]"},
+		{"[FSP DN] 牧神记 Mushen Ji (Tales of Herding Gods) - 02 [4K]", "2160", "[FSP DN] 牧神记 Mushen Ji (Tales of Herding Gods) - 02 "},
 	}
 	for _, tt := range testdata {
 		t.Run(tt.subject, func(t *testing.T) {
