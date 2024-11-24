@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"time"
 
 	"github.com/samber/lo"
 
@@ -14,6 +15,9 @@ type ReleasesPopular struct {
 }
 
 func (j *ReleasesPopular) Kind() string { return "releases_popular" }
+func (j *ReleasesPopular) Timeout(job *minion.Job[*ReleasesPopular]) time.Duration {
+	return 5 * time.Minute
+}
 func (j *ReleasesPopular) Work(ctx context.Context, job *minion.Job[*ReleasesPopular]) error {
 	a := ContextApp(ctx)
 	logger := a.Log.Named("releases_popular")
