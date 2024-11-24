@@ -95,6 +95,15 @@ func (c *Connector) ReleasesPopular(interval string) (map[string][]*Popular, err
 	return out, nil
 }
 
+func (a *Application) CachePopular(interval string) error {
+	resp, err := a.DB.ReleasesPopular(interval)
+	if err != nil {
+		return err
+	}
+
+	return a.Cache.Set("releases_popular_"+interval, resp)
+}
+
 func (c *Connector) ReleasesPopularType(ctx context.Context, t string, date time.Time, limit int) ([]*Popular, error) {
 	p := []bson.M{
 		{"$match": bson.M{"title": bson.M{"$ne": ""}, "type": t, "published_at": bson.M{"$gte": date}}},
@@ -127,7 +136,7 @@ func (c *Connector) ReleasesPopularType(ctx context.Context, t string, date time
 }
 
 func (c *Connector) ReleasesPopularMovies() ([]*PopularMovie, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 	defer TickTock("ReleasesPopularMovies")()
 
@@ -153,4 +162,13 @@ func (c *Connector) ReleasesPopularMovies() ([]*PopularMovie, error) {
 	}
 
 	return results, nil
+}
+
+func (a *Application) CachePopularMovies() error {
+	resp, err := a.DB.ReleasesPopularMovies()
+	if err != nil {
+		return err
+	}
+
+	return a.Cache.Set("releases_popular_movies", resp)
 }
