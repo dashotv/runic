@@ -8,13 +8,13 @@ import (
 )
 
 func TestRift_GetAll(t *testing.T) {
-	err := getRiftAll(nil)
+	err := app.getRiftAll(nil)
 	assert.NoError(t, err)
 }
 
 func TestRift_Get(t *testing.T) {
 	app.Rift.SetDebug(true)
-	resp, err := getRift(nil)
+	resp, err := app.getRift(nil)
 	assert.NoError(t, err)
 	assert.Len(t, resp.Result, 100)
 	for _, v := range resp.Result {

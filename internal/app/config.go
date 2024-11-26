@@ -164,6 +164,9 @@ func (c *ConnectionSet) UnmarshalText(text []byte) error {
 	*c = make(map[string]*Connection)
 	for _, conn := range strings.Split(string(text), ";") {
 		kv := strings.Split(conn, "=")
+		if len(kv) != 2 {
+			continue
+		}
 		vals := strings.Split(kv[1]+",,", ",")
 		(*c)[kv[0]] = &Connection{
 			URI:        vals[0],

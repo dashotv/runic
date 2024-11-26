@@ -92,21 +92,22 @@ type ParseRift struct {
 
 func (j *ParseRift) Kind() string { return "parse_rift" }
 func (j *ParseRift) Work(ctx context.Context, job *minion.Job[*ParseRift]) error {
-	resp, err := getRift(ctx)
+	a := ContextApp(ctx)
+	if a == nil {
+		return fae.New("ParseRift: no app in context")
+	}
+
+	resp, err := a.getRift(ctx)
 	if err != nil {
 		return err
 	}
 
-	err = processRift(resp)
+	err = a.processRift(resp)
 	if err != nil {
 		return err
 	}
 
 	return nil
-}
-
-func getRift(ctx context.Context) (*rift.VideoIndexResponse, error) {
-	return app.Rift.Video.Index(ctx, &rift.VideoIndexRequest{Limit: 100, Page: 1})
 }
 
 type ParseRiftAll struct {
@@ -115,11 +116,19 @@ type ParseRiftAll struct {
 
 func (j *ParseRiftAll) Kind() string { return "parse_rift_all" }
 func (j *ParseRiftAll) Work(ctx context.Context, job *minion.Job[*ParseRiftAll]) error {
-	return getRiftAll(ctx)
+	a := ContextApp(ctx)
+	if a == nil {
+		return fae.New("ParseRift: no app in context")
+	}
+	return a.getRiftAll(ctx)
 }
 
-func getRiftAll(ctx context.Context) error {
-	count, err := app.Rift.Video.Index(ctx, &rift.VideoIndexRequest{Limit: 0})
+func (a *Application) getRift(ctx context.Context) (*rift.VideoIndexResponse, error) {
+	return app.Rift.Video.Index(ctx, &rift.VideoIndexRequest{Limit: 100, Page: 1})
+}
+
+func (a *Application) getRiftAll(ctx context.Context) error {
+	count, err := a.Rift.Video.Index(ctx, &rift.VideoIndexRequest{Limit: 0})
 	if err != nil {
 		return err
 	}
@@ -127,12 +136,12 @@ func getRiftAll(ctx context.Context) error {
 	pages := int(count.Total)/100 + 1
 	limit := 100
 	for page := 1; page <= pages; page++ {
-		resp, err := app.Rift.Video.Index(ctx, &rift.VideoIndexRequest{Limit: limit, Page: page})
+		resp, err := a.Rift.Video.Index(ctx, &rift.VideoIndexRequest{Limit: limit, Page: page})
 		if err != nil {
 			return err
 		}
 
-		err = processRift(resp)
+		err = a.processRift(resp)
 		if err != nil {
 			return err
 		}
@@ -140,10 +149,10 @@ func getRiftAll(ctx context.Context) error {
 	return nil
 }
 
-func processRift(resp *rift.VideoIndexResponse) error {
+func (a *Application) processRift(resp *rift.VideoIndexResponse) error {
 	for _, video := range resp.Result {
 		// app.Log.Debugf("processRift: %s %02dx%02d", video.Title, video.Season, video.Episode)
-		if err := processRiftVideo(video); err != nil {
+		if err := a.processRiftVideo(video); err != nil {
 			return err
 		}
 	}
@@ -151,10 +160,10 @@ func processRift(resp *rift.VideoIndexResponse) error {
 	return nil
 }
 
-func processRiftVideo(video *rift.Video) error {
+func (a *Application) processRiftVideo(video *rift.Video) error {
 	// TODO: change this to a unique index?
 	// Skip if it exists
-	count, err := app.DB.Release.Query().Where("checksum", video.DisplayID).Count()
+	count, err := a.DB.Release.Query().Where("checksum", video.DisplayID).Count()
 	if err != nil {
 		return err
 	}
@@ -182,10 +191,10 @@ func processRiftVideo(video *rift.Video) error {
 		Website:     video.Source,
 		View:        video.View,
 		PublishedAt: time.Now(),
-		Verified:    true,
+		Verified:    a.Config.IsVerifiedGroup(video.Source),
 	}
 
-	if err := app.DB.Release.Save(result); err != nil {
+	if err := a.DB.Release.Save(result); err != nil {
 		return err
 	}
 

@@ -5,10 +5,13 @@ import (
 	"os"
 	"strings"
 
-	_ "github.com/joho/godotenv/autoload"
+	"github.com/joho/godotenv"
 )
 
 func init() {
+	if err := godotenv.Load("../../.env"); err != nil {
+		panic(err)
+	}
 	if err := appSetup(); err != nil {
 		panic(err)
 	}
@@ -48,7 +51,10 @@ func appSetup() error {
 
 func envReplaceAll(old, new string, vars []string) error {
 	for _, v := range vars {
-		if err := os.Setenv(v, strings.ReplaceAll(os.Getenv(v), old, new)); err != nil {
+		oldval := os.Getenv(v)
+		newval := strings.ReplaceAll(oldval, old, new)
+		fmt.Printf("replacing %s: %s -> %s\n", v, oldval, newval)
+		if err := os.Setenv(v, newval); err != nil {
 			return err
 		}
 	}
