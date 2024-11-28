@@ -171,8 +171,9 @@ func (a *Application) processRiftVideo(video *rift.Video) error {
 		return nil
 	}
 
-	// log.Debugf("video: %s", video.Title)
+	// a.Log.Warnf("video: %s [%t] %s", video.Title, a.Config.IsVerifiedGroup(video.Source), video.Source)
 	season := 1
+
 	if video.Season != 0 {
 		season = video.Season
 	}

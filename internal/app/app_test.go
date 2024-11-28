@@ -53,7 +53,7 @@ func envReplaceAll(old, new string, vars []string) error {
 	for _, v := range vars {
 		oldval := os.Getenv(v)
 		newval := strings.ReplaceAll(oldval, old, new)
-		fmt.Printf("replacing %s: %s -> %s\n", v, oldval, newval)
+		// fmt.Printf("replacing %s: %s -> %s\n", v, oldval, newval)
 		if err := os.Setenv(v, newval); err != nil {
 			return err
 		}
