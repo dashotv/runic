@@ -41,25 +41,92 @@ func (j *UpdateIndexes) Work(ctx context.Context, job *minion.Job[*UpdateIndexes
 		return fae.New("app not found")
 	}
 
-	log := app.Log.Named("update_indexes")
-	log.Debug("updating indices")
-	// ctx, cancel := context.WithCancel(ctx)
-	// defer cancel()
+	if err := a.updateIndexes(ctx, 24*30); err != nil {
+		return fae.Wrap(err, "failed to update indexes")
+	}
 
+	return nil
+}
+
+type UpdateIndexesAll struct {
+	minion.WorkerDefaults[*UpdateIndexesAll]
+}
+
+func (j *UpdateIndexesAll) Kind() string { return "update_indexes_all" }
+func (j *UpdateIndexesAll) Work(ctx context.Context, job *minion.Job[*UpdateIndexesAll]) error {
+	a := ContextApp(ctx)
+	if a == nil {
+		return fae.New("app not found")
+	}
+
+	if err := a.updateIndexes(ctx, 24*30*6); err != nil {
+		return fae.Wrap(err, "failed to update indexes")
+	}
+
+	return nil
+}
+
+type UpdateIndexesDaily struct {
+	minion.WorkerDefaults[*UpdateIndexesDaily]
+}
+
+func (j *UpdateIndexesDaily) Kind() string { return "update_indexes_daily" }
+func (j *UpdateIndexesDaily) Work(ctx context.Context, job *minion.Job[*UpdateIndexesDaily]) error {
+	a := ContextApp(ctx)
+	if a == nil {
+		return fae.New("app not found")
+	}
+
+	if err := a.updateIndexes(ctx, 24); err != nil {
+		return fae.Wrap(err, "failed to update indexes")
+	}
+
+	return nil
+}
+
+type UpdateIndexesHourly struct {
+	minion.WorkerDefaults[*UpdateIndexesHourly]
+}
+
+func (j *UpdateIndexesHourly) Kind() string { return "update_indexes_hourly" }
+func (j *UpdateIndexesHourly) Work(ctx context.Context, job *minion.Job[*UpdateIndexesHourly]) error {
+	a := ContextApp(ctx)
+	if a == nil {
+		return fae.New("app not found")
+	}
+
+	if err := a.updateIndexes(ctx, 1); err != nil {
+		return fae.Wrap(err, "failed to update indexes")
+	}
+
+	return nil
+}
+
+func (a *Application) updateIndexes(ctx context.Context, hours int) error {
 	rl := ratelimit.New(scryRateLimit) // per second
 	ch := make(chan *Release, 100)
 	wg := conc.NewWaitGroup()
 
+	now := time.Now()
+	from := now.Add(-time.Duration(hours) * time.Hour)
+	q := a.DB.Release.Query().Desc("published_at").GreaterThan("published_at", from).LessThan("published_at", now)
+
+	count, err := q.Count()
+	if err != nil {
+		return fae.Wrap(err, "failed to count releases")
+	}
+
+	a.Workers.Log.Infow("update indexes", "hours", hours, "count", count)
+
 	wg.Go(func() {
 		defer close(ch)
 
-		err := app.DB.Release.Query().Desc("published_at").Each(100, func(r *Release) error {
-			// log.Debugw("push", "id", r.ID.Hex())
+		err := q.Each(100, func(r *Release) error {
 			ch <- r
 			return nil
 		})
 		if err != nil {
-			app.Workers.Log.Errorf("batch releases: %s", err)
+			a.Workers.Log.Errorf("batch releases: %s", err)
 		}
 	})
 
@@ -73,18 +140,16 @@ func (j *UpdateIndexes) Work(ctx context.Context, job *minion.Job[*UpdateIndexes
 					return
 				}
 
-				// log.Debugw("handle", "id", r.ID.Hex())
+				// a.Workers.Log.Debugw("handle", "id", r.ID.Hex())
 				rl.Take()
-				if err := app.DB.Release.Update(r); err != nil {
-					app.Workers.Log.Errorf("updating release (%s): %s", r.ID.Hex(), err)
+				if err := a.DB.Release.Update(r); err != nil {
+					a.Workers.Log.Errorf("updating release (%s): %s", r.ID.Hex(), err)
 				}
 			}
 		}
 	})
 
 	wg.Wait()
-
-	log.Debug("update complete")
 
 	return nil
 }

@@ -1,0 +1,2 @@
+name: update_indexes_hourly
+schedule: 0 0 * * * *

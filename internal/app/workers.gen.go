@@ -100,6 +100,27 @@ func setupWorkers(app *Application) error {
 	if err := minion.Register[*UpdateIndexes](m, &UpdateIndexes{}); err != nil {
 		return fae.Wrap(err, "registering worker: update_indexes (UpdateIndexes)")
 	}
+	if _, err := m.Schedule("0 0 8 1 * *", &UpdateIndexes{}); err != nil {
+		return fae.Wrap(err, "scheduling worker: update_indexes (UpdateIndexes)")
+	}
+
+	if err := minion.Register[*UpdateIndexesAll](m, &UpdateIndexesAll{}); err != nil {
+		return fae.Wrap(err, "registering worker: update_indexes_all (UpdateIndexesAll)")
+	}
+
+	if err := minion.Register[*UpdateIndexesDaily](m, &UpdateIndexesDaily{}); err != nil {
+		return fae.Wrap(err, "registering worker: update_indexes_daily (UpdateIndexesDaily)")
+	}
+	if _, err := m.Schedule("0 0 8 * * *", &UpdateIndexesDaily{}); err != nil {
+		return fae.Wrap(err, "scheduling worker: update_indexes_daily (UpdateIndexesDaily)")
+	}
+
+	if err := minion.Register[*UpdateIndexesHourly](m, &UpdateIndexesHourly{}); err != nil {
+		return fae.Wrap(err, "registering worker: update_indexes_hourly (UpdateIndexesHourly)")
+	}
+	if _, err := m.Schedule("0 0 * * * *", &UpdateIndexesHourly{}); err != nil {
+		return fae.Wrap(err, "scheduling worker: update_indexes_hourly (UpdateIndexesHourly)")
+	}
 
 	app.Workers = m
 	return nil

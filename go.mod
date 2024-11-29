@@ -22,6 +22,7 @@ require (
 	github.com/redis/go-redis/v9 v9.5.3
 	github.com/samber/lo v1.46.0
 	github.com/sirupsen/logrus v1.9.3
+	github.com/smallstep/assert v0.0.0-20200723003110-82e2b9b3b262
 	github.com/sourcegraph/conc v0.3.0
 	github.com/spf13/cobra v1.8.1
 	github.com/streamingfast/logging v0.0.0-20230608130331-f22c91403091
