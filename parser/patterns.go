@@ -53,6 +53,7 @@ var _encodings = []string{
 	"aac2",
 	"ac3",
 	"avc",
+	"av1",
 	"dd5.1",
 	"dd5",
 	"ddp2",
