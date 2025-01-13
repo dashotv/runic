@@ -8,7 +8,6 @@ import { Grid, Pagination, Paper, Stack, Typography } from '@mui/material';
 
 import { ButtonMap, ButtonMapButton, LoadingIndicator } from '@dashotv/components';
 
-import { useIndexersOptionsQuery } from 'components/indexers';
 import { ReleaseList, ReleasesEmbeddedForm, SearchForm, useSearchQuery } from 'components/releases';
 
 const pagesize = 25;
@@ -24,7 +23,6 @@ const RemoteSearch = ({ rawForm, selector, selected }: RunicSearchProps) => {
     return rawForm;
   });
 
-  const { data: indexers } = useIndexersOptionsQuery();
   const { data, isFetching } = useSearchQuery(pagesize, (page - 1) * pagesize, form);
 
   const reset = () => {
@@ -77,7 +75,7 @@ const RemoteSearch = ({ rawForm, selector, selected }: RunicSearchProps) => {
         {isFetching ? <LoadingIndicator /> : null}
         <Grid container spacing={1}>
           <Grid item md={8} xs={12}>
-            <ReleasesEmbeddedForm form={form} setForm={setForm} reset={reset} indexers={indexers} />
+            <ReleasesEmbeddedForm form={form} setForm={setForm} reset={reset} />
           </Grid>
           <Grid item md={4} xs={12} justifyContent="end">
             <Stack direction="row" spacing={0} justifyContent="end" width="100%" sx={{ pt: 2 }}>

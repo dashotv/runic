@@ -123,7 +123,7 @@ export function ReleasesEmbeddedForm({
   reset,
 }: {
   form: SearchForm;
-  indexers?: Option[];
+  // indexers?: Option[];
   setForm: React.Dispatch<React.SetStateAction<SearchForm>>;
   reset?: () => void;
 }) {
