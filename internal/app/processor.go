@@ -4,8 +4,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/samber/lo"
-
 	rift "github.com/dashotv/rift/client"
 	"github.com/dashotv/runic/internal/newznab"
 	"github.com/dashotv/runic/internal/reader"
@@ -131,9 +129,6 @@ func (p *Processor) Process(source string, list []*newznab.NZB) ([]*Release, err
 
 		if p.cfg.IsVerifiedGroup(info.Group) || p.cfg.IsVerifiedGroup(info.Website) {
 			r.Verified = true
-		}
-		if lo.Contains(r.Encodings, "av1") {
-			r.Verified = false
 		}
 
 		releases = append(releases, r)
